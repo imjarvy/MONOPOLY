@@ -1,0 +1,97 @@
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: linear-gradient(135deg, #f9f9f9, #dfe6e9);
+    text-align: center;
+    padding: 40px;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#jugadores {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.jugador {
+    background: #ffffff;
+    border-left: 8px solid #27ae60;
+    border-radius: 12px;
+    padding: 15px;
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.jugador:hover {
+    transform: scale(1.03);
+}
+
+.jugador input {
+    border: none;
+    font-size: 1rem;
+    width: 120px;
+    outline: none;
+    background: transparent;
+}
+
+select {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 4px;
+    font-size: 1rem;
+}
+
+.acciones button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 8px;
+    transition: transform 0.2s;
+}
+
+.acciones button:hover {
+    transform: scale(1.2);
+}
+
+button {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    margin: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #219150;
+}
+
+button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+.secundario {
+    background: #2980b9;
+}
+
+.secundario:hover {
+    background: #1f6391;
+}
