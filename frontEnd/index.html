@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monopoly Game</title>
-    <link rel="stylesheet" href="./src/styles/main.css">
-</head>
-<body>
-    <div id="app">
-        <!-- Main application content will be rendered here -->
-        <div class="loading">Loading...</div>
-    </div>
-
-    <script type="module" src="./src/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/MONOPOLY/frontEnd/src/pages/index.js" defer></script>
+    <link rel="stylesheet" href="/MONOPOLY/frontEnd/src/styles/index.css" />
+    <title>Monopoly</title>
+  </head>
+  <body>
+    <h1>Monopoly</h1>
+    <div id="jugadores"></div>
+    <button id="agregarBtn">Agregar jugador</button>
+    <br /><br />
+    <button onclick="guardarJugadores()">Jugar</button>
+    <button class="secundario" onclick="location.href='./src/pages/como-jugar.html'">
+      Cómo jugar
+    </button>
+  </body>
 </html>
-ñ
