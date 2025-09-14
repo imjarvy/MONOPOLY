@@ -1,0 +1,68 @@
+.title{
+    text-align: center;
+     font-weight: bold;
+     margin-top:20px ;
+
+
+ 
+}
+.right{
+    text-align: right;
+}
+.botonCenter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top:20px ;
+}
+.body{
+    background: #f0f0f0;
+}
+/*para quitar margen, relleno, y tipo de letra */
+.pagina{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+/*para fondo*/
+.fondo {
+  background: url("https://p4.wallpaperbetter.com/wallpaper/895/370/560/monopoly-wallpaper-preview.jpg") 
+              no-repeat center center fixed;
+  background-size: contain;   /* hace que la imagen cubra todo */
+  background-attachment: fixed;  /* mantiene fijo al hacer scroll */
+  min-height: 100vh;
+  width: 100vw;
+}
+/*ancho para fondo para fondo*/
+.body, .modal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.modal{
+    position: fixed;
+    top:0;
+    left:0;
+    background: rgba(0,0,0,0.5);
+    transition: all 500ms ease;
+
+}
+.contenedor{
+    width: 500px;
+    height: auto;
+    margin: auto;
+    background: rgb(202, 239, 230);
+    box-shadow: 2px 1px 10px rgba(214, 233, 240, 0.6);
+    transition: all 500ms ease;
+}
+.subtitle{
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+
+}
