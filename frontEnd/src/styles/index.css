@@ -2,11 +2,17 @@ body {
     font-family: 'Trebuchet MS', sans-serif;
     background: linear-gradient(135deg, #f9f9f9, #dfe6e9);
     text-align: center;
-    padding: 40px;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
-    font-size: 3rem;
+    font-size: clamp(2rem, 8vw, 3rem);
     color: #2c3e50;
     margin-bottom: 30px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -18,7 +24,9 @@ h1 {
     align-items: center;
     gap: 12px;
     max-width: 500px;
+    width: 100%;
     margin: 0 auto 25px auto;
+    padding: 0 10px;
 }
 
 .jugador:hover {
@@ -63,11 +71,14 @@ button {
     cursor: pointer;
     font-size: 1.1rem;
     box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    min-width: 120px;
 }
 
 button:hover {
     background: #219150;
+    transform: translateY(-2px);
+    box-shadow: 2px 6px 8px rgba(0, 0, 0, 0.3);
 }
 
 button:disabled {
@@ -81,4 +92,130 @@ button:disabled {
 
 .secundario:hover {
     background: #1f6391;
+}
+
+/* Contenedor de botones principales */
+.main-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Media Queries para Responsive */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    h1 {
+        margin-bottom: 20px;
+    }
+    
+    #jugadores {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .jugador input {
+        width: 100px;
+        font-size: 0.9rem;
+    }
+    
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        margin: 6px;
+        min-width: 100px;
+    }
+    
+    .main-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    select {
+        font-size: 0.9rem;
+        padding: 3px;
+    }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    h1 {
+        margin-bottom: 15px;
+    }
+    
+    #jugadores {
+        gap: 8px;
+        margin-bottom: 15px;
+        padding: 0 5px;
+    }
+    
+    .jugador {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .jugador input {
+        width: 80px;
+        font-size: 0.85rem;
+    }
+    
+    button {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        margin: 5px;
+        width: 100%;
+        max-width: 280px;
+        min-width: auto;
+    }
+    
+    .main-buttons {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .acciones button {
+        font-size: 1rem;
+        margin-left: 6px;
+    }
+    
+    select {
+        font-size: 0.85rem;
+        padding: 2px;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 320px) {
+    body {
+        padding: 8px;
+    }
+    
+    .jugador input {
+        width: 70px;
+        font-size: 0.8rem;
+    }
+    
+    button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        margin: 4px;
+    }
+    
+    .acciones button {
+        font-size: 0.9rem;
+        margin-left: 4px;
+    }
 }

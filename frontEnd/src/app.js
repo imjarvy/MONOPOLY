@@ -287,5 +287,5 @@ function guardarJugadores() {
     // Guardamos en localStorage para usar en el tablero
     localStorage.setItem("jugadores", JSON.stringify(jugadores));
     console.log("Jugadores guardados en localStorage:", localStorage.getItem("jugadores"));
-    location.href = "src/components/tablero/tablero.html";
+    location.href = "frontEnd/src/components/tablero/tablero.html";
 }

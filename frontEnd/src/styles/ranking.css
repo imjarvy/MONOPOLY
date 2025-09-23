@@ -354,13 +354,76 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .stats-summary {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+    }
+    
+    .stat-item {
+        padding: 20px;
+    }
+    
+    .ranking-table {
+        font-size: 13px;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 10px;
     }
     
+    .ranking-header {
+        margin-bottom: 20px;
+    }
+    
+    .btn-back {
+        position: static;
+        margin-bottom: 15px;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
+    .ranking-title {
+        font-size: 2em;
+        margin-bottom: 8px;
+    }
+    
+    .ranking-subtitle {
+        font-size: 1em;
+    }
+    
+    .stats-summary {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .stat-item {
+        padding: 18px;
+    }
+    
+    .stat-item i {
+        font-size: 1.8em;
+    }
+    
+    .stat-number {
+        font-size: 1.8em;
+    }
+    
+    .table-container {
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+    
     .ranking-table {
         font-size: 12px;
+        min-width: 600px;
     }
     
     .ranking-table th,
@@ -368,22 +431,253 @@
         padding: 10px 8px;
     }
     
-    .btn-back {
-        position: static;
-        margin-bottom: 20px;
-    }
-    
-    .ranking-title {
-        font-size: 2em;
-    }
-    
-    .stats-summary {
-        grid-template-columns: 1fr;
+    .ranking-table th {
+        font-size: 11px;
     }
     
     .player-info {
+        gap: 8px;
+    }
+    
+    .player-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 1.1em;
+    }
+    
+    .player-details h4 {
+        font-size: 0.9em;
+    }
+    
+    .player-details p {
+        font-size: 0.8em;
+    }
+    
+    .rank-position {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+    
+    .country-flag {
+        width: 28px;
+        height: 21px;
+    }
+    
+    .score-badge {
+        padding: 4px 8px;
+        font-size: 0.8em;
+    }
+    
+    .games-count {
+        padding: 3px 6px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+    
+    .ranking-header {
+        margin-bottom: 15px;
+    }
+    
+    .btn-back {
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 12px;
+        border-radius: 8px;
+    }
+    
+    .ranking-title {
+        font-size: 1.6em;
+        margin-bottom: 5px;
+    }
+    
+    .ranking-subtitle {
+        font-size: 0.9em;
+    }
+    
+    .stats-summary {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .stat-item {
+        padding: 15px;
+        border-radius: 10px;
+    }
+    
+    .stat-item i {
+        font-size: 1.5em;
+        margin-bottom: 8px;
+    }
+    
+    .stat-number {
+        font-size: 1.6em;
+        margin-bottom: 3px;
+    }
+    
+    .stat-label {
+        font-size: 0.8em;
+    }
+    
+    .table-container {
+        border-radius: 8px;
+        margin: 0 -8px;
+    }
+    
+    .ranking-table {
+        font-size: 11px;
+        min-width: 500px;
+    }
+    
+    .ranking-table th,
+    .ranking-table td {
+        padding: 8px 6px;
+    }
+    
+    .ranking-table th {
+        font-size: 10px;
+        padding: 12px 6px;
+    }
+    
+    .rank-col {
+        width: 60px;
+    }
+    
+    .flag-col {
+        width: 70px;
+    }
+    
+    .player-col {
+        min-width: 140px;
+    }
+    
+    .score-col, .games-col, .avg-col {
+        width: 80px;
+    }
+    
+    .player-info {
+        gap: 6px;
         flex-direction: column;
         text-align: center;
-        gap: 8px;
+    }
+    
+    .player-avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 1em;
+    }
+    
+    .player-details h4 {
+        font-size: 0.85em;
+    }
+    
+    .player-details p {
+        font-size: 0.75em;
+    }
+    
+    .rank-position {
+        width: 25px;
+        height: 25px;
+        font-size: 0.9em;
+    }
+    
+    .country-flag {
+        width: 24px;
+        height: 18px;
+    }
+    
+    .score-badge {
+        padding: 3px 6px;
+        font-size: 0.75em;
+        border-radius: 12px;
+    }
+    
+    .games-count {
+        padding: 2px 4px;
+        font-size: 0.75em;
+        border-radius: 8px;
+    }
+    
+    .avg-score {
+        font-size: 0.85em;
+    }
+    
+    .loading-container, .error-container {
+        padding: 40px 15px;
+    }
+    
+    .loading-spinner i {
+        font-size: 2.5em;
+    }
+    
+    .error-message {
+        padding: 20px;
+        margin: 0 10px;
+    }
+    
+    .error-message i {
+        font-size: 2em;
+    }
+    
+    .no-data {
+        padding: 40px 15px;
+    }
+    
+    .no-data i {
+        font-size: 3em;
+    }
+}
+
+@media (max-width: 320px) {
+    .container {
+        padding: 5px;
+    }
+    
+    .ranking-title {
+        font-size: 1.4em;
+    }
+    
+    .stat-item {
+        padding: 12px;
+    }
+    
+    .stat-number {
+        font-size: 1.4em;
+    }
+    
+    .table-container {
+        margin: 0 -5px;
+    }
+    
+    .ranking-table {
+        font-size: 10px;
+        min-width: 450px;
+    }
+    
+    .ranking-table th,
+    .ranking-table td {
+        padding: 6px 4px;
+    }
+    
+    .player-avatar {
+        width: 25px;
+        height: 25px;
+        font-size: 0.9em;
+    }
+    
+    .rank-position {
+        width: 22px;
+        height: 22px;
+        font-size: 0.8em;
+    }
+    
+    .country-flag {
+        width: 20px;
+        height: 15px;
     }
 }

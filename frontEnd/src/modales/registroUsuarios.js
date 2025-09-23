@@ -65,7 +65,7 @@ function mostrarModalRegistroUsuarios() {
             title: 'Registro de Jugadores',
             customStyles: estilos,
             size: 'md',
-            closeOnOverlay: false
+            closeOnOverlay: true
         });
         // Renderizar jugadores
         function renderJugadores() {
