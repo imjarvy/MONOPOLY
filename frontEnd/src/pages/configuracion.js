@@ -57,13 +57,21 @@ function obtenerFichasDisponibles() {
  */
 function agregarJugador(nombre, ficha) {
     if (contador >= maxJugadores) {
-        alert("⚠️ Ya tienes el máximo de jugadores permitidos (4).");
+        if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Ya tienes el máximo de jugadores permitidos (4).", "Límite Alcanzado");
+        } else {
+            alert("⚠️ Ya tienes el máximo de jugadores permitidos (4).");
+        }
         return false;
     }
 
     // Verificar que la ficha no esté en uso
     if (jugadores.some(j => j.ficha === ficha)) {
-        alert("⚠️ Esta ficha ya está en uso. Elige otra ficha.");
+        if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Esta ficha ya está en uso. Elige otra ficha.", "Ficha Ocupada");
+        } else {
+            alert("⚠️ Esta ficha ya está en uso. Elige otra ficha.");
+        }
         return false;
     }
 
@@ -283,7 +291,11 @@ function actualizarFichaJugador(id, nuevaFicha) {
     // Verificar que la ficha no esté en uso por otro jugador
     const fichaEnUso = jugadores.some(j => j.id !== id && j.ficha === nuevaFicha);
     if (fichaEnUso) {
-        alert("⚠️ Esta ficha ya está en uso por otro jugador.");
+        if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Esta ficha ya está en uso por otro jugador.", "Ficha Ocupada");
+        } else {
+            alert("⚠️ Esta ficha ya está en uso por otro jugador.");
+        }
         actualizarListaJugadores(); // Revertir cambio
         return;
     }
@@ -330,6 +342,8 @@ function guardarJugadores() {
     if (jugadores.length < 2) {
         if (typeof mostrarModalInfo === 'function') {
             mostrarModalInfo('Jugadores Insuficientes', 'Se necesitan al menos 2 jugadores para comenzar el juego.');
+        } else if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Se necesitan al menos 2 jugadores para comenzar.", "Jugadores Insuficientes");
         } else {
             alert("⚠️ Se necesitan al menos 2 jugadores para comenzar.");
         }
@@ -341,6 +355,8 @@ function guardarJugadores() {
     if (nombresVacios.length > 0) {
         if (typeof mostrarModalInfo === 'function') {
             mostrarModalInfo('Nombres Incompletos', 'Todos los jugadores deben tener un nombre.');
+        } else if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Todos los jugadores deben tener un nombre.", "Nombres Incompletos");
         } else {
             alert("⚠️ Todos los jugadores deben tener un nombre.");
         }

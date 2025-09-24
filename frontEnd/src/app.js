@@ -104,6 +104,8 @@ function navegarATablero() {
     if (!jugadores || jugadores.length < 2) {
         if (typeof mostrarModalInfo === 'function') {
             mostrarModalInfo('Error', 'No hay jugadores configurados. Configura al menos 2 jugadores primero.');
+        } else if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Configura al menos 2 jugadores antes de empezar.", "Jugadores Requeridos");
         } else {
             alert('⚠️ Configura al menos 2 jugadores antes de empezar.');
         }

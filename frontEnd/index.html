@@ -7,9 +7,12 @@
     <!-- Modal Component -->
     <link rel="stylesheet" href="src/components/modals/modal.css" />
     <script src="src/components/modals/modal.js"></script>
+    <!-- Toast Component -->
+    <link rel="stylesheet" href="src/components/toast/toast.css" />
+    <script src="src/components/toast/toast.js"></script>
     <!-- Countries Service - DEBE cargarse antes que index.js -->
     <script src="src/services/countriesService.js"></script>
-    <script src="src/index.js" defer></script>
+    <script src="src/pages/index.js" defer></script>
     <!-- Modal registro de usuarios -->
     <link rel="stylesheet" href="src/components/modals/registroUsuarios.css">
     <script src="src/components/modals/registroUsuarios.js"></script>
@@ -18,14 +21,23 @@
   <body>
     <h1>Monopoly</h1>
     <div id="jugadores"></div>
-    <button id="agregarBtn">Agregar jugador</button>
-    <br /><br />
-    <button onclick="guardarJugadores()">Jugar</button>
-    <button class="secundario" onclick="location.href='como-jugar.html'">
-      Cómo jugar
-    </button>
-    <button class="ranking-btn" onclick="location.href='src/pages/ranking.html'">
-      🏆 Ranking
-    </button>
+    
+    <!-- Primera fila: Botón Agregar Jugador -->
+    <div class="button-row-1">
+      <button id="agregarBtn" class="btn-agregar">Agregar jugador</button>
+    </div>
+    
+    <!-- Segunda fila: Botones de navegación -->
+    <div class="button-row-2">
+      <button class="btn-secundario" onclick="location.href='como-jugar.html'">
+        Cómo jugar
+      </button>
+      <button class="btn-principal" onclick="guardarJugadores()">
+        🎮 Jugar
+      </button>
+      <button class="btn-ranking" onclick="location.href='src/pages/ranking.html'">
+        🏆 Ranking
+      </button>
+    </div>
   </body>
 </html>

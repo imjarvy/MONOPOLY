@@ -223,7 +223,11 @@ function mostrarModalRegistroUsuarios() {
                         });
                     }
                     if (!valid) {
-                        alert('Completa todos los campos y asegúrate de que cada ficha y color sean únicos.');
+                        if (typeof window.Toast !== 'undefined' && window.Toast) {
+                            window.Toast.warning("Completa todos los campos y asegúrate de que cada ficha y color sean únicos.", "Datos Incompletos");
+                        } else {
+                            alert('Completa todos los campos y asegúrate de que cada ficha y color sean únicos.');
+                        }
                         return;
                     }
                     // Guardar jugadores en el array global y actualizar la UI
