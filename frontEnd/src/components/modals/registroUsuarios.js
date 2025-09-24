@@ -15,18 +15,39 @@ function mostrarModalRegistroUsuarios() {
     const jugadoresExistentes = window.jugadores || [];
     let numJugadores = Math.max(2, jugadoresExistentes.length); // Mínimo 2, o los que ya existen
 
-    // Paso 1: Obtener países
-    fetch('http://127.0.0.1:5000/countries')
-        .then(res => res.json())
-        .then(data => {
-            // data es un array de objetos tipo { "ad": "Andorra" }
-            paises = Array.isArray(data) ? data : [];
-            renderModal();
-        })
-        .catch(() => {
-            paises = [ { co: 'Colombia' }, { mx: 'México' }, { ar: 'Argentina' }, { es: 'España' }, { cl: 'Chile' } ]; // fallback
-            renderModal();
-        });
+    // 🌍 PASO 1: Obtener países usando countriesService (arquitectura correcta)
+    if (typeof window.countriesService !== 'undefined') {
+        // Usar el servicio oficial
+        window.countriesService.obtenerPaises()
+            .then(data => {
+                paises = Array.isArray(data) ? data : [];
+                console.log('✅ Países cargados desde countriesService:', paises.length);
+                renderModal();
+            })
+            .catch((error) => {
+                console.error('❌ Error con countriesService:', error);
+                paises = window.countriesService.getCountriesFallback();
+                renderModal();
+            });
+    } else {
+        // Fallback si countriesService no está disponible
+        console.warn('⚠️ countriesService no disponible, usando fetch directo');
+        fetch('http://127.0.0.1:5000/countries')
+            .then(res => res.json())
+            .then(data => {
+                paises = Array.isArray(data) ? data : [];
+                renderModal();
+            })
+            .catch(() => {
+                // Usar fallback básico solo como última opción
+                paises = [ 
+                    { co: 'Colombia' }, { mx: 'México' }, { ar: 'Argentina' }, 
+                    { es: 'España' }, { cl: 'Chile' }, { br: 'Brasil' },
+                    { us: 'Estados Unidos' }, { ca: 'Canadá' }
+                ];
+                renderModal();
+            });
+    }
 
     function renderModal() {
         const contenido = `
@@ -177,11 +198,11 @@ function mostrarModalRegistroUsuarios() {
                     for (let i = 0; i < numJugadores; i++) {
                         const nickname = form[`nickname${i}`].value.trim();
                         const paisCodigo = form[`pais${i}`].value;
-                        const paisNombre = paises.find(p => Object.keys(p)[0] === paisCodigo);
-                        const pais = paisNombre ? Object.values(paisNombre)[0] : paisCodigo;
+                        // 🎯 ARREGLO: Guardar CÓDIGO de país, no el nombre completo
+                        const pais = paisCodigo; // Solo el código (ej: 'co', 'mx')
                         const fichaIdx = form[`ficha${i}`].value;
                         const color = form[`color${i}`].value;
-                        if (!nickname || !paisCodigo || fichaIdx === '' || !color) {
+                        if (!nickname || !pais || fichaIdx === '' || !color) {
                             valid = false;
                             break;
                         }

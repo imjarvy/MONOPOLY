@@ -1,291 +1,312 @@
-const jugadoresDiv = document.getElementById("jugadores");
-const agregarBtn = document.getElementById("agregarBtn");
-let contador = 0;
-const maxJugadores = 4;
-let jugadores = []; // Array para mantener los jugadores
+/**
+ * APP.JS - ENRUTADOR PRINCIPAL DEL MONOPOLY
+ * 
+ * Responsabilidades:
+ * - Navegación entre páginas (configuración, juego, ranking)
+ * - Gestión del estado global de la aplicación
+ * - Inicialización de módulos según la página actual
+ * - Comunicación entre componentes
+ */
 
-// Fichas disponibles (emojis, pero pueden ser imágenes también)
-let fichasDisponibles = ["🚗", "🎩", "🐶", "🚢", "🏠", "🛩️"];
-
-// Función global para recibir jugadores del modal
-window.agregarJugadoresDesdeModal = function(jugadoresConfig) {
-    jugadores = jugadoresConfig;
-    contador = jugadores.length;
-    // Actualizar la referencia global
-    window.jugadores = jugadores;
-    actualizarListaJugadores();
-    
-    // Deshabilitar botón si se alcanza el máximo
-    if (contador >= maxJugadores) {
-        agregarBtn.disabled = true;
+// ============== CONFIGURACIÓN GLOBAL ==============
+const APP_CONFIG = {
+    pages: {
+        CONFIGURACION: 'configuracion',
+        TABLERO: 'tablero',
+        RANKING: 'ranking',
+        COMO_JUGAR: 'como-jugar'
+    },
+    storage: {
+        JUGADORES: 'jugadores',
+        PARTIDA_ACTUAL: 'partida-actual',
+        CONFIGURACION: 'monopoly-config'
     }
 };
 
-// Exponer la variable jugadores globalmente para que el modal pueda accederla
-window.jugadores = jugadores;
-
-// Función para obtener fichas disponibles (no usadas)
-function obtenerFichasDisponibles() {
-    const fichasUsadas = jugadores.map(j => j.ficha);
-    return fichasDisponibles.filter(ficha => !fichasUsadas.includes(ficha));
-}
-
-// Función refactorizada para agregar jugador
-function agregarJugador(nombre, ficha) {
-    if (contador >= maxJugadores) {
-        alert("⚠️ Ya tienes el máximo de jugadores permitidos (4).");
-        return false;
-    }
-
-    // Verificar que la ficha no esté en uso
-    if (jugadores.some(j => j.ficha === ficha)) {
-        alert("⚠️ Esta ficha ya está en uso. Elige otra ficha.");
-        return false;
-    }
-
-    // Crear objeto jugador
-    const nuevoJugador = {
-        id: Date.now(), // ID único
-        nombre: nombre.trim(),
-        ficha: ficha
-    };
-
-    // Agregar al array
-    jugadores.push(nuevoJugador);
-    contador++;
-
-    // Actualizar la UI
-    actualizarListaJugadores();
-
-    // Deshabilitar botón si se alcanza el máximo
-    if (contador >= maxJugadores) {
-        agregarBtn.disabled = true;
-    }
-
-    return true;
-}
-
-// Función para eliminar jugador
-function eliminarJugador(id) {
-    jugadores = jugadores.filter(j => (j.id || Date.now()) !== id);
-    contador = jugadores.length;
-    actualizarListaJugadores();
+// ============== ESTADO GLOBAL DE LA APLICACIÓN ==============
+window.MonopolyApp = {
+    currentPage: null,
+    jugadores: [],
+    configuracion: {},
     
-    // Rehabilitar botón si hay espacio
-    if (contador < maxJugadores) {
-        agregarBtn.disabled = false;
+    // Métodos públicos para otros módulos
+    navegarA: function(pagina) {
+        navegarAPagina(pagina);
+    },
+    
+    obtenerJugadores: function() {
+        return this.jugadores;
+    },
+    
+    guardarJugadores: function(jugadores) {
+        this.jugadores = jugadores;
+        localStorage.setItem(APP_CONFIG.storage.JUGADORES, JSON.stringify(jugadores));
+    },
+    
+    // Métodos de utilidad para debug
+    limpiarDatos: function() {
+        localStorage.clear();
+        this.jugadores = [];
+        this.configuracion = {};
+        console.log('Datos de la aplicación limpiados');
+    },
+    
+    obtenerEstado: function() {
+        return {
+            currentPage: this.currentPage,
+            jugadores: this.jugadores,
+            configuracion: this.configuracion,
+            localStorage: {
+                jugadores: localStorage.getItem(APP_CONFIG.storage.JUGADORES),
+                configuracion: localStorage.getItem(APP_CONFIG.storage.CONFIGURACION)
+            }
+        };
+    }
+};
+
+// ============== FUNCIONES DE NAVEGACIÓN ==============
+
+/**
+ * Navega a una página específica del juego
+ * @param {string} pagina - Nombre de la página (configuracion, tablero, ranking)
+ */
+function navegarAPagina(pagina) {
+    console.log(`Navegando a: ${pagina}`);
+    
+    switch (pagina) {
+        case APP_CONFIG.pages.CONFIGURACION:
+            window.location.href = 'src/pages/index.html';
+            break;
+            
+        case APP_CONFIG.pages.TABLERO:
+            navegarATablero();
+            break;
+            
+        case APP_CONFIG.pages.RANKING:
+            window.location.href = 'src/pages/ranking.html';
+            break;
+            
+        case APP_CONFIG.pages.COMO_JUGAR:
+            window.location.href = 'como-jugar.html';
+            break;
+            
+        default:
+            console.error(`Página no encontrada: ${pagina}`);
     }
 }
 
-// Función para actualizar la lista visual de jugadores
-function actualizarListaJugadores() {
-    jugadoresDiv.innerHTML = '';
+/**
+ * Navegación específica al tablero con validaciones
+ */
+function navegarATablero() {
+    const jugadores = obtenerJugadoresGuardados();
     
-    jugadores.forEach(jugador => {
-        const div = document.createElement("div");
-        div.className = "jugador-card";
-        div.innerHTML = `
-            <div style="
-                position: relative;
-                width: 100%;
-                max-width: 480px;
-                min-height: 88px;
-                height: 88px;
-                background: linear-gradient(135deg, #ffffff, #f8fafc);
-                border-radius: 16px;
-                border-left: 5px solid ${jugador.color || '#e5e7eb'};
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-                display: flex;
-                align-items: center;
-                padding: 0 20px 0 20px;
-                transition: all 0.3s ease;
-                cursor: default;
-                margin: 0 auto;
-            " 
-            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.12)'"
-            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.08)'">
-                
-                <!-- Ficha del jugador -->
-                <div style="
-                    width: 56px;
-                    height: 56px;
-                    min-width: 56px;
-                    background: linear-gradient(135deg, ${jugador.color}15, ${jugador.color}25);
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 1.8em;
-                    margin-right: 16px;
-                    border: 2px solid ${jugador.color}40;
-                ">
-                    ${jugador.ficha}
-                </div>
-                
-                <!-- Información del jugador -->
-                <div style="flex: 1; text-align: left; min-width: 0; padding-right: 50px;">
-                    <div style="
-                        font-size: 1.1em;
-                        font-weight: 600;
-                        color: #1f2937;
-                        margin-bottom: 4px;
-                        letter-spacing: 0.3px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    ">${jugador.nickname}</div>
-                    <div style="
-                        font-size: 0.85em;
-                        color: #6b7280;
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        flex-wrap: wrap;
-                    ">
-                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${obtenerNombrePais(jugador.pais)}</span>
-                        <span style="
-                            background: #10b98120;
-                            color: #059669;
-                            padding: 2px 8px;
-                            border-radius: 6px;
-                            font-weight: 500;
-                            font-size: 0.8em;
-                            white-space: nowrap;
-                        ">$${jugador.dinero}</span>
-                    </div>
-                </div>
-                
-                <!-- Botón eliminar -->
-                <button onclick="confirmarEliminarJugador('${jugador.id || Date.now()}', '${jugador.nickname}')" 
-                        style="
-                            position: absolute;
-                            top: 12px;
-                            right: 12px;
-                            width: 28px;
-                            height: 28px;
-                            min-width: 28px;
-                            background: linear-gradient(135deg, #ffffff, #f8fafc);
-                            color: #9ca3af;
-                            border: 1px solid #e5e7eb;
-                            border-radius: 8px;
-                            font-size: 0.9em;
-                            font-weight: 500;
-                            cursor: pointer;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            transition: all 0.3s ease;
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                            z-index: 10;
-                        " 
-                        onmouseover="this.style.background='linear-gradient(135deg, #fef2f2, #fee2e2)'; this.style.color='#dc2626'; this.style.borderColor='#fca5a5'; this.style.transform='scale(1.05)'"
-                        onmouseout="this.style.background='linear-gradient(135deg, #ffffff, #f8fafc)'; this.style.color='#9ca3af'; this.style.borderColor='#e5e7eb'; this.style.transform='scale(1)'"
-                        title="Eliminar jugador">×</button>
-            </div>
-        `;
-        jugadoresDiv.appendChild(div);
-    });
-}
-
-// Función para obtener el nombre del país desde el código
-function obtenerNombrePais(codigoPais) {
-    // Si ya es un nombre completo, devolverlo
-    if (!codigoPais || codigoPais.length > 2) {
-        return codigoPais || 'País desconocido';
-    }
-    
-    // Mapeo de códigos comunes a nombres
-    const paises = {
-        'co': 'Colombia',
-        'mx': 'México', 
-        'ar': 'Argentina',
-        'es': 'España',
-        'cl': 'Chile',
-        'pe': 'Perú',
-        'br': 'Brasil',
-        'us': 'Estados Unidos',
-        'ca': 'Canadá',
-        'fr': 'Francia',
-        'de': 'Alemania',
-        'it': 'Italia',
-        'uk': 'Reino Unido',
-        'jp': 'Japón',
-        'kr': 'Corea del Sur',
-        'cn': 'China',
-        'in': 'India'
-    };
-    
-    return paises[codigoPais.toLowerCase()] || codigoPais.toUpperCase();
-}
-
-// Función para actualizar nombre de jugador
-function actualizarNombreJugador(id, nuevoNombre) {
-    const jugador = jugadores.find(j => j.id === id);
-    if (jugador) {
-        jugador.nombre = nuevoNombre.trim();
-    }
-}
-
-// Función para actualizar ficha de jugador
-function actualizarFichaJugador(id, nuevaFicha) {
-    // Verificar que la ficha no esté en uso por otro jugador
-    const fichaEnUso = jugadores.some(j => j.id !== id && j.ficha === nuevaFicha);
-    if (fichaEnUso) {
-        alert("⚠️ Esta ficha ya está en uso por otro jugador.");
-        actualizarListaJugadores(); // Revertir cambio
+    if (!jugadores || jugadores.length < 2) {
+        if (typeof mostrarModalInfo === 'function') {
+            mostrarModalInfo('Error', 'No hay jugadores configurados. Configura al menos 2 jugadores primero.');
+        } else {
+            alert('⚠️ Configura al menos 2 jugadores antes de empezar.');
+        }
+        navegarAPagina(APP_CONFIG.pages.CONFIGURACION);
         return;
     }
     
-    const jugador = jugadores.find(j => j.id === id);
-    if (jugador) {
-        jugador.ficha = nuevaFicha;
-        actualizarListaJugadores(); // Refrescar para actualizar opciones disponibles
-    }
+    // Guardar estado antes de navegar
+    MonopolyApp.jugadores = jugadores;
+    window.location.href = 'src/components/tablero/tablero.html';
 }
 
-// Función para confirmar eliminación (usando el modal)
-function confirmarEliminarJugador(id, nombre) {
-    if (typeof mostrarModalConfirmacion === 'function') {
-        mostrarModalConfirmacion(
-            `¿Estás seguro de que quieres eliminar a <strong>${nombre}</strong>?`,
-            () => eliminarJugador(id)
-        );
+/**
+ * Regresa a la página anterior o a configuración por defecto
+ */
+function volverAtras() {
+    if (window.history.length > 1) {
+        window.history.back();
     } else {
-        // Fallback si el modal no está disponible
-        if (confirm(`¿Eliminar a ${nombre}?`)) {
-            eliminarJugador(id);
-        }
+        navegarAPagina(APP_CONFIG.pages.CONFIGURACION);
     }
 }
 
-// Event listener removido - ahora se maneja con onclick en el HTML
-
-function guardarJugadores() {
-    console.log("Función guardarJugadores ejecutada");
-    console.log("Jugadores actuales:", jugadores);
+/**
+ * Navega al index.html principal
+ */
+function irAlInicio() {
+    // Detectar desde qué ubicación se está llamando
+    const currentPath = window.location.pathname;
     
-    if (jugadores.length < 2) {
-        if (typeof mostrarModalInfo === 'function') {
-            mostrarModalInfo('Jugadores Insuficientes', 'Se necesitan al menos 2 jugadores para comenzar el juego.');
-        } else {
-            alert("⚠️ Se necesitan al menos 2 jugadores para comenzar.");
-        }
-        return;
+    if (currentPath.includes('/src/pages/')) {
+        // Desde pages/ -> sube dos niveles
+        window.location.href = '../../index.html';
+    } else if (currentPath.includes('/src/components/')) {
+        // Desde components/ -> sube tres niveles  
+        window.location.href = '../../../index.html';
+    } else {
+        // Desde raíz de frontEnd
+        window.location.href = 'index.html';
     }
-
-    // Verificar nombres vacíos
-    const nombresVacios = jugadores.filter(j => !j.nickname || j.nickname.trim() === '');
-    if (nombresVacios.length > 0) {
-        if (typeof mostrarModalInfo === 'function') {
-            mostrarModalInfo('Nombres Incompletos', 'Todos los jugadores deben tener un nombre.');
-        } else {
-            alert("⚠️ Todos los jugadores deben tener un nombre.");
-        }
-        return;
-    }
-
-    // Guardamos en localStorage para usar en el tablero
-    localStorage.setItem("jugadores", JSON.stringify(jugadores));
-    console.log("Jugadores guardados en localStorage:", localStorage.getItem("jugadores"));
-    location.href = "frontEnd/src/components/tablero/tablero.html";
 }
+
+// ============== GESTIÓN DE ESTADO ==============
+
+/**
+ * Obtiene los jugadores guardados en localStorage
+ * @returns {Array} Array de jugadores o array vacío
+ */
+function obtenerJugadoresGuardados() {
+    try {
+        const jugadoresString = localStorage.getItem(APP_CONFIG.storage.JUGADORES);
+        return jugadoresString ? JSON.parse(jugadoresString) : [];
+    } catch (error) {
+        console.error('Error al obtener jugadores:', error);
+        return [];
+    }
+}
+
+/**
+ * Guarda jugadores en localStorage y actualiza estado global
+ * @param {Array} jugadores - Array de objetos jugador
+ */
+function guardarJugadoresEnEstado(jugadores) {
+    MonopolyApp.jugadores = jugadores;
+    localStorage.setItem(APP_CONFIG.storage.JUGADORES, JSON.stringify(jugadores));
+    console.log('Jugadores guardados en estado global:', jugadores);
+}
+
+/**
+ * Obtiene la configuración actual del juego
+ * @returns {Object} Objeto de configuración
+ */
+function obtenerConfiguracion() {
+    try {
+        const configString = localStorage.getItem(APP_CONFIG.storage.CONFIGURACION);
+        return configString ? JSON.parse(configString) : {};
+    } catch (error) {
+        console.error('Error al obtener configuración:', error);
+        return {};
+    }
+}
+
+/**
+ * Guarda la configuración del juego
+ * @param {Object} config - Objeto de configuración
+ */
+function guardarConfiguracion(config) {
+    MonopolyApp.configuracion = config;
+    localStorage.setItem(APP_CONFIG.storage.CONFIGURACION, JSON.stringify(config));
+}
+
+// ============== INICIALIZACIÓN DE LA APLICACIÓN ==============
+
+/**
+ * Inicializa la aplicación según la página actual
+ */
+function inicializarApp() {
+    console.log('Inicializando Monopoly App...');
+    
+    // Cargar estado previo
+    MonopolyApp.jugadores = obtenerJugadoresGuardados();
+    MonopolyApp.configuracion = obtenerConfiguracion();
+    
+    // Detectar página actual
+    const path = window.location.pathname;
+    const filename = window.location.pathname.split('/').pop();
+    
+    if (path.includes('configuracion') || filename === 'configuracion.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.CONFIGURACION;
+        inicializarConfiguracion();
+    } else if (path.includes('tablero') || filename === 'tablero.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.TABLERO;
+        inicializarTablero();
+    } else if (path.includes('ranking') || filename === 'ranking.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.RANKING;
+        inicializarRanking();
+    } else if (path.includes('como-jugar') || filename === 'como-jugar.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.COMO_JUGAR;
+        console.log('Página como-jugar inicializada');
+    }
+    
+    console.log(`Página actual: ${MonopolyApp.currentPage}`);
+}
+
+/**
+ * Inicializa la página de configuración
+ */
+function inicializarConfiguracion() {
+    console.log('Inicializando página de configuración...');
+    // La lógica específica está en configuracion.js
+}
+
+/**
+ * Inicializa la página del tablero
+ */
+function inicializarTablero() {
+    console.log('Inicializando tablero de juego...');
+    
+    // Validar que hay jugadores
+    if (!MonopolyApp.jugadores || MonopolyApp.jugadores.length < 2) {
+        console.warn('No hay suficientes jugadores, redirigiendo a configuración...');
+        navegarAPagina(APP_CONFIG.pages.CONFIGURACION);
+        return;
+    }
+    
+    // La lógica específica está en tablero.js
+}
+
+/**
+ * Inicializa la página de ranking
+ */
+function inicializarRanking() {
+    console.log('Inicializando página de ranking...');
+    // La lógica específica está en ranking.js
+}
+
+// ============== FUNCIONES GLOBALES PARA RETROCOMPATIBILIDAD ==============
+
+/**
+ * Función global para guardar jugadores (usada por configuracion.js)
+ * @deprecated Usar MonopolyApp.guardarJugadores() en su lugar
+ */
+window.guardarJugadores = function() {
+    console.warn('Función guardarJugadores() está obsoleta. Usar navegarATablero()');
+    navegarATablero();
+};
+
+/**
+ * Función global para navegar al tablero
+ */
+window.navegarATablero = navegarATablero;
+
+/**
+ * Función global para obtener jugadores
+ */
+window.obtenerJugadores = function() {
+    return MonopolyApp.obtenerJugadores();
+};
+
+/**
+ * Función global para navegar a páginas (usada por configuracion.js)
+ */
+window.navegarAPagina = navegarAPagina;
+
+/**
+ * Función global para volver atrás (usada por configuracion.html)
+ */
+window.volverAtras = volverAtras;
+
+/**
+ * Función global para ir al inicio (usada desde cualquier página)
+ */
+window.irAlInicio = irAlInicio;
+
+// ============== INICIALIZACIÓN ==============
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', inicializarApp);
+
+// Manejar navegación del navegador
+window.addEventListener('popstate', function(event) {
+    console.log('Navegación detectada, reinicializando...');
+    inicializarApp();
+});
+
+console.log('App.js cargado - Enrutador principal inicializado');

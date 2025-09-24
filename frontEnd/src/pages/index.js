@@ -83,5 +83,5 @@ function guardarJugadores() {
     }
     // Guardamos en localStorage para usar en el tablero
     localStorage.setItem("jugadores", JSON.stringify(jugadores));
-    location.href = "../components/tablero/tablero.html"; // Redirigir al tablero
+    location.href = "frontEnd/src/components/tablero/tablero.html"; // Redirigir al tablero desde pages/
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/styles/index.css" />
+    <!-- Modal Component -->
+    <link rel="stylesheet" href="src/components/modals/modal.css" />
+    <script src="src/components/modals/modal.js"></script>
+    <!-- Countries Service - DEBE cargarse antes que index.js -->
+    <script src="src/services/countriesService.js"></script>
+    <script src="src/index.js" defer></script>
+    <!-- Modal registro de usuarios -->
+    <link rel="stylesheet" href="src/components/modals/registroUsuarios.css">
+    <script src="src/components/modals/registroUsuarios.js"></script>
+    <title>Monopoly</title>
+  </head>
+  <body>
+    <h1>Monopoly</h1>
+    <div id="jugadores"></div>
+    <button id="agregarBtn">Agregar jugador</button>
+    <br /><br />
+    <button onclick="guardarJugadores()">Jugar</button>
+    <button class="secundario" onclick="location.href='como-jugar.html'">
+      Cómo jugar
+    </button>
+    <button class="ranking-btn" onclick="location.href='src/pages/ranking.html'">
+      🏆 Ranking
+    </button>
+  </body>
+</html>

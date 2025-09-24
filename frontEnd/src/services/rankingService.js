@@ -84,39 +84,25 @@ async function getCountryFlag(countryCode) {
         name: getCountryName(countryCode),
         isImage: false // Indica que es un emoji
     };
-}function getCountryName(countryCode) {
-    const countries = {
-        'co': 'Colombia',
-        'mx': 'México',
-        'ar': 'Argentina', 
-        'es': 'España',
-        'us': 'Estados Unidos',
-        'br': 'Brasil',
-        'cl': 'Chile',
-        'pe': 'Perú',
-        'ca': 'Canadá',
-        'fr': 'Francia',
-        'de': 'Alemania',
-        'it': 'Italia',
-        'uk': 'Reino Unido',
-        'gb': 'Reino Unido',
-        've': 'Venezuela',
-        'ec': 'Ecuador',
-        'uy': 'Uruguay',
-        'py': 'Paraguay',
-        'bo': 'Bolivia',
-        'pa': 'Panamá',
-        'cr': 'Costa Rica',
-        'gt': 'Guatemala',
-        'hn': 'Honduras',
-        'sv': 'El Salvador',
-        'ni': 'Nicaragua',
-        'cu': 'Cuba',
-        'do': 'República Dominicana',
-        'pr': 'Puerto Rico'
+}/**
+ * Obtiene el nombre del país usando countriesService (sin duplicación)
+ * @param {string} countryCode - Código del país
+ * @returns {string} Nombre del país
+ */
+function getCountryName(countryCode) {
+    // 🌍 Usar countriesService en lugar de hardcode
+    if (typeof window.countriesService !== 'undefined' && window.countriesCache) {
+        return window.countriesCache[countryCode.toLowerCase()] || countryCode.toUpperCase();
+    }
+    
+    // ⚠️ Fallback básico solo si countriesService no está disponible
+    console.warn('⚠️ countriesService/cache no disponible en rankingService');
+    const basicCountries = {
+        'co': 'Colombia', 'mx': 'México', 'ar': 'Argentina', 'es': 'España',
+        'us': 'Estados Unidos', 'br': 'Brasil', 'cl': 'Chile', 'pe': 'Perú'
     };
     
-    return countries[countryCode.toLowerCase()] || countryCode.toUpperCase();
+    return basicCountries[countryCode.toLowerCase()] || countryCode.toUpperCase();
 }
 
 window.rankingService = {
