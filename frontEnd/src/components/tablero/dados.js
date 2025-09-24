@@ -1,5 +1,12 @@
+import { moverFichaActual } from '../../app.js';
 const areaDados = document.getElementById('area-dados');
 
+
+/**
+ * Componente visual y lógico para lanzar los dados.
+ * Al lanzar, llama a moverFichaActual(casillas) desde app.js para mover la ficha del jugador actual.
+ * Se monta en el contenedor #area-dados.
+ */
 function crearDados() {
   areaDados.innerHTML = `
     <button class="btn btn-primary" id="btn-lanzar">Lanzar Dados</button>
@@ -12,7 +19,7 @@ function crearDados() {
     let dado1 = parseInt(document.getElementById('dado1').value) || (Math.floor(Math.random() * 6) + 1);
     let dado2 = parseInt(document.getElementById('dado2').value) || (Math.floor(Math.random() * 6) + 1);
     document.getElementById('resultado-dados').textContent = `Resultado: ${dado1} + ${dado2} = ${dado1 + dado2}`;
-    // TODO: Mover la ficha del jugador actual según la suma
+    moverFichaActual(dado1 + dado2); // Llama la función de movimiento
   };
 }
 

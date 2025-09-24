@@ -2,6 +2,11 @@ import { getBoard } from '../../services/boardService.js';
 
 const tablero = document.querySelector('.tablero');
 
+/**
+ * Renderiza el tablero de Monopoly en el DOM usando los datos del backend.
+ * Cada casilla muestra nombre, color, tipo y estado.
+ * Se llama automáticamente al cargar el módulo.
+ */
 async function renderizarTablero() {
   const boardData = await getBoard();
   if (!boardData) return;
@@ -113,8 +118,14 @@ boardData.bottom.forEach((casilla, idx) => {
   centro.className = 'centro';
   centro.textContent = 'MONOPOLY';
   tablero.appendChild(centro);
-}
 
+}
+/**
+ * Devuelve la clase CSS correspondiente a la posición de la casilla.
+ * Usado para rotar y ubicar correctamente cada casilla en el tablero.
+ * @param {number} position - Índice de la casilla
+ * @returns {string} Clase CSS
+ */
 function getPositionClass(position) {
   // Corner positions
   if (position === 0) return 'esquinaIa';  // Salida (bottom-left)
@@ -132,3 +143,32 @@ function getPositionClass(position) {
 }
 
 renderizarTablero();
+
+/**
+ * Actualiza visualmente las fichas de los jugadores en el tablero.
+ * Elimina fichas anteriores y coloca la ficha de cada jugador en su casilla actual.
+ * @param {Array} jugadores - Lista de jugadores con su posición
+ */
+export function actualizarFichas(jugadores) {
+  // Limpia fichas anteriores
+  document.querySelectorAll('.ficha-jugador').forEach(el => el.remove());
+
+  jugadores.forEach((jugador, idx) => {
+    const casilla = document.querySelector(`[data-position="${jugador.posicion}"]`);
+    if (casilla) {
+      const ficha = document.createElement('div');
+      ficha.className = 'ficha-jugador';
+      ficha.textContent = jugador.nickname[0]; // Inicial del jugador
+      ficha.style.background = idx === turnoActual ? '#007bff' : '#888';
+      ficha.style.color = '#fff';
+      ficha.style.borderRadius = '50%';
+      ficha.style.width = '22px';
+      ficha.style.height = '22px';
+      ficha.style.display = 'inline-flex';
+      ficha.style.justifyContent = 'center';
+      ficha.style.alignItems = 'center';
+      ficha.style.margin = '2px';
+      casilla.appendChild(ficha);
+    }
+  });
+}

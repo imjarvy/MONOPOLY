@@ -5,19 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monopoly</title>
     <link rel="stylesheet" href="./tablero.css">
+    <link rel="stylesheet" href="../../styles/panelJugador.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 <body class="container">
     <div class="row">
-        <div class="col-lg-9 col-md-8 col-sm-12">
+        <!-- Tablero principal -->
+        <div class="col-lg-8 col-md-7 col-sm-12 mb-3">
             <div class="tablero"></div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <!-- Panel lateral: jugadores y dados -->
+        <div class="col-lg-4 col-md-5 col-sm-12">
             <div id="panel-jugadores"></div>
             <div id="area-dados"></div>
         </div>
     </div>
     <script type="module" src="./tablero.js"></script>
-    <script src="./dados.js"></script>
+    <script type="module" src="./dados.js"></script>
 </body>
 </html>
