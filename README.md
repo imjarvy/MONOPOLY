@@ -14,7 +14,7 @@ Frontend for the Monopoly game application.
   /pages         # Main views (Settings, Game, Ranking)
   /services      # Backend consumption modules (fetch)
   /styles        # CSS files organized (by pages/components if necessary)
-  /utils         # Helper functions (dice, property, validations, helpers)
+  /utils         # Helper functions (dice, property, validations, helpers) here   you can put the controllers of the project
   app.js         # Main logic and page router
   main.js        # Entry point, initializer
 index.html       # Main HTML file

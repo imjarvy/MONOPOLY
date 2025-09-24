@@ -1,52 +1,73 @@
 .tablero {
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
-  grid-template-rows: repeat(11, 1fr);
-  gap: 2px;
-  width: 800px;
-  height: 800px;
+  grid-template-columns: repeat(11, minmax(60px, 1fr));
+  grid-template-rows: repeat(11, minmax(60px, 1fr));
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  aspect-ratio: 1;
   border: 4px solid #000;
   background: #fefefe;
   margin: auto;
+  gap: 1px;
 }
 
 .casilla {
-  border: 1px solid #333;
+    border: 1px solid #333;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 3px;
-  font-size: 0.65rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem;
+  font-size: clamp(0.5rem, 1.5vw, 0.75rem);
   text-align: center;
   position: relative;
+  transition: transform 0.3s ease;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  overflow: hidden; /* <-- evita que el contenido se salga */
+}
+
+.casilla .nombre,
+.casilla .precio,
+.casilla .renta {
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 /* Corner squares */
 .casilla.esquinaIa { /* Salida (0) */
   grid-column: 1;
   grid-row: 11;
-  background: #78ff09;
+  background: #c8c86f;
   transform: none;
 }
 
 .casilla.esquinaDa { /* Cárcel (10) */
   grid-column: 11;
   grid-row: 11;
-  background: #7e50af;
+  background: #c8c86f;
   transform: rotate(90deg);
 }
 
 .casilla.esquinaIb { /* Parqueo (20) */
   grid-column: 1;
   grid-row: 1;
-  background: #b4006c;
+  background: #c8c86f;
   transform: rotate(-90deg);
 }
 
 .casilla.esquinaDb { /* Ve a la Cárcel (30) */
   grid-column: 11;
   grid-row: 1;
-  background: #ccc;
+  background: #c8c86f;
   transform: rotate(180deg);
 }
 
@@ -73,7 +94,7 @@
 
 /* Property colors */
 .casilla[data-color="brown"] { background-color: #8b4513; color: white; }
-.casilla[data-color="purple"] { background-color: #e667af; color: white; }
+.casilla[data-color="purple"] { background-color: #740970; color: white; }
 .casilla[data-color="pink"] { background-color: #ff69b4; color: white; }
 .casilla[data-color="orange"] { background-color: #ffa500; color: black; }
 .casilla[data-color="red"] { background-color: #ff0000; color: white; }
@@ -89,28 +110,64 @@
 
 /* Center area */
 .centro {
-  grid-area: 2 / 2 / 11 / 11;
+ grid-area: 2 / 2 / 11 / 11;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: bold;
   color: #ff0000;
   background: #fff;
   z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 /* Text content */
-.nombre {
+.casilla .nombre {
   font-weight: bold;
-  margin-bottom: 2px;
+  margin-bottom: 0.25rem;
+  font-size: clamp(0.45rem, 1.2vw, 0.7rem);
 }
 
-.precio, .renta {
-  font-size: 0.6rem;
+.casilla .precio {
+  color: #444;
+  font-size: clamp(0.4rem, 1vw, 0.6rem);
+}
+
+.casilla .renta {
+  font-size: clamp(0.35rem, 0.9vw, 0.55rem);
+  color: #666;
 }
 
 .hipotecada {
   color: red;
   font-weight: bold;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .tablero {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .casilla {
+    padding: 0.15rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .casilla .nombre {
+    font-size: clamp(0.35rem, 1vw, 0.5rem);
+  }
+  
+  .casilla .precio,
+  .casilla .renta {
+    font-size: clamp(0.3rem, 0.8vw, 0.45rem);
+  }
+  
+  .centro {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
 }
