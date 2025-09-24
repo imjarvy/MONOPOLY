@@ -1,37 +1,134 @@
+import { getBoard } from '../../services/boardService.js';
+
 const tablero = document.querySelector('.tablero');
 
-// Crear casillas superiores (arriba)
-for (let column = 2; column <= 10; column++) {
-  const arriba = document.createElement('div');
-  arriba.className = 'casilla arriba';
-   arriba.style.gridColumn = column;  // Columna variable
-  arriba.textContent = column;  // Número de casilla (2 a 9)
-  tablero.appendChild(arriba);
+async function renderizarTablero() {
+  const boardData = await getBoard();
+  if (!boardData) return;
+
+  tablero.innerHTML = '';
+
+  const createSquare = (casilla, position) => {
+    const div = document.createElement('div');
+    div.className = `casilla ${getPositionClass(position)}`;
+    div.dataset.type = casilla.type;
+    div.dataset.color = casilla.color;
+    div.dataset.position = position;
+    
+    div.innerHTML = `
+      <div class="nombre">${casilla.name}</div>
+      ${casilla.price ? `<div class="precio">$${casilla.price}</div>` : ''}
+      ${casilla.type === 'property' ? `<div class="renta">Renta: $${casilla.rent.base}</div>` : ''}
+    `;
+    
+    return div;
+  };
+
+// Bottom row (right to left, 0-9)
+boardData.bottom.forEach((casilla, idx) => {
+  const square = createSquare(casilla, idx);
+  square.style.gridRow = '11';
+  square.style.gridColumn = `${11 - idx}`; // Right to left
+
+  // Solo asignar clase de esquina a la posición 0 (Salida)
+  if (idx === 0) {
+    square.className = 'casilla esquinaIa'; // Salida
+  } else {
+    square.className = 'casilla abajo'; // Resto de casillas del bottom
+  }
+  
+  // Mantener los data attributes
+  square.dataset.type = casilla.type;
+  square.dataset.color = casilla.color;
+  square.dataset.position = idx;
+  
+  tablero.appendChild(square);
+});
+
+  // Left column (bottom to top, 10-20)
+  boardData.left.forEach((casilla, idx) => {
+    const square = createSquare(casilla, idx + 10);
+    square.style.gridColumn = '1';
+    
+    // Adjust grid row to go from bottom to top
+    square.style.gridRow = `${11 - idx}`; 
+
+    // Handle corner cases for Jail (10) and Free Parking (20)
+    if (idx === 0) { // Jail (position 10)
+      square.className = 'casilla esquinaDa';
+    } else if (idx === boardData.left.length - 1) { // Free Parking (position 20)
+      square.className = 'casilla esquinaIb';
+    } else {
+      square.className = 'casilla izquierda';
+    }
+
+    // Maintain data attributes
+    square.dataset.type = casilla.type;
+    square.dataset.color = casilla.color;
+    square.dataset.position = idx + 10;
+
+    tablero.appendChild(square);
+  });
+
+   // Top row (left to right, 21-30)
+  boardData.top.forEach((casilla, idx) => {
+    const square = createSquare(casilla, idx + 21); // Start from 21
+    square.style.gridRow = '1';
+    square.style.gridColumn = `${idx + 2}`; // Start from column 2 (after Parqueo)
+
+    // Handle corner case for Go to Jail (30)
+    if (idx === boardData.top.length - 1) { // Last position (30)
+      square.className = 'casilla esquinaDb';
+    } else {
+      square.className = 'casilla arriba';
+    }
+
+    // Maintain data attributes
+    square.dataset.type = casilla.type;
+    square.dataset.color = casilla.color;
+    square.dataset.position = idx + 21; // Start from position 21
+
+    tablero.appendChild(square);
+  });
+
+    // Right column (top to bottom, 31-39)
+  boardData.right.forEach((casilla, idx) => {
+    const square = createSquare(casilla, idx + 31); // Start from 31
+    square.style.gridColumn = '11';
+    square.style.gridRow = `${idx + 2}`; // Start from row 2 (after Ve a la Cárcel)
+
+    // Set correct class
+    square.className = 'casilla derecha';
+
+    // Maintain data attributes
+    square.dataset.type = casilla.type;
+    square.dataset.color = casilla.color;
+    square.dataset.position = idx + 31;
+
+    tablero.appendChild(square);
+  });
+
+  // Add center
+  const centro = document.createElement('div');
+  centro.className = 'centro';
+  centro.textContent = 'MONOPOLY';
+  tablero.appendChild(centro);
 }
 
-// Crear casillas inferiores (abajo)
-for (let column = 2; column <= 10; column++) {
-  const abajo = document.createElement('div');
-  abajo.className = 'casilla abajo';
-  abajo.style.gridColumn = column;  // Columna variable
-  abajo.textContent = 31 - (column - 1);  // Número de casilla (31 a 22)
-  tablero.appendChild(abajo);
+function getPositionClass(position) {
+  // Corner positions
+  if (position === 0) return 'esquinaIa';  // Salida (bottom-left)
+  if (position === 10) return 'esquinaDa'; // Cárcel (bottom-right)
+  if (position === 20) return 'esquinaIb'; // Parqueo (top-left)
+  if (position === 30) return 'esquinaDb'; // Ve a la Cárcel (top-right)
+  
+  // Regular positions
+  if (position > 0 && position < 10) return 'abajo';     // Bottom row
+  if (position > 10 && position < 20) return 'izquierda'; // Left column
+  if (position > 20 && position < 30) return 'arriba';    // Top row
+  if (position > 30 && position < 40) return 'derecha';   // Right column
+  
+  return '';
 }
 
-// Crear casillas izquierdas
-for (let fila = 2; fila <= 10; fila++) {
-  const izquierda = document.createElement('div');
-  izquierda.className = 'casilla izquierda';
-  izquierda.style.gridRow = fila;  // Fila variable
-  izquierda.textContent = 40 - (fila - 1);  // Número de casilla (39 a 31)
-  tablero.appendChild(izquierda);
-}
-
-// Crear casillas derechas
-for (let fila = 2; fila <= 10; fila++) {
-  const derecha = document.createElement('div');
-  derecha.className = 'casilla derecha';
-  derecha.style.gridRow = fila;  // Fila variable
-  derecha.textContent = 11 + (fila - 1);  // Número de casilla (12 a 2)
-  tablero.appendChild(derecha);
-}
+renderizarTablero();

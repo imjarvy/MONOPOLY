@@ -2,67 +2,115 @@
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: repeat(11, 1fr);
-  width: 600px;
-  height: 600px;
-  border: 2px solid black;
+  gap: 2px;
+  width: 800px;
+  height: 800px;
+  border: 4px solid #000;
+  background: #fefefe;
+  margin: auto;
 }
 
 .casilla {
-  border: 1px solid #ccc;
-  background-color: #f9f871;
+  border: 1px solid #333;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3px;
+  font-size: 0.65rem;
+  text-align: center;
+  position: relative;
 }
 
-
-.cuadro {
-  background-color: lightblue;
-  border: 1px solid #000;
-}
-
-.centro {
-  grid-column: 2 / span 9;
-  grid-row: 2 / span 9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 24px;
-}
-.izquierda {
+/* Corner squares */
+.casilla.esquinaIa { /* Salida (0) */
   grid-column: 1;
-}
-
-.derecha {
-  grid-column: 11;
-  
-}
-.arriba {
-  grid-row: 1;
-}
-
-
-.abajo {
   grid-row: 11;
-  
+  background: #78ff09;
+  transform: none;
 }
-.esquinaIa{
-    grid-column: 1; grid-row: 1;
-    background-color: gray;
-}
-.esquinaDa{ 
-    grid-column: 11; grid-row: 1;
-    background-color: gray;
 
+.casilla.esquinaDa { /* Cárcel (10) */
+  grid-column: 11;
+  grid-row: 11;
+  background: #7e50af;
+  transform: rotate(90deg);
 }
-.esquinaIb{ 
-    grid-column: 1; grid-row: 11;
-    background-color: gray;
 
+.casilla.esquinaIb { /* Parqueo (20) */
+  grid-column: 1;
+  grid-row: 1;
+  background: #b4006c;
+  transform: rotate(-90deg);
 }
-.esquinaDb{ 
-    grid-column: 11; grid-row: 11;
-    background-color: gray;
 
+.casilla.esquinaDb { /* Ve a la Cárcel (30) */
+  grid-column: 11;
+  grid-row: 1;
+  background: #ccc;
+  transform: rotate(180deg);
+}
+
+/* Side rows */
+.casilla.abajo { /* Bottom row (1-9) */
+  grid-row: 11;
+  transform: none;
+}
+
+.casilla.izquierda { /* Left column (11-19) */
+  grid-column: 1;
+  transform: rotate(-90deg);
+}
+
+.casilla.arriba { /* Top row (21-29) */
+  grid-row: 1;
+  transform: rotate(180deg);
+}
+
+.casilla.derecha { /* Right column (31-39) */
+  grid-column: 11;
+  transform: rotate(90deg);
+}
+
+/* Property colors */
+.casilla[data-color="brown"] { background-color: #8b4513; color: white; }
+.casilla[data-color="purple"] { background-color: #e667af; color: white; }
+.casilla[data-color="pink"] { background-color: #ff69b4; color: white; }
+.casilla[data-color="orange"] { background-color: #ffa500; color: black; }
+.casilla[data-color="red"] { background-color: #ff0000; color: white; }
+.casilla[data-color="yellow"] { background-color: #ffff00; color: black; }
+.casilla[data-color="green"] { background-color: #008000; color: white; }
+.casilla[data-color="blue"] { background-color: #0000ff; color: white; }
+
+/* Special squares */
+.casilla[data-type="railroad"] { background-color: #000; color: white; }
+.casilla[data-type="tax"] { background-color: #fff; }
+.casilla[data-type="chance"] { background-color: #ffa07a; }
+.casilla[data-type="community_chest"] { background-color: #87ceeb; }
+
+/* Center area */
+.centro {
+  grid-area: 2 / 2 / 11 / 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ff0000;
+  background: #fff;
+  z-index: 1;
+}
+
+/* Text content */
+.nombre {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.precio, .renta {
+  font-size: 0.6rem;
+}
+
+.hipotecada {
+  color: red;
+  font-weight: bold;
 }
