@@ -35,3 +35,10 @@ for (let fila = 2; fila <= 10; fila++) {
   derecha.textContent = 11 + (fila - 1);  // Número de casilla (12 a 2)
   tablero.appendChild(derecha);
 }
+// funcionalidad del boton finalizaer partida
+document.querySelector('button').addEventListener('click', function() {
+  alert("La partida ha finalizado. Gracias por jugar.");
+  window.location.href = "/MONOPOLY/frontEnd/src/pages/registrar.html"; // Redirigir a la página de registro
+});
+
+// Nota: Las casillas de las esquinas ya están definidas en el HTML.
