@@ -170,4 +170,18 @@
   .centro {
     font-size: clamp(1.5rem, 4vw, 2rem);
   }
+  .casas, .hotel {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  margin-top: 2px;
+}
+.icon-casa {
+  font-size: 1.1em;
+  color: #2e7d32;
+}
+.icon-hotel {
+  font-size: 1.1em;
+  color: #b71c1c;
+}
 }

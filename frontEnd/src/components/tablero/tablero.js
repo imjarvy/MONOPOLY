@@ -13,22 +13,56 @@ async function renderizarTablero() {
 
   tablero.innerHTML = '';
 
-  const createSquare = (casilla, position) => {
-    const div = document.createElement('div');
-    div.className = `casilla ${getPositionClass(position)}`;
-    div.dataset.type = casilla.type;
-    div.dataset.color = casilla.color;
-    div.dataset.position = position;
-    
-    div.innerHTML = `
-      <div class="nombre">${casilla.name}</div>
-      ${casilla.price ? `<div class="precio">$${casilla.price}</div>` : ''}
-      ${casilla.type === 'property' ? `<div class="renta">Renta: $${casilla.rent.base}</div>` : ''}
-    `;
-    
-    return div;
-  };
+const createSquare = (casilla, position) => {
+  const div = document.createElement('div');
+  div.className = `casilla ${getPositionClass(position)}`;
+  div.dataset.type = casilla.type;
+  div.dataset.color = casilla.color;
+  div.dataset.position = position;
 
+  // Nombre
+  const nombre = document.createElement('div');
+  nombre.className = 'nombre';
+  nombre.textContent = casilla.name;
+  div.appendChild(nombre);
+
+  // Precio
+  if (casilla.price) {
+    const precio = document.createElement('div');
+    precio.className = 'precio';
+    precio.textContent = `$${casilla.price}`;
+    div.appendChild(precio);
+  }
+
+  // Casas
+  if (casilla.casas && casilla.casas > 0) {
+    const casasDiv = document.createElement('div');
+    casasDiv.className = 'casas';
+    for (let i = 0; i < casilla.casas; i++) {
+      const casa = document.createElement('span');
+      casa.className = 'icon-casa';
+      casa.textContent = '🏠';
+      casasDiv.appendChild(casa);
+    }
+    div.appendChild(casasDiv);
+  }
+
+  // Hotel
+  if (casilla.hotel && casilla.hotel > 0) {
+    const hotelDiv = document.createElement('div');
+    hotelDiv.className = 'hotel';
+    for (let i = 0; i < casilla.hotel; i++) {
+      const hotel = document.createElement('span');
+      hotel.className = 'icon-hotel';
+      hotel.textContent = '🏨';
+      hotelDiv.appendChild(hotel);
+    }
+    div.appendChild(hotelDiv);
+  }
+
+  return div;
+};
+    
 // Bottom row (right to left, 0-9)
 boardData.bottom.forEach((casilla, idx) => {
   const square = createSquare(casilla, idx);

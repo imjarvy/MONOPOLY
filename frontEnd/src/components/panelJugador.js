@@ -6,12 +6,54 @@
  */
 export function renderizarPanelJugadores(jugadores, turnoActual) {
   const panel = document.getElementById('panel-jugadores');
-  panel.innerHTML = jugadores.map((jugador, idx) => `
-    <div class="panel-jugador${turnoActual === idx ? ' activo' : ''}">
-      <div><strong>${jugador.nickname}</strong> (${jugador.pais})</div>
-      <div>Dinero: $${jugador.dinero}</div>
-      <div>Propiedades: ${jugador.propiedades.map(p => `<span style="color:${p.color}">${p.nombre}</span>`).join(', ')}</div>
-      <div>Hipotecas: ${jugador.hipotecas?.length ? jugador.hipotecas.join(', ') : 'Ninguna'}</div>
-    </div>
-  `).join('');
+  panel.innerHTML = '';
+jugadores.forEach((jugador, idx) => {
+  const div = document.createElement('div');
+  div.className = 'panel-jugador' + (turnoActual === idx ? ' activo' : '');
+
+  const nombre = document.createElement('div');
+  nombre.innerHTML = `<strong>${jugador.nickname}</strong> (${jugador.pais})`;
+  div.appendChild(nombre);
+
+  const dinero = document.createElement('div');
+  dinero.textContent = `Dinero: $${jugador.dinero}`;
+  div.appendChild(dinero);
+
+  // Propiedades
+  const props = document.createElement('div');
+  props.textContent = 'Propiedades: ';
+  if (jugador.propiedades.length) {
+    jugador.propiedades.forEach(p => {
+      const span = document.createElement('span');
+      span.textContent = p.nombre;
+      span.style.color = p.color;
+      props.appendChild(span);
+      props.appendChild(document.createTextNode(', '));
+    });
+    // Quita la última coma
+    props.removeChild(props.lastChild);
+  } else {
+    props.appendChild(document.createTextNode('Ninguna'));
+  }
+  div.appendChild(props);
+
+  // Hipotecas
+  const hips = document.createElement('div');
+  hips.textContent = 'Hipotecas: ';
+  if (jugador.hipotecas && jugador.hipotecas.length) {
+    jugador.hipotecas.forEach(h => {
+      const span = document.createElement('span');
+      span.className = 'hipotecada';
+      span.textContent = h;
+      hips.appendChild(span);
+      hips.appendChild(document.createTextNode(', '));
+    });
+    hips.removeChild(hips.lastChild);
+  } else {
+    hips.appendChild(document.createTextNode('Ninguna'));
+  }
+  div.appendChild(hips);
+
+  panel.appendChild(div);
+});
 }
