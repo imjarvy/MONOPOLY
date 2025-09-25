@@ -1,100 +1,80 @@
-// /src/utils/juego.js
-// Lógica principal del juego Monopoly
-// Incluye: compra/venta, construcción, hipotecas, cárcel, impuestos, finalización de partida
 
-/**
- * Representa una propiedad del tablero
- */
-export class Propiedad {
-  constructor({ nombre, color, precio, alquiler, propietario = null, casas = 0, hotel = false, hipotecada = false }) {
-    this.nombre = nombre;
-    this.color = color;
-    this.precio = precio;
-    this.alquiler = alquiler; // Array: [sin casas, 1 casa, ..., hotel]
-    this.propietario = propietario;
-    this.casas = casas;
-    this.hotel = hotel;
-    this.hipotecada = hipotecada;
+export class Juego {
+  constructor(jugadores, tablero) {
+    this.jugadores = jugadores;   
+    this.tablero = tablero;       
+    this.turnoActual = 0;        
+    this.dados = [0, 0];          
+    this.estado = "EN_CURSO";     
+    this.ranking = [];           
   }
 
-  calcularAlquiler() {
-    if (this.hipotecada) return 0;
-    if (this.hotel) return this.alquiler[5];
-    return this.alquiler[this.casas];
+
+  // Mover jugador según los dados
+  moverJugador(jugador) {
+    const pasos = this.dados[0] + this.dados[1];
+    jugador.posicion = (jugador.posicion + pasos) % this.tablero.length;
+
+    // Si pasó por la salida (casilla 0), cobra
+    if (jugador.posicion < pasos) {
+      accionInicio(jugador, 200);
+    }
+
+    return jugador.posicion;
   }
 
-  puedeConstruir(jugador) {
-  // Lógica para verificar si el jugador puede construir en esta propiedad
-    return this.propietario === jugador && !this.hotel && this.casas < 4 && !this.hipotecada;
+  // Ejecutar acción de la casilla
+  ejecutarAccion(jugador) {
+    const casilla = this.tablero[jugador.posicion];
+    switch (casilla.tipo) {
+      case "propiedad":
+        return accionPropiedad(jugador, casilla, this.jugadores);
+      case "ferrocarril":
+        return accionFerrocarril(jugador, casilla);
+      case "servicio":
+        return accionServicio(jugador, casilla, this.dados);
+      case "impuesto":
+        return accionPagarImpuesto(jugador, casilla.monto);
+      case "carcel":
+        return accionIrCarcel(jugador);
+      case "carta":
+        return accionCartaEspecial(jugador, casilla.carta, this.jugadores);
+      case "inicio":
+        return accionInicio(jugador);
+      case "parqueLibre":
+        return accionParqueLibre();
+      default:
+        return { tipo: "sinAccion" };
+    }
+  }
+
+  // Cambiar al siguiente jugador
+  siguienteTurno() {
+    this.turnoActual = (this.turnoActual + 1) % this.jugadores.length;
+    return this.jugadores[this.turnoActual];
+  }
+
+  // Finalizar juego y calcular ranking
+  finalizarJuego() {
+    this.estado = "FINALIZADO";
+    this.ranking = this.jugadores.map(j => {
+      let patrimonio = j.dinero;
+
+      j.propiedades.forEach(p => {
+        if (!p.hipotecada) {
+          patrimonio += p.precio;
+          patrimonio += p.casas * 100;
+          patrimonio += p.hotel ? 250 : 0;
+        }
+      });
+
+      return {
+        nickname: j.nickname,
+        pais: j.pais,
+        score: patrimonio
+      };
+    }).sort((a, b) => b.score - a.score);
+
+    return this.ranking;
   }
 }
-
-/**
- * Compra una propiedad
- */
-export function comprarPropiedad(jugador, propiedad) {
-  if (propiedad.propietario || jugador.dinero < propiedad.precio) return false;
-  jugador.dinero -= propiedad.precio;
-  propiedad.propietario = jugador;
-  jugador.propiedades.push(propiedad);
-  return true;
-}
-
-/**
- * Vende una propiedad
- */
-export function venderPropiedad(jugador, propiedad) {
-  if (propiedad.propietario !== jugador) return false;
-  jugador.dinero += propiedad.precio; // O valor de venta
-  propiedad.propietario = null;
-  jugador.propiedades = jugador.propiedades.filter(p => p !== propiedad);
-  return true;
-}
-
-/**
- * Hipoteca una propiedad
- */
-export function hipotecarPropiedad(jugador, propiedad) {
-  if (propiedad.propietario !== jugador || propiedad.hipotecada) return false;
-  propiedad.hipotecada = true;
-  jugador.dinero += propiedad.precio / 2;
-  return true;
-}
-
-/**
- * Deshipoteca una propiedad
- */
-export function deshipotecarPropiedad(jugador, propiedad) {
-  const costo = propiedad.precio * 0.55;
-  if (propiedad.propietario !== jugador || !propiedad.hipotecada || jugador.dinero < costo) return false;
-  propiedad.hipotecada = false;
-  jugador.dinero -= costo;
-  return true;
-}
-
-/**
- * Construye una casa o un hotel
- */
-export function construirCasaOHotel(jugador, propiedad) {
-  if (!propiedad.puedeConstruir(jugador) || jugador.dinero < propiedad.precioCasa) return false;
-  jugador.dinero -= propiedad.precioCasa;
-  propiedad.casas++;
-  if (propiedad.casas === 4) {
-    propiedad.hotel = true;
-    propiedad.casas = 0;
-  }
-  return true;
-}
-
-/**
- * Verifica si el jugador tiene monopolio de color
- */
-export function tieneMonopolio(jugador, color, propiedadesTablero) {
-  const delColor = propiedadesTablero.filter(p => p.color === color);
-  return delColor.every(p => p.propietario === jugador);
-}
-
-// Ejemplo de uso:
-// import { Propiedad, comprarPropiedad } from './juego.js';
-// const p = new Propiedad({nombre: 'Gran Vía', color: 'rojo', precio: 200, alquiler: [20, 60, 180, 320, 450, 600]});
-// comprarPropiedad(jugador, p);
