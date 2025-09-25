@@ -152,3 +152,15 @@ const jugadores = [
 - `/src/services/rankingService.js`
 - `/src/styles/modalAccion.css`, `/src/styles/ranking.css`
 - Documentación de lógica y ejemplos de uso.
+
+
+### DEsARROLLO PERsONA 2
+### Flujo de conexión entre componentes
+
+### Flujo de conexión entre componentes
+
+- El **tablero** se renderiza dinámicamente usando los datos obtenidos por `boardService.js`.
+- El **panel de jugadores** muestra el estado actual de cada jugador y se actualiza en cada turno.
+- El **componente de dados** permite lanzar los dados; al hacerlo, llama a `moverFichaActual(casillas)` en `app.js`.
+- La función `moverFichaActual` actualiza la posición del jugador, mueve la ficha en el tablero y llama a `siguienteTurno` para cambiar el turno y actualizar el panel.
+- Todos los componentes están conectados mediante funciones importadas/exportadas y el estado global de los jugadores.
