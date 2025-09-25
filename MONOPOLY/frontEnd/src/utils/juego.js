@@ -61,14 +61,13 @@ export class Juego {
     this.ranking = this.jugadores.map(j => {
       let patrimonio = j.dinero;
 
+      // Propiedades activas
       j.propiedades.forEach(p => {
-        if (!p.hipotecada) {
-          patrimonio += p.precio;
-          patrimonio += p.casas * 100;
-          patrimonio += p.hotel ? 250 : 0;
-        }
+        patrimonio += p.price;
+        patrimonio += (p.casas || 0) * 100;
+        patrimonio += (p.hotel ? 250 : 0);
       });
-
+      // Propiedades hipotecadas NO suman al patrimonio
       return {
         nickname: j.nickname,
         pais: j.pais,

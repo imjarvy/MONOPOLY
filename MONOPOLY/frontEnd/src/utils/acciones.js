@@ -1,4 +1,3 @@
-
 export function accionPropiedad(jugador, casilla, jugadores) {
   // Si no tiene dueño, opción de compra
   if (!casilla.propietario) {
@@ -33,12 +32,12 @@ export function accionPropiedad(jugador, casilla, jugadores) {
  
 export function calcularRenta(casilla) {
   if (casilla.hotel) {
-    return casilla.rentas.hotel;
+    return casilla.rent.withHotel;
   }
   if (casilla.casas > 0) {
-    return casilla.rentas[`casa${casilla.casas}`];
+    return casilla.rent.withHouse[casilla.casas - 1];
   }
-  return casilla.rentas.base;
+  return casilla.rent.base;
 }
 
 export function puedeConstruir(jugador, casilla, jugadores) {
@@ -202,4 +201,14 @@ export function accionParqueLibre() {
 
 export function accionIrCarcel(jugador) {
   return irACarcel(jugador);
+}
+
+// Hipotecar propiedad
+export function hipotecarPropiedad(jugador, propiedad) {
+  return jugador.hipotecarPropiedad(propiedad);
+}
+
+// Deshipotecar propiedad
+export function deshipotecarPropiedad(jugador, propiedad) {
+  return jugador.deshipotecarPropiedad(propiedad);
 }

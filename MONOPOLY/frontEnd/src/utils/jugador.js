@@ -6,7 +6,7 @@ export class Jugador {
     this.figura = figura;               // Aquí guardas el emoji seleccionado
     this.dinero = 1500;                 // Dinero inicial
     this.posicion = 0;                  // Casilla actual (0 = salida)
-    this.propiedades = [];              // Propiedades adquiridas (no hipotecadas)
+    this.propiedades = [];              // Propiedades activas (no hipotecadas)
     this.hipotecas = [];                // Propiedades hipotecadas
     this.enCarcel = false;              // ¿Está en la cárcel?
     this.turnosCarcel = 0;              // Turnos restantes en la cárcel
@@ -74,6 +74,39 @@ export class Jugador {
       return false;
     }
 }
+
+  // Hipotecar una propiedad
+  hipotecarPropiedad(propiedad) {
+    if (this.propiedades.includes(propiedad) && !propiedad.hipotecada) {
+      propiedad.hipotecada = true;
+      this.dinero += propiedad.mortgage;
+      this.hipotecas.push(propiedad);
+      this.propiedades = this.propiedades.filter(p => p !== propiedad);
+      return true;
+    }
+    return false;
+  }
+
+  // Deshipotecar una propiedad (paga mortgage + 10%)
+  deshipotecarPropiedad(propiedad) {
+    const costo = Math.ceil(propiedad.mortgage * 1.1);
+    if (this.hipotecas.includes(propiedad) && this.dinero >= costo) {
+      propiedad.hipotecada = false;
+      this.dinero -= costo;
+      this.propiedades.push(propiedad);
+      this.hipotecas = this.hipotecas.filter(p => p !== propiedad);
+      return true;
+    }
+    return false;
+  }
+
+  // Verifica si puede construir en un grupo de color
+  puedeConstruir(color, tablero) {
+    // Busca todas las propiedades de ese color en el tablero
+    const grupo = tablero.filter(c => c.color === color && c.type === "property");
+    // Verifica si el jugador tiene todas y ninguna está hipotecada
+    return grupo.every(p => p.propietario === this && !p.hipotecada);
+  }
 }
 
 //para poder usarla en otros archivos
