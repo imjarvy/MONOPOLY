@@ -1,12 +1,13 @@
-
 export class Juego {
   constructor(jugadores, tablero) {
-    this.jugadores = jugadores;   
-    this.tablero = tablero;       
-    this.turnoActual = 0;        
-    this.dados = [0, 0];          
-    this.estado = "EN_CURSO";     
-    this.ranking = [];           
+    this.jugadores = jugadores;         // Array de Jugador
+    this.tablero = tablero;             // Array de casillas (propiedades, ferrocarriles, servicios, etc.)
+    this.turnoActual = 0;               // Índice del jugador actual
+    this.dados = [0, 0];                // Último lanzamiento de dados
+    this.estado = "EN_CURSO";           // Estado del juego
+    this.ranking = [];                  // Ranking final al terminar
+    this.historial = [];                // Historial de acciones (opcional)
+  
   }
 
 

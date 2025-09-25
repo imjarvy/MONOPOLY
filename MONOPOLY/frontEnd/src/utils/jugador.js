@@ -1,18 +1,18 @@
-import Propiedad from "./jugador";
 export class Jugador {
-  constructor(nickname, pais, fichaColor) {
-    this.nickname = nickname;       // Nombre del jugador
-    this.pais = pais;               // Código del país (ej: "co")
-    this.fichaColor = fichaColor;   // Color único de ficha
-    this.dinero = 1500;             // Dinero inicial
-    this.posicion = 0;              // Casilla actual en el tablero
-    this.propiedades = [];          // Propiedades que posee
-    this.hipotecas = [];            // Propiedades hipotecadas
-    this.enCarcel = false;          // Si está en la cárcel
-    this.turnosCarcel = 0;          // Turnos restantes en cárcel
-    this.prestamos = 0;             // Dinero prestado
-    this.tieneCartaSalirCarcel = false; // Carta especial "Salir de la cárcel"
-    this.activo = true;             // Si sigue en juego o en bancarrota
+  constructor(nickname, pais, fichaColor, figura) {
+    this.nickname = nickname;           // Nick del jugador
+    this.pais = pais;                   // Código país (ej: 'CO')
+    this.fichaColor = fichaColor;       // Color único de la ficha
+    this.figura = figura;               // Aquí guardas el emoji seleccionado
+    this.dinero = 1500;                 // Dinero inicial
+    this.posicion = 0;                  // Casilla actual (0 = salida)
+    this.propiedades = [];              // Propiedades adquiridas (no hipotecadas)
+    this.hipotecas = [];                // Propiedades hipotecadas
+    this.enCarcel = false;              // ¿Está en la cárcel?
+    this.turnosCarcel = 0;              // Turnos restantes en la cárcel
+    this.tieneCartaSalirCarcel = false; // ¿Tiene carta de "Salir de la cárcel"?
+    this.activo = true;                 // ¿Sigue en juego?
+    this.bancarrota = false;            // ¿Está en bancarrota?
   }
 
   mover(casillas) {

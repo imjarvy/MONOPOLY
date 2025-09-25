@@ -5,9 +5,11 @@
  * @example
  *   getRanking().then(ranking => console.log(ranking));
  */
+const API_URL = 'http://127.0.0.1:5000';
+
 export async function getRanking() {
   try {
-    const response = await fetch('http://127.0.0.1/ranking');
+    const response = await fetch(`${API_URL}/ranking`);
     if (!response.ok) throw new Error('No se pudo obtener el ranking');
     return await response.json();
   } catch (error) {
