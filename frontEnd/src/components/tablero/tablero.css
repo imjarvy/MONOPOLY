@@ -1,73 +1,3 @@
-<<<<<<< HEAD
-.tablero {
-  display: grid;
-  grid-template-columns: repeat(11, 1fr);
-  grid-template-rows: repeat(11, 1fr);
-  width: 600px;
-  height: 600px;
-  border: 2px solid black;
-}
-
-.casilla {
-  border: 1px solid #ccc;
-  background-color: #f9f871;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.cuadro {
-  background-color: lightblue;
-  border: 1px solid #000;
-}
-
-.centro {
-  grid-column: 2 / span 9;
-  grid-row: 2 / span 9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 24px;
-}
-.izquierda {
-  grid-column: 1;
-}
-
-.derecha {
-  grid-column: 11;
-  
-}
-.arriba {
-  grid-row: 1;
-}
-
-
-.abajo {
-  grid-row: 11;
-  
-}
-.esquinaIa{
-    grid-column: 1; grid-row: 1;
-    background-color: gray;
-}
-.esquinaDa{ 
-    grid-column: 11; grid-row: 1;
-    background-color: gray;
-
-}
-.esquinaIb{ 
-    grid-column: 1; grid-row: 11;
-    background-color: gray;
-
-}
-.esquinaDb{ 
-    grid-column: 11; grid-row: 11;
-    background-color: gray;
-
-}
-=======
 .tablero {
   display: grid;
   grid-template-columns: repeat(11, minmax(60px, 1fr));
@@ -241,4 +171,4 @@
     font-size: clamp(1.5rem, 4vw, 2rem);
   }
 }
->>>>>>> jarvy
+/* 
