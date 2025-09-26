@@ -1,13 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div>
-        <h1>Cómo jugar a Monopoly</h1>
-    </div>
-</body>
-</html>
+<!-- Modal Compra Propiedad -->
+<div class="modal" id="modalCompra">
+  <div class="modal-content">
+    <span class="close" id="cerrarCompra">&times;</span>
+    <h2 id="tituloPropiedad"></h2>
+    <p>Precio: <span id="precioPropiedad"></span></p>
+    <p>¿Deseas comprar esta propiedad?</p>
+    <button id="btnComprar">Comprar</button>
+    <button id="btnPasar">Pasar</button>
+  </div>
+</div>
+
+<!-- Importar CSS -->
+<link rel="stylesheet" href="modal-compra.css">
+
+<!-- Importar JS -->
+<script src="modal-compra.js"></script>
