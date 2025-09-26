@@ -1,11 +1,38 @@
 /**
  * Toast Component - Sistema de Notificaciones Moderno
  * 
- * Tipos disponibles:
- * - success: Acciones exitosas (verde)
- * - error: Errores (rojo)
- * - warning: Advertencias (amarillo)
- * - info: Información (azul cielo)
+ * Sistema completo de notificaciones toast con animaciones suaves,
+ * diferentes tipos de mensajes y control total sobre la experiencia.
+ * 
+ * @fileoverview Sistema de toast moderno con soporte para múltiples tipos
+ * @author Tu Nombre
+ * @version 2.0.0
+ * 
+ * TIPOS DISPONIBLES:
+ * - success: Acciones exitosas (verde con ✓) - 4s duración
+ * - error: Errores críticos (rojo con ✕) - 6s duración  
+ * - warning: Advertencias importantes (amarillo con ⚠) - 5s duración
+ * - info: Información general (azul con ⓘ) - 4s duración
+ * 
+ * CARACTERÍSTICAS:
+ * - Auto-posicionamiento (top-right)
+ * - Animaciones fluidas de entrada/salida
+ * - Progreso visual con barra
+ * - Pausa automática en hover
+ * - Responsive design
+ * - Control programático (hide, hideAll)
+ * - Soporte para toast permanentes (duration = 0)
+ * 
+ * USO RÁPIDO:
+ * Toast.success('¡Éxito!');
+ * Toast.error('Error crítico');
+ * Toast.warning('Cuidado');
+ * Toast.info('Información');
+ * 
+ * INSTALACIÓN:
+ * 1. Incluir toast.js en tu HTML
+ * 2. Incluir toast.css (opcional, estilos están embebidos)
+ * 3. Usar window.Toast en cualquier lugar
  */
 
 class ToastManager {
@@ -47,6 +74,13 @@ class ToastManager {
      * Agrega los estilos CSS modernos
      */
     addStyles() {
+        // Verificar si ya hay estilos CSS externos cargados
+        const existingCSS = document.querySelector('link[href*="toast.css"]');
+        if (existingCSS) {
+            console.log('Toast CSS external file detected, skipping embedded styles');
+            return;
+        }
+        
         if (document.getElementById('toast-styles')) return;
 
         const style = document.createElement('style');
@@ -70,19 +104,20 @@ class ToastManager {
                 max-width: 400px;
                 padding: 16px 20px;
                 background: #ffffff;
-                border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
                 border-left: 4px solid;
                 display: flex;
-                align-items: flex-start;
+                align-items: center;
                 gap: 12px;
                 position: relative;
                 pointer-events: auto;
                 transform: translateX(100%);
                 opacity: 0;
-                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
             }
 
             /* Animaciones de entrada */
@@ -129,9 +164,8 @@ class ToastManager {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 600;
-                margin-top: 2px;
             }
 
             .toast.success .toast-icon {
@@ -163,7 +197,7 @@ class ToastManager {
             .toast-title {
                 font-weight: 600;
                 font-size: 14px;
-                line-height: 1.4;
+                line-height: 1.3;
                 margin-bottom: 2px;
                 color: #111827;
             }
@@ -180,8 +214,8 @@ class ToastManager {
                 position: absolute;
                 top: 8px;
                 right: 8px;
-                width: 24px;
-                height: 24px;
+                width: 20px;
+                height: 20px;
                 border: none;
                 background: none;
                 cursor: pointer;
@@ -190,7 +224,7 @@ class ToastManager {
                 align-items: center;
                 justify-content: center;
                 color: #9ca3af;
-                font-size: 18px;
+                font-size: 16px;
                 line-height: 1;
                 transition: all 0.2s ease;
                 opacity: 0.7;
@@ -207,9 +241,9 @@ class ToastManager {
                 position: absolute;
                 bottom: 0;
                 left: 0;
-                height: 3px;
+                height: 2px;
                 background: rgba(0, 0, 0, 0.1);
-                border-radius: 0 0 12px 12px;
+                border-radius: 0 0 8px 8px;
                 overflow: hidden;
             }
 
@@ -281,12 +315,27 @@ class ToastManager {
     }
 
     /**
-     * Muestra un toast
-     * @param {string} type - Tipo de toast (success, error, warning, info)
-     * @param {string} message - Mensaje principal
-     * @param {string} title - Título opcional
-     * @param {number} duration - Duración en ms (0 = no auto-close)
-     * @param {Object} options - Opciones adicionales
+     * Muestra un toast personalizado
+     * @param {('success'|'error'|'warning'|'info')} type - Tipo de toast que determina color e icono
+     * @param {string} message - Mensaje principal a mostrar (texto corto recomendado)
+     * @param {string|null} [title=null] - Título opcional en negrita (si es null, solo muestra mensaje)
+     * @param {number} [duration=4000] - Duración en milisegundos antes de auto-cerrar (0 = permanente)
+     * @param {Object} [options={}] - Opciones adicionales para personalización
+     * @param {boolean} [options.shake=false] - Agregar efecto shake para errores
+     * @param {string} [options.className=''] - Clase CSS adicional
+     * @returns {string|null} ID único del toast creado (null si falla)
+     * 
+     * @example
+     * // Toast básico de éxito
+     * show('success', 'Operación completada');
+     * 
+     * @example
+     * // Toast con título y duración personalizada
+     * show('error', 'No se pudo conectar', 'Error de Red', 6000);
+     * 
+     * @example
+     * // Toast permanente (no se cierra automáticamente)
+     * show('warning', 'Revisa tu conexión', 'Advertencia', 0);
      */
     show(type, message, title = null, duration = 4000, options = {}) {
         // Asegurar que el contenedor existe
@@ -391,8 +440,13 @@ class ToastManager {
     }
 
     /**
-     * Oculta un toast específico
-     * @param {string} id - ID del toast
+     * Oculta un toast específico por su ID
+     * @param {string} id - ID único del toast a ocultar (retornado por show())
+     * @returns {void}
+     * 
+     * @example
+     * const toastId = Toast.info('Cargando...');
+     * setTimeout(() => Toast.hide(toastId), 2000);
      */
     hide(id) {
         const toast = this.toasts.get(id);
@@ -408,7 +462,12 @@ class ToastManager {
     }
 
     /**
-     * Oculta todos los toasts
+     * Oculta todos los toasts visibles de una vez
+     * @returns {void}
+     * 
+     * @example
+     * // Limpiar todas las notificaciones al cambiar de página
+     * Toast.hideAll();
      */
     hideAll() {
         this.toasts.forEach((toast, id) => {
@@ -417,7 +476,10 @@ class ToastManager {
     }
 
     /**
-     * Configuración por tipo de toast
+     * Obtiene la configuración específica de cada tipo de toast
+     * @private
+     * @param {('success'|'error'|'warning'|'info')} type - Tipo de toast
+     * @returns {Object} Configuración con icono y título por defecto
      */
     getTypeConfig(type) {
         const configs = {
@@ -442,19 +504,64 @@ class ToastManager {
         return configs[type] || configs.info;
     }
 
-    // Métodos de conveniencia
+    // Métodos de conveniencia para cada tipo de toast
+    
+    /**
+     * Muestra un toast de éxito (verde con ✓)
+     * @param {string} message - Mensaje de éxito a mostrar
+     * @param {string} [title] - Título opcional (por defecto: "¡Éxito!")
+     * @param {number} [duration=4000] - Duración en ms (4 segundos por defecto)
+     * @returns {string|null} ID del toast creado
+     * 
+     * @example
+     * Toast.success('Usuario registrado correctamente');
+     * Toast.success('Archivo guardado', 'Operación Completada', 3000);
+     */
     success(message, title, duration = 4000) {
         return this.show('success', message, title, duration);
     }
 
+    /**
+     * Muestra un toast de error (rojo con ✕)
+     * @param {string} message - Mensaje de error a mostrar
+     * @param {string} [title] - Título opcional (por defecto: "Error")
+     * @param {number} [duration=6000] - Duración en ms (6 segundos por defecto, más tiempo para errores)
+     * @returns {string|null} ID del toast creado
+     * 
+     * @example
+     * Toast.error('No se pudo conectar al servidor');
+     * Toast.error('Credenciales incorrectas', 'Error de Autenticación');
+     */
     error(message, title, duration = 6000) {
         return this.show('error', message, title, duration);
     }
 
+    /**
+     * Muestra un toast de advertencia (amarillo con ⚠)
+     * @param {string} message - Mensaje de advertencia a mostrar
+     * @param {string} [title] - Título opcional (por defecto: "Advertencia")
+     * @param {number} [duration=5000] - Duración en ms (5 segundos por defecto)
+     * @returns {string|null} ID del toast creado
+     * 
+     * @example
+     * Toast.warning('Tu sesión expirará en 5 minutos');
+     * Toast.warning('Campos incompletos', 'Revisa el formulario');
+     */
     warning(message, title, duration = 5000) {
         return this.show('warning', message, title, duration);
     }
 
+    /**
+     * Muestra un toast informativo (azul con ⓘ)
+     * @param {string} message - Mensaje informativo a mostrar
+     * @param {string} [title] - Título opcional (por defecto: "Información")
+     * @param {number} [duration=4000] - Duración en ms (4 segundos por defecto)
+     * @returns {string|null} ID del toast creado
+     * 
+     * @example
+     * Toast.info('Nuevas funciones disponibles');
+     * Toast.info('Datos actualizados', 'Sistema');
+     */
     info(message, title, duration = 4000) {
         return this.show('info', message, title, duration);
     }
@@ -472,32 +579,110 @@ function initToastManager() {
 }
 
 // Funciones globales para fácil uso (disponibles inmediatamente)
+
+/**
+ * Función global para mostrar toasts (forma alternativa)
+ * @deprecated Usar window.Toast.success, error, warning, info en su lugar
+ * @param {string} type - Tipo de toast
+ * @param {string} message - Mensaje a mostrar
+ * @param {string} title - Título opcional
+ * @param {number} duration - Duración en ms
+ * @returns {string|null} ID del toast
+ */
 window.mostrarToast = (type, message, title, duration) => {
     const manager = initToastManager();
     return manager.show(type, message, title, duration);
 };
 
+/**
+ * API Global del Sistema de Toast
+ * Disponible como window.Toast en toda la aplicación
+ * 
+ * @namespace Toast
+ * @example
+ * // Uso básico
+ * Toast.success('¡Operación exitosa!');
+ * Toast.error('Algo salió mal');
+ * Toast.warning('Ten cuidado');
+ * Toast.info('Información importante');
+ * 
+ * @example
+ * // Con títulos personalizados
+ * Toast.success('Usuario creado', 'Registro Exitoso');
+ * Toast.error('Conexión perdida', 'Error de Red');
+ * 
+ * @example
+ * // Control manual
+ * const id = Toast.info('Procesando...', 'Por favor espera', 0); // Permanente
+ * setTimeout(() => Toast.hide(id), 5000); // Ocultar después de 5s
+ * 
+ * @example
+ * // Limpiar todas las notificaciones
+ * Toast.hideAll();
+ */
 window.Toast = {
+    /**
+     * Muestra un toast de éxito
+     * @param {string} message - Mensaje de éxito
+     * @param {string} [title] - Título opcional
+     * @param {number} [duration] - Duración personalizada en ms
+     * @returns {string|null} ID del toast creado
+     */
     success: (message, title, duration) => {
         const manager = initToastManager();
         return manager.success(message, title, duration);
     },
+
+    /**
+     * Muestra un toast de error
+     * @param {string} message - Mensaje de error
+     * @param {string} [title] - Título opcional
+     * @param {number} [duration] - Duración personalizada en ms
+     * @returns {string|null} ID del toast creado
+     */
     error: (message, title, duration) => {
         const manager = initToastManager();
         return manager.error(message, title, duration);
     },
+
+    /**
+     * Muestra un toast de advertencia
+     * @param {string} message - Mensaje de advertencia
+     * @param {string} [title] - Título opcional
+     * @param {number} [duration] - Duración personalizada en ms
+     * @returns {string|null} ID del toast creado
+     */
     warning: (message, title, duration) => {
         const manager = initToastManager();
         return manager.warning(message, title, duration);
     },
+
+    /**
+     * Muestra un toast informativo
+     * @param {string} message - Mensaje informativo
+     * @param {string} [title] - Título opcional
+     * @param {number} [duration] - Duración personalizada en ms
+     * @returns {string|null} ID del toast creado
+     */
     info: (message, title, duration) => {
         const manager = initToastManager();
         return manager.info(message, title, duration);
     },
+
+    /**
+     * Oculta un toast específico
+     * @param {string} id - ID del toast a ocultar
+     * @returns {void}
+     */
     hide: (id) => {
         const manager = initToastManager();
         return manager.hide(id);
     },
+
+    /**
+     * Oculta todos los toasts visibles
+     * @returns {void}
+     */
     hideAll: () => {
         const manager = initToastManager();
         return manager.hideAll();
@@ -505,3 +690,31 @@ window.Toast = {
 };
 
 console.log('✅ Toast system loaded successfully');
+
+/**
+ * EJEMPLOS DE USO COMPLETOS:
+ * 
+ * // Ejemplos básicos
+ * Toast.success('Usuario guardado correctamente');
+ * Toast.error('No se pudo conectar al servidor');
+ * Toast.warning('Tu sesión expirará pronto');
+ * Toast.info('Nueva actualización disponible');
+ * 
+ * // Con títulos personalizados
+ * Toast.success('Datos sincronizados', 'Sincronización Completa');
+ * Toast.error('Verifique su conexión', 'Error de Red');
+ * 
+ * // Con duración personalizada
+ * Toast.warning('Cambios no guardados', 'Advertencia', 8000); // 8 segundos
+ * Toast.info('Cargando contenido...', 'Por favor espere', 0); // Permanente
+ * 
+ * // Control programático
+ * const loadingToast = Toast.info('Procesando...', 'Cargando', 0);
+ * setTimeout(() => {
+ *     Toast.hide(loadingToast);
+ *     Toast.success('¡Listo!', 'Proceso Completado');
+ * }, 3000);
+ * 
+ * // Limpiar todas las notificaciones
+ * Toast.hideAll();
+ */

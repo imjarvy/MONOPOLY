@@ -7,32 +7,92 @@
 function mostrarModalDados() {
     const contenido = `
         <div class="dados-modal-container">
-            <!-- Título y contexto -->
+            <!-- Título minimalista -->
             <div class="dados-header">
-                <h3>🎲 Lanzar Dados</h3>
-                <p>¡Es tu turno! Lanza los dados para moverte por el tablero</p>
+                <h3>Lanzar Dados</h3>
+                <p>Es tu turno para moverte por el tablero</p>
             </div>
 
-            <!-- Área de dados con animación -->
-            <div class="dados-area">
+            <!-- Área principal de dados -->
+            <div class="dados-main-area">
+                <!-- Dados con animación 3D -->
                 <div class="dados-container" id="dadosContainer">
                     <div class="dado" id="dado1">
-                        <div class="cara cara-1">⚀</div>
-                        <div class="cara cara-2">⚁</div>
-                        <div class="cara cara-3">⚂</div>
-                        <div class="cara cara-4">⚃</div>
-                        <div class="cara cara-5">⚄</div>
-                        <div class="cara cara-6">⚅</div>
+                        <div class="cara cara-1">
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-2">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-3">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-4">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-5">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-6">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
                     </div>
                     <div class="dado" id="dado2">
-                        <div class="cara cara-1">⚀</div>
-                        <div class="cara cara-2">⚁</div>
-                        <div class="cara cara-3">⚂</div>
-                        <div class="cara cara-4">⚃</div>
-                        <div class="cara cara-5">⚄</div>
-                        <div class="cara cara-6">⚅</div>
+                        <div class="cara cara-1">
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-2">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-3">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-4">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-5">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="cara cara-6">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Botón de lanzar junto a los dados -->
+                <button class="btn-lanzar" id="btnLanzarAuto" onclick="lanzarDadosAuto()">
+                    Lanzar Dados
+                </button>
 
                 <!-- Resultado -->
                 <div class="resultado-dados" id="resultadoDados">
@@ -40,32 +100,23 @@ function mostrarModalDados() {
                 </div>
             </div>
 
-            <!-- Controles -->
-            <div class="dados-controles">
-                <!-- Lanzamiento automático -->
-                <div class="control-section">
-                    <h4>🎯 Lanzamiento Automático</h4>
-                    <button class="btn-lanzar" id="btnLanzarAuto" onclick="lanzarDadosAuto()">
-                        🎲 Lanzar Dados
-                    </button>
-                </div>
-
-                <!-- Entrada manual -->
-                <div class="control-section">
-                    <h4>✋ Valores Manuales</h4>
-                    <div class="manual-inputs">
+            <!-- Entrada manual (abajo) -->
+            <div class="manual-section">
+                <h4>Tiro Manual</h4>
+                <div class="manual-inputs">
+                    <div class="inputs-row">
                         <div class="input-group">
-                            <label>Dado 1:</label>
-                            <input type="number" id="manualDado1" min="1" max="6" placeholder="1-6">
+                            <label>Dado 1</label>
+                            <input type="number" id="manualDado1" min="1" max="6" placeholder="1">
                         </div>
                         <div class="input-group">
-                            <label>Dado 2:</label>
-                            <input type="number" id="manualDado2" min="1" max="6" placeholder="1-6">
+                            <label>Dado 2</label>
+                            <input type="number" id="manualDado2" min="1" max="6" placeholder="1">
                         </div>
-                        <button class="btn-manual" onclick="lanzarDadosManual()">
-                            ✅ Usar Valores
-                        </button>
                     </div>
+                    <button class="btn-manual" onclick="lanzarDadosManual()">
+                        Usar Valores
+                    </button>
                 </div>
             </div>
 
@@ -75,7 +126,7 @@ function mostrarModalDados() {
                     Cancelar
                 </button>
                 <button class="btn-primary" id="btnConfirmar" onclick="confirmarMovimiento()" disabled>
-                    ➡️ Mover Ficha
+                    Mover Ficha
                 </button>
             </div>
         </div>
@@ -83,75 +134,200 @@ function mostrarModalDados() {
 
     const estilos = `
         .dados-modal-container {
-            padding: 20px;
+            padding: 32px;
             text-align: center;
             background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
             border-radius: 20px;
             color: #374151;
-            min-height: 500px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .dados-header h3 {
-            font-size: 1.8em;
+            font-size: 2em;
             margin-bottom: 8px;
             color: #374151;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .dados-header p {
             color: #6b7280;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             font-size: 1.1rem;
+            font-weight: 400;
         }
 
-        /* Contenedor de dados 3D */
-        .dados-area {
+        /* Área principal de dados */
+        .dados-main-area {
             perspective: 1000px;
             margin-bottom: 30px;
             background: #fafbff;
             border-radius: 16px;
-            padding: 25px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
         .dados-container {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            margin-bottom: 20px;
+            gap: 50px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
         }
 
         .dado {
             position: relative;
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             transform-style: preserve-3d;
             transition: transform 0.6s;
-            margin: 20px;
         }
 
         .cara {
             position: absolute;
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
-            border: 3px solid #d1d5db;
-            border-radius: 12px;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5em;
-            color: #374151;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        .cara-1 { transform: rotateY(0deg) translateZ(40px); }
-        .cara-2 { transform: rotateY(90deg) translateZ(40px); }
-        .cara-3 { transform: rotateY(180deg) translateZ(40px); }
-        .cara-4 { transform: rotateY(-90deg) translateZ(40px); }
-        .cara-5 { transform: rotateX(90deg) translateZ(40px); }
-        .cara-6 { transform: rotateX(-90deg) translateZ(40px); }
+        /* Posicionamiento 3D de caras */
+        .cara-1 { transform: rotateY(0deg) translateZ(45px); }
+        .cara-2 { transform: rotateY(90deg) translateZ(45px); }
+        .cara-3 { transform: rotateY(180deg) translateZ(45px); }
+        .cara-4 { transform: rotateY(-90deg) translateZ(45px); }
+        .cara-5 { transform: rotateX(90deg) translateZ(45px); }
+        .cara-6 { transform: rotateX(-90deg) translateZ(45px); }
+
+        /* Puntos de dados reales */
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #374151;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Cara 1 - Un punto central */
+        .cara-1 .dot:nth-child(1) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Cara 2 - Dos puntos diagonal */
+        .cara-2 .dot:nth-child(1) {
+            top: 20%;
+            left: 20%;
+        }
+        .cara-2 .dot:nth-child(2) {
+            bottom: 20%;
+            right: 20%;
+        }
+
+        /* Cara 3 - Tres puntos diagonal */
+        .cara-3 .dot:nth-child(1) {
+            top: 20%;
+            left: 20%;
+        }
+        .cara-3 .dot:nth-child(2) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .cara-3 .dot:nth-child(3) {
+            bottom: 20%;
+            right: 20%;
+        }
+
+        /* Cara 4 - Cuatro puntos esquinas */
+        .cara-4 .dot:nth-child(1) {
+            top: 20%;
+            left: 20%;
+        }
+        .cara-4 .dot:nth-child(2) {
+            top: 20%;
+            right: 20%;
+        }
+        .cara-4 .dot:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+        }
+        .cara-4 .dot:nth-child(4) {
+            bottom: 20%;
+            right: 20%;
+        }
+
+        /* Cara 5 - Cinco puntos */
+        .cara-5 .dot:nth-child(1) {
+            top: 20%;
+            left: 20%;
+        }
+        .cara-5 .dot:nth-child(2) {
+            top: 20%;
+            right: 20%;
+        }
+        .cara-5 .dot:nth-child(3) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .cara-5 .dot:nth-child(4) {
+            bottom: 20%;
+            left: 20%;
+        }
+        .cara-5 .dot:nth-child(5) {
+            bottom: 20%;
+            right: 20%;
+        }
+
+        /* Cara 6 - Seis puntos */
+        .cara-6 .dot:nth-child(1) {
+            top: 20%;
+            left: 20%;
+        }
+        .cara-6 .dot:nth-child(2) {
+            top: 20%;
+            right: 20%;
+        }
+        .cara-6 .dot:nth-child(3) {
+            top: 50%;
+            left: 20%;
+            transform: translateY(-50%);
+        }
+        .cara-6 .dot:nth-child(4) {
+            top: 50%;
+            right: 20%;
+            transform: translateY(-50%);
+        }
+        .cara-6 .dot:nth-child(5) {
+            bottom: 20%;
+            left: 20%;
+        }
+        .cara-6 .dot:nth-child(6) {
+            bottom: 20%;
+            right: 20%;
+        }
 
         /* Animaciones de rotación */
         .dado.girando {
@@ -174,56 +350,19 @@ function mostrarModalDados() {
         .dado.mostrar-5 { transform: rotateY(0deg) rotateX(-90deg); }
         .dado.mostrar-6 { transform: rotateY(0deg) rotateX(90deg); }
 
-        /* Resultado */
-        .resultado-dados {
-            background: linear-gradient(135deg, #f3f4f6, #ffffff);
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .resultado-text {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        /* Controles */
-        .dados-controles {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .control-section {
-            background: #fafbff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-left: 6px solid #3b82f6;
-        }
-
-        .control-section h4 {
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        /* Botones principales - estilo consistente con registroUsuarios */
+        /* Botón de lanzar principal */
         .btn-lanzar {
             background: #3b82f6;
             color: white;
             border: 1px solid #3b82f6;
             border-radius: 6px;
-            padding: 12px 25px;
+            padding: 16px 32px;
             font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 0;
+            min-width: 200px;
             box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
         }
 
@@ -246,37 +385,83 @@ function mostrarModalDados() {
             transform: translateY(0);
         }
 
-        /* Inputs manuales - estilo consistente */
+        /* Resultado */
+        .resultado-dados {
+            background: linear-gradient(135deg, #f3f4f6, #ffffff);
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .resultado-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #374151;
+            letter-spacing: 0.3px;
+        }
+
+        /* Sección manual */
+        .manual-section {
+            background: #fafbff;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 6px solid #10b981;
+        }
+
+        .manual-section h4 {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #374151;
+        }
+
         .manual-inputs {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .inputs-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .input-group {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .input-group label {
-            width: 70px;
-            text-align: left;
             font-weight: 600;
             color: #374151;
             font-size: 1rem;
         }
 
         .input-group input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
+            width: 60px;
+            height: 60px;
+            padding: 0;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
             background: #ffffff;
             color: #374151;
-            font-size: 1em;
+            font-size: 1.5em;
             text-align: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .input-group input::placeholder {
@@ -287,6 +472,7 @@ function mostrarModalDados() {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+            background: #ffffff;
         }
 
         .btn-manual {
@@ -294,22 +480,21 @@ function mostrarModalDados() {
             color: white;
             border: 1px solid #10b981;
             border-radius: 6px;
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 8px;
-            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
         }
 
         .btn-manual:hover {
             background: #059669;
             border-color: #059669;
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
         }
 
-        /* Botones de acción - mismo estilo que registroUsuarios */
+        /* Botones de acción */
         .dados-actions {
             display: flex;
             gap: 15px;
@@ -374,36 +559,69 @@ function mostrarModalDados() {
         /* Responsive */
         @media (max-width: 768px) {
             .dados-modal-container {
-                padding: 15px;
-                min-height: 400px;
-            }
-            
-            .dados-controles {
-                grid-template-columns: 1fr;
+                padding: 20px;
+                min-height: 450px;
             }
             
             .dados-container {
-                gap: 20px;
+                gap: 30px;
             }
             
             .dado {
-                width: 60px;
-                height: 60px;
+                width: 70px;
+                height: 70px;
             }
             
             .cara {
-                width: 60px;
-                height: 60px;
-                font-size: 2em;
+                width: 70px;
+                height: 70px;
+            }
+
+            .cara-1 { transform: rotateY(0deg) translateZ(35px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(35px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(35px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(35px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(35px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(35px); }
+
+            .dot {
+                width: 10px;
+                height: 10px;
             }
             
             .dados-actions {
                 flex-direction: column;
-                gap: 10px;
+                gap: 15px;
+            }
+
+            .inputs-row {
+                flex-direction: column;
+                gap: 15px;
             }
         }
 
-        /* Animación de entrada mejorada */
+        /* Animación de entrada futurista */
+        .dados-modal-container {
+            animation: fadeInScale 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Efectos de hover para dados */
+        .dado:hover {
+            transform: scale(1.02);
+        }
+
+        /* Animación de entrada */
         .dados-modal-container {
             animation: fadeInScale 0.4s ease-out;
         }
@@ -439,7 +657,7 @@ function lanzarDadosAuto() {
     
     // Deshabilitar botón durante la animación
     btnLanzar.disabled = true;
-    btnLanzar.textContent = '🎲 Lanzando...';
+    btnLanzar.textContent = 'Lanzando...';
     btnConfirmar.disabled = true;
     
     // Limpiar inputs manuales
@@ -453,7 +671,7 @@ function lanzarDadosAuto() {
     dado1Element.className = 'dado girando';
     dado2Element.className = 'dado girando';
     
-    resultado.innerHTML = '<span class="resultado-text">🎲 Girando dados...</span>';
+    resultado.innerHTML = '<span class="resultado-text">Girando dados...</span>';
     
     // Generar valores aleatorios
     const valor1 = Math.floor(Math.random() * 6) + 1;
@@ -468,15 +686,15 @@ function lanzarDadosAuto() {
         
         resultado.innerHTML = `
             <span class="resultado-text">
-                🎯 Resultado: ${valor1} + ${valor2} = ${ultimoResultado.total}
-                ${valor1 === valor2 ? '<br>🎉 ¡Dobles! Puedes lanzar otra vez' : ''}
+                Resultado: ${valor1} + ${valor2} = ${ultimoResultado.total}
+                ${valor1 === valor2 ? '<br>¡Dobles! Puedes lanzar otra vez' : ''}
             </span>
         `;
         
         // Efectos especiales para dobles
         if (valor1 === valor2) {
             resultado.classList.add('dobles-effect');
-            console.log('🎉 ¡DOBLES! Sonido especial aquí');
+            console.log('¡DOBLES! Sonido especial aquí');
             
             // Remover el efecto después de la animación
             setTimeout(() => {
@@ -486,7 +704,7 @@ function lanzarDadosAuto() {
         
         // Rehabilitar botones
         btnLanzar.disabled = false;
-        btnLanzar.textContent = '🎲 Lanzar Dados';
+        btnLanzar.textContent = 'Lanzar Dados';
         btnConfirmar.disabled = false;
         
     }, 2000); // Duración de la animación
@@ -504,7 +722,7 @@ function lanzarDadosManual() {
     
     // Validar valores
     if (!valor1 || !valor2 || valor1 < 1 || valor1 > 6 || valor2 < 1 || valor2 > 6) {
-        resultado.innerHTML = '<span class="resultado-text">⚠️ Por favor ingresa valores válidos (1-6)</span>';
+        resultado.innerHTML = '<span class="resultado-text">Por favor ingresa valores válidos (1-6)</span>';
         return;
     }
     
@@ -519,8 +737,8 @@ function lanzarDadosManual() {
     
     resultado.innerHTML = `
         <span class="resultado-text">
-            ✋ Manual: ${valor1} + ${valor2} = ${ultimoResultado.total}
-            ${valor1 === valor2 ? '<br>🎉 ¡Dobles! Puedes lanzar otra vez' : ''}
+            Manual: ${valor1} + ${valor2} = ${ultimoResultado.total}
+            ${valor1 === valor2 ? '<br>¡Dobles! Puedes lanzar otra vez' : ''}
         </span>
     `;
     
@@ -541,13 +759,13 @@ function confirmarMovimiento() {
         if (typeof window.Toast !== 'undefined' && window.Toast) {
             window.Toast.warning("Primero debes lanzar los dados", "Acción Requerida");
         } else {
-            alert('⚠️ Primero debes lanzar los dados');
+            alert('Primero debes lanzar los dados');
         }
         return;
     }
     
     // Aquí integrar con la lógica del juego
-    console.log(`🎯 Moviendo ficha ${ultimoResultado.total} espacios:`, ultimoResultado);
+    console.log(`Moviendo ficha ${ultimoResultado.total} espacios:`, ultimoResultado);
     
     // Llamar a función del juego principal (si existe)
     if (typeof moverJugador === 'function') {
@@ -556,13 +774,6 @@ function confirmarMovimiento() {
     
     // Cerrar modal
     window.Modal.close();
-    
-    // Opcional: mostrar notificación
-    if (typeof window.Toast !== 'undefined' && window.Toast) {
-        window.Toast.info(`Dados: ${ultimoResultado.dado1} + ${ultimoResultado.dado2} = ${ultimoResultado.total} - Moviendo ficha...`, "Resultado de Dados");
-    } else {
-        alert(`🎲 Dados: ${ultimoResultado.dado1} + ${ultimoResultado.dado2} = ${ultimoResultado.total}\n➡️ Moviendo ficha...`);
-    }
 }
 
 // Hacer función disponible globalmente
