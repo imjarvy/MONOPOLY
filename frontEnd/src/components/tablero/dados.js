@@ -1,51 +1,57 @@
 import { moverFichaActual } from '../../app.js';
 const areaDados = document.getElementById('area-dados');
 
-
 /**
  * Componente visual y lógico para lanzar los dados.
- * Al lanzar, llama a moverFichaActual(casillas) desde app.js para mover la ficha del jugador actual.
+ * Integrado con el sistema Toast y Modal de dados para una experiencia moderna.
  * Se monta en el contenedor #area-dados.
  */
 function crearDados() {
- areaDados.innerHTML = '';
+  areaDados.innerHTML = '';
 
-const btn = document.createElement('button');
-btn.className = 'btn btn-primary';
-btn.id = 'btn-lanzar';
-btn.textContent = 'Lanzar Dados';
-areaDados.appendChild(btn);
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-primary btn-lg';
+  btn.id = 'btn-lanzar';
+  btn.innerHTML = '🎲 Lanzar Dados';
+  btn.style.width = '100%';
+  btn.style.marginBottom = '15px';
+  areaDados.appendChild(btn);
 
-const input1 = document.createElement('input');
-input1.type = 'number';
-input1.id = 'dado1';
-input1.min = 1;
-input1.max = 6;
-input1.placeholder = 'Manual Dado 1';
-input1.style.width = '60px';
-areaDados.appendChild(input1);
+  const info = document.createElement('div');
+  info.className = 'alert alert-info';
+  info.innerHTML = '<small><strong>🎮 Nuevo:</strong> Experiencia de dados modernizada con animaciones y notificaciones visuales.</small>';
+  areaDados.appendChild(info);
 
-const input2 = document.createElement('input');
-input2.type = 'number';
-input2.id = 'dado2';
-input2.min = 1;
-input2.max = 6;
-input2.placeholder = 'Manual Dado 2';
-input2.style.width = '60px';
-areaDados.appendChild(input2);
-
-const resultado = document.createElement('div');
-resultado.id = 'resultado-dados';
-areaDados.appendChild(resultado);
-
-// Listeners y lógica igual que antes
-
+  // Event listener que abre el modal de dados
   document.getElementById('btn-lanzar').onclick = () => {
-    let dado1 = parseInt(document.getElementById('dado1').value) || (Math.floor(Math.random() * 6) + 1);
-    let dado2 = parseInt(document.getElementById('dado2').value) || (Math.floor(Math.random() * 6) + 1);
-    document.getElementById('resultado-dados').textContent = `Resultado: ${dado1} + ${dado2} = ${dado1 + dado2}`;
-    moverFichaActual(dado1 + dado2); // Llama la función de movimiento
+    // Verificar que el modal esté disponible
+    if (window.Modal) {
+      window.Modal.show();
+    } else {
+      // Fallback a funcionalidad original si el modal no está disponible
+      lanzarDadosOriginal();
+    }
   };
 }
+
+/**
+ * Funcionalidad original de dados como fallback
+ */
+function lanzarDadosOriginal() {
+  let dado1 = Math.floor(Math.random() * 6) + 1;
+  let dado2 = Math.floor(Math.random() * 6) + 1;
+  
+  if (window.Toast) {
+    window.Toast.info(`Resultado: ${dado1} + ${dado2} = ${dado1 + dado2}`, "Dados");
+    if (dado1 === dado2) {
+      window.Toast.success("¡Dobles! Puedes lanzar otra vez.", "¡Excelente!");
+    }
+  }
+  
+  moverFichaActual(dado1 + dado2);
+}
+
+// Exponer función para el modal
+window.moverFichaActual = moverFichaActual;
 
 crearDados();

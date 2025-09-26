@@ -34,9 +34,14 @@ function crearJugador(nombre = `Jugador ${contador + 1}`) {
     eliminarBtn.textContent = "❌";
     eliminarBtn.title = "Eliminar jugador";
     eliminarBtn.onclick = () => {
+        const nombreJugador = div.querySelector("input").value.trim() || `Jugador ${contador}`;
         jugadoresDiv.removeChild(div);
         contador--;
         if (contador < maxJugadores) agregarBtn.disabled = false;
+        
+        if (window.Toast) {
+            window.Toast.info(`${nombreJugador} ha sido eliminado.`, "Jugador Eliminado");
+        }
     };
 
     acciones.appendChild(eliminarBtn);
@@ -53,7 +58,15 @@ function crearJugador(nombre = `Jugador ${contador + 1}`) {
 }
 
 agregarBtn.addEventListener("click", () => {
-    crearJugador();
+    if (contador < maxJugadores) {
+        crearJugador();
+        if (window.Toast) {
+            window.Toast.success(`Jugador ${contador} agregado correctamente.`, "Nuevo Jugador");
+        }
+        if (contador >= maxJugadores && window.Toast) {
+            window.Toast.info("Has alcanzado el máximo de 4 jugadores.", "Límite Alcanzado");
+        }
+    }
 });
 
 function guardarJugadores() {
@@ -74,14 +87,32 @@ function guardarJugadores() {
         jugadores.push({ nombre, ficha });
     });
     if (hayRepetidos) {
-        alert("⚠️ Cada jugador debe tener una ficha diferente. Cambia las fichas repetidas antes de jugar.");
+        if (window.Toast) {
+            window.Toast.warning("Cada jugador debe tener una ficha diferente. Cambia las fichas repetidas antes de jugar.", "Fichas Repetidas");
+        } else {
+            alert("⚠️ Cada jugador debe tener una ficha diferente. Cambia las fichas repetidas antes de jugar.");
+        }
         return; 
     }
     if (jugadores.length < 2) {
-        alert("⚠️ Se necesitan al menos 2 jugadores para comenzar.");
+        if (window.Toast) {
+            window.Toast.error("Se necesitan al menos 2 jugadores para comenzar.", "Jugadores Insuficientes");
+        } else {
+            alert("⚠️ Se necesitan al menos 2 jugadores para comenzar.");
+        }
         return;
     }
+    
+    // Notificación de éxito
+    if (window.Toast) {
+        window.Toast.success(`¡Perfecto! ${jugadores.length} jugadores listos para jugar.`, "Iniciando Juego");
+    }
+    
     // Guardamos en localStorage para usar en el tablero
     localStorage.setItem("jugadores", JSON.stringify(jugadores));
-    location.href = "./src/components/tablero/tablero.html"; // Redirigir al tablero
+    
+    // Pequeña demora para mostrar el toast antes de redirigir
+    setTimeout(() => {
+        location.href = "./src/components/tablero/tablero.html"; // Redirigir al tablero
+    }, 1000);
 }
