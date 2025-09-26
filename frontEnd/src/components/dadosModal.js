@@ -47,7 +47,7 @@ class DadosModal {
         </div>
       </div>
 
-      <div class="manual-inputs">
+      <div class="manual-inputs" id="manual-inputs">
         <input type="number" class="input-dado" id="manual-dado1" min="1" max="6" placeholder="D1">
         <input type="number" class="input-dado" id="manual-dado2" min="1" max="6" placeholder="D2">
       </div>
