@@ -288,3 +288,49 @@ function guardarJugadores() {
     console.log("Jugadores guardados en localStorage:", localStorage.getItem("jugadores"));
     location.href = "src/components/tablero/tablero.html";
 }
+
+// Función para probar todos los tipos de toast
+function probarTodosLosToasts() {
+    console.log("Probando todos los toasts...");
+    
+    if (typeof window.Toast !== 'undefined' && window.Toast) {
+        // Toast de éxito
+        setTimeout(() => {
+            window.Toast.success("¡Operación completada exitosamente!", "Éxito");
+        }, 0);
+        
+        // Toast de información
+        setTimeout(() => {
+            window.Toast.info("Esta es una notificación informativa", "Información");
+        }, 1000);
+        
+        // Toast de advertencia
+        setTimeout(() => {
+            window.Toast.warning("Ten cuidado con esta acción", "Advertencia");
+        }, 2000);
+        
+        // Toast de error
+        setTimeout(() => {
+            window.Toast.error("Ha ocurrido un error en el sistema", "Error");
+        }, 3000);
+        
+        // Toast simple (sin título)
+        setTimeout(() => {
+            window.Toast.info("Toast simple sin título");
+        }, 4000);
+        
+        // Toast personalizado si existe el método
+        setTimeout(() => {
+            if (typeof window.Toast.custom === 'function') {
+                window.Toast.custom("Toast personalizado", "Custom", "#8b5cf6");
+            } else {
+                window.Toast.info("Toast personalizado (método custom no disponible)", "Custom");
+            }
+        }, 5000);
+        
+        console.log("✅ Todos los toasts han sido programados");
+    } else {
+        console.error("❌ Toast no está disponible");
+        alert("El sistema de Toast no está disponible");
+    }
+}

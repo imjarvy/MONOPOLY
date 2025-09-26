@@ -16,28 +16,69 @@
     <!-- Modal registro de usuarios -->
     <link rel="stylesheet" href="src/components/modals/registroUsuarios.css">
     <script src="src/components/modals/registroUsuarios.js"></script>
+    <!-- Estilos para botón de prueba -->
+    <style>
+      .btn-test {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+      }
+      .btn-test:hover {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+      }
+      .btn-test:active {
+        transform: translateY(0);
+      }
+    </style>
     <title>Monopoly</title>
   </head>
   <body>
-    <h1>Monopoly</h1>
-    <div id="jugadores"></div>
-    
-    <!-- Primera fila: Botón Agregar Jugador -->
-    <div class="button-row-1">
-      <button id="agregarBtn" class="btn-agregar">Agregar jugador</button>
+    <!-- Video de fondo -->
+    <div class="video-background">
+      <video autoplay muted loop class="background-video">
+        <source src="../public/assets/img/video.mp4" type="video/mp4">
+        <!-- Fallback si no encuentra el video -->
+        Tu navegador no soporta videos HTML5.
+      </video>
+      <div class="video-overlay"></div>
     </div>
-    
-    <!-- Segunda fila: Botones de navegación -->
-    <div class="button-row-2">
-      <button class="btn-secundario" onclick="location.href='como-jugar.html'">
-        Cómo jugar
-      </button>
-      <button class="btn-principal" onclick="guardarJugadores()">
-        🎮 Jugar
-      </button>
-      <button class="btn-ranking" onclick="location.href='src/pages/ranking.html'">
-        🏆 Ranking
-      </button>
+
+    <div class="main-container">
+      <div class="monopoly-logo-container">
+        <img src="../public/assets/img/Monopoly-Emblem.webp" alt="Monopoly" class="monopoly-logo-img">
+      </div>
+      <div id="jugadores"></div>
+      
+      <!-- Primera fila: Botón Agregar Jugador -->
+      <div class="button-row-1">
+        <button id="agregarBtn" class="btn-agregar">Agregar jugador</button>
+      </div>
+      
+      <!-- Segunda fila: Botones de navegación -->
+      <div class="button-row-2">
+        <button class="btn-secundario" onclick="location.href='como-jugar.html'">
+          Cómo jugar
+        </button>
+        <button class="btn-principal" onclick="guardarJugadores()">
+          <div class="btn-content">
+            <div class="btn-text">JUGAR</div>
+            <div class="btn-emoji">🎮</div>
+          </div>
+        </button>
+        <button class="btn-ranking" onclick="location.href='src/pages/ranking.html'">
+          🏆 Ranking
+        </button>
+      </div>
+      
     </div>
   </body>
 </html>

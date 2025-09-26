@@ -1,11 +1,5 @@
 # Karen
--alert("⚠️ Ya tienes el máximo de jugadores permitidos (4)."); hacer un  toast en componente 
-```
--implentar if (jugadores.some(j => j.ficha === ficha)) {
-        mostrarToast("⚠️ Esta ficha ya está en uso. Elige otra ficha.");
-        return false;
-```
--toast: alerta 'para mensaje de advertencia
--success: aceptado, cuando la acción se realiza correctamente
--Error: cuando hay un error
--info: información adicional, o complementaria
+-revisar toast
+-compra e hipoteca de viviendas, creacion de hoteles, implementar en logic, en app.js
+-configuración final del juego, usar modal 
+-crear un div y poner la imagen public/assets/img/monopoly-logo.png como fondo
