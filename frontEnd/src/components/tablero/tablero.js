@@ -2,28 +2,67 @@ import { getBoard } from '../../services/boardService.js';
 
 const tablero = document.querySelector('.tablero');
 
+/**
+ * Renderiza el tablero de Monopoly en el DOM usando los datos del backend.
+ * Cada casilla muestra nombre, color, tipo y estado.
+ * Se llama automáticamente al cargar el módulo.
+ */
 async function renderizarTablero() {
   const boardData = await getBoard();
   if (!boardData) return;
 
   tablero.innerHTML = '';
 
-  const createSquare = (casilla, position) => {
-    const div = document.createElement('div');
-    div.className = `casilla ${getPositionClass(position)}`;
-    div.dataset.type = casilla.type;
-    div.dataset.color = casilla.color;
-    div.dataset.position = position;
-    
-    div.innerHTML = `
-      <div class="nombre">${casilla.name}</div>
-      ${casilla.price ? `<div class="precio">$${casilla.price}</div>` : ''}
-      ${casilla.type === 'property' ? `<div class="renta">Renta: $${casilla.rent.base}</div>` : ''}
-    `;
-    
-    return div;
-  };
+const createSquare = (casilla, position) => {
+  const div = document.createElement('div');
+  div.className = `casilla ${getPositionClass(position)}`;
+  div.dataset.type = casilla.type;
+  div.dataset.color = casilla.color;
+  div.dataset.position = position;
 
+  // Nombre
+  const nombre = document.createElement('div');
+  nombre.className = 'nombre';
+  nombre.textContent = casilla.name;
+  div.appendChild(nombre);
+
+  // Precio
+  if (casilla.price) {
+    const precio = document.createElement('div');
+    precio.className = 'precio';
+    precio.textContent = `$${casilla.price}`;
+    div.appendChild(precio);
+  }
+
+  // Casas
+  if (casilla.casas && casilla.casas > 0) {
+    const casasDiv = document.createElement('div');
+    casasDiv.className = 'casas';
+    for (let i = 0; i < casilla.casas; i++) {
+      const casa = document.createElement('span');
+      casa.className = 'icon-casa';
+      casa.textContent = '🏠';
+      casasDiv.appendChild(casa);
+    }
+    div.appendChild(casasDiv);
+  }
+
+  // Hotel
+  if (casilla.hotel && casilla.hotel > 0) {
+    const hotelDiv = document.createElement('div');
+    hotelDiv.className = 'hotel';
+    for (let i = 0; i < casilla.hotel; i++) {
+      const hotel = document.createElement('span');
+      hotel.className = 'icon-hotel';
+      hotel.textContent = '🏨';
+      hotelDiv.appendChild(hotel);
+    }
+    div.appendChild(hotelDiv);
+  }
+
+  return div;
+};
+    
 // Bottom row (right to left, 0-9)
 boardData.bottom.forEach((casilla, idx) => {
   const square = createSquare(casilla, idx);
@@ -113,8 +152,14 @@ boardData.bottom.forEach((casilla, idx) => {
   centro.className = 'centro';
   centro.textContent = 'MONOPOLY';
   tablero.appendChild(centro);
-}
 
+}
+/**
+ * Devuelve la clase CSS correspondiente a la posición de la casilla.
+ * Usado para rotar y ubicar correctamente cada casilla en el tablero.
+ * @param {number} position - Índice de la casilla
+ * @returns {string} Clase CSS
+ */
 function getPositionClass(position) {
   // Corner positions
   if (position === 0) return 'esquinaIa';  // Salida (bottom-left)
@@ -132,3 +177,32 @@ function getPositionClass(position) {
 }
 
 renderizarTablero();
+
+/**
+ * Actualiza visualmente las fichas de los jugadores en el tablero.
+ * Elimina fichas anteriores y coloca la ficha de cada jugador en su casilla actual.
+ * @param {Array} jugadores - Lista de jugadores con su posición
+ */
+export function actualizarFichas(jugadores) {
+  // Limpia fichas anteriores
+  document.querySelectorAll('.ficha-jugador').forEach(el => el.remove());
+
+  jugadores.forEach((jugador, idx) => {
+    const casilla = document.querySelector(`[data-position="${jugador.posicion}"]`);
+    if (casilla) {
+      const ficha = document.createElement('div');
+      ficha.className = 'ficha-jugador';
+      ficha.textContent = jugador.nickname[0]; // Inicial del jugador
+      ficha.style.background = idx === turnoActual ? '#007bff' : '#888';
+      ficha.style.color = '#fff';
+      ficha.style.borderRadius = '50%';
+      ficha.style.width = '22px';
+      ficha.style.height = '22px';
+      ficha.style.display = 'inline-flex';
+      ficha.style.justifyContent = 'center';
+      ficha.style.alignItems = 'center';
+      ficha.style.margin = '2px';
+      casilla.appendChild(ficha);
+    }
+  });
+}

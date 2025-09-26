@@ -1,3 +1,4 @@
+import { moverFichaActual } from '../../app.js';
 const areaDados = document.getElementById('area-dados');
 
 // Variables para el resultado de dados
@@ -32,10 +33,8 @@ function crearDados() {
       let dado2 = parseInt(document.getElementById('dado2').value) || (Math.floor(Math.random() * 6) + 1);
       ultimoLanzamiento = { dado1, dado2, total: dado1 + dado2 };
       document.getElementById('resultado-dados').textContent = `Resultado: ${dado1} + ${dado2} = ${ultimoLanzamiento.total}`;
-      // TODO: Mover la ficha del jugador actual según la suma
-      if (typeof moverJugador === 'function') {
-        moverJugador(ultimoLanzamiento.total, ultimoLanzamiento);
-      }
+      // Aquí usamos la lógica de Jarvy:
+      moverFichaActual(ultimoLanzamiento.total);
     };
   }
 }
@@ -45,24 +44,7 @@ function obtenerUltimoLanzamiento() {
   return ultimoLanzamiento;
 }
 
-// Función para mover jugador (placeholder) - Integrada con el modal
-function moverJugador(espacios, datosLanzamiento) {
-  console.log(`🎯 Moviendo jugador ${espacios} espacios:`, datosLanzamiento);
-  
-  // Actualizar el ultimo lanzamiento local
-  ultimoLanzamiento = datosLanzamiento;
-  
-  // Aquí se integrará con la lógica del tablero
-  // Por ahora solo mostramos el resultado
-  const resultadoDiv = document.getElementById('ultimo-resultado');
-  if (resultadoDiv) {
-    resultadoDiv.innerHTML = `
-      <strong>Último lanzamiento:</strong><br>
-      🎲 ${datosLanzamiento.dado1} + ${datosLanzamiento.dado2} = ${datosLanzamiento.total}
-      ${datosLanzamiento.dado1 === datosLanzamiento.dado2 ? '<br>🎉 ¡Dobles!' : ''}
-    `;
-  }
-}
+// (Opcional) Si quieres mantener la lógica del modal, puedes hacer que también llame a moverFichaActual en el lugar correcto
 
 // Función para integrar con el modal (se ejecutará cuando esté disponible)
 function integrarModalDados() {
@@ -75,8 +57,7 @@ function integrarModalDados() {
   }
 }
 
-// Hacer funciones disponibles globalmente
-window.moverJugador = moverJugador;
+// Hacer funciones disponibles globalmente si las necesitas fuera
 window.obtenerUltimoLanzamiento = obtenerUltimoLanzamiento;
 
 // Inicializar cuando el DOM esté listo
