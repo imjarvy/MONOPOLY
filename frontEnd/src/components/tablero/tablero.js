@@ -1,6 +1,6 @@
 import { getBoard } from '../../services/boardService.js';
-
 const tablero = document.querySelector('.tablero');
+
 
 /**
  * Renderiza el tablero de Monopoly en el DOM usando los datos del backend.

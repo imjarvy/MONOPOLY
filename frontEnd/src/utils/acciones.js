@@ -3,7 +3,6 @@ export function accionPropiedad(jugador, casilla, jugadores) {
   if (!casilla.propietario) {
     // Opción de compra
     if (jugador.dinero >= casilla.precio) {
-      // Aquí deberías mostrar UI para preguntar si desea comprar
       jugador.dinero -= casilla.precio;
       casilla.propietario = jugador;
       jugador.propiedades.push(casilla);
@@ -13,13 +12,8 @@ export function accionPropiedad(jugador, casilla, jugadores) {
     const renta = casilla.calcularRenta();
     if (jugador.pagar(renta)) {
       casilla.propietario.cobrar(renta);
-    } else {
-      // Lógica de bancarrota
-    }
-  } else {
-    // Posibilidad de construir si cumple condiciones
-    // (Lógica de UI aquí)
-  }
+    } 
+  } 
 }
 
 export function calcularRenta(casilla) {
@@ -77,13 +71,8 @@ export function irACarcel(jugador) {
   jugador.posicion = 10; // Casilla de cárcel
 }
 
-export function accionCartaEspecial(jugador, carta, jugadores) {
-  // Implementa lógica de cartas especiales aquí
-}
-
 export function accionPagarImpuesto(jugador, monto, motivo = "") {
   jugador.pagar(monto);
-  // Aquí puedes mostrar en la UI el motivo si lo deseas
 }
 
 export function accionCarta(jugador, mazo) {
@@ -93,7 +82,6 @@ export function accionCarta(jugador, mazo) {
   } else if (carta.tipo === "pagar") {
     jugador.pagar(carta.valor);
   }
-  // Puedes agregar más tipos de cartas aquí
   return carta;
 }
 
@@ -152,5 +140,4 @@ export async function finalizarJuego(jugadores) {
       body: JSON.stringify(r)
     });
   }
-  // Aquí puedes mostrar el ganador en la UI
 }

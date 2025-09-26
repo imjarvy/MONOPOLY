@@ -20,7 +20,19 @@
             <div id="area-dados"></div>
         </div>
     </div>
+
+    <!-- Modal para acciones del juego -->
+    <div id="modalAccion" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:9999;">
+      <div style="background:white; padding:2em; border-radius:8px; min-width:300px; max-width:90vw; margin:auto;">
+        <h2 id="modalTitulo"></h2>
+        <p id="modalMensaje"></p>
+        <div id="modalBotones"></div>
+        <button id="cerrarModal">Cerrar</button>
+      </div>
+    </div>
+
     <script type="module" src="./tablero.js"></script>
     <script type="module" src="./dados.js"></script>
+    
 </body>
 </html>

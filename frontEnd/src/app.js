@@ -1,5 +1,6 @@
 import { renderizarPanelJugadores } from './components/panelJugador.js';
 
+
 let jugadores = [
   { nickname: "Juan", pais: "CO", dinero: 1500, propiedades: [], hipotecas: [], posicion: 0 },
   { nickname: "Ana", pais: "MX", dinero: 1500, propiedades: [], hipotecas: [], posicion: 0 }
