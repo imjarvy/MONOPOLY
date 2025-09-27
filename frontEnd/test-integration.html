@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Integración Countries Service</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de Integración - Countries Service</h1>
+    <div id="results"></div>
+    
+    <h2>🎯 Test Manual</h2>
+    <button onclick="testCountriesService()">Probar Countries Service</button>
+    <button onclick="testLocalStorage()">Probar LocalStorage</button>
+    <button onclick="testRegistroModal()">Probar Modal Registro</button>
+
+    <!-- Scripts necesarios -->
+    <script src="src/services/countriesService.js"></script>
+    <script src="src/pages/configuracion.js"></script>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        // Test automático al cargar
+        document.addEventListener('DOMContentLoaded', async function() {
+            addResult('🚀 Iniciando tests automáticos...', 'info');
+            
+            // Test 1: Verificar que countriesService esté disponible
+            if (typeof window.countriesService !== 'undefined') {
+                addResult('✅ countriesService está disponible globalmente', 'success');
+            } else {
+                addResult('❌ countriesService NO está disponible', 'error');
+                return;
+            }
+            
+            // Test 2: Cargar países
+            try {
+                const paises = await window.countriesService.obtenerPaises();
+                addResult(`✅ Países cargados: ${paises.length} países desde backend`, 'success');
+            } catch (error) {
+                addResult(`⚠️ Error cargando países: ${error.message}`, 'error');
+            }
+            
+            // Test 3: Conversión código a nombre
+            try {
+                const nombreCo = await window.countriesService.obtenerNombrePais('co');
+                const nombreMx = await window.countriesService.obtenerNombrePais('mx');
+                addResult(`✅ Conversión códigos: co='${nombreCo}', mx='${nombreMx}'`, 'success');
+            } catch (error) {
+                addResult(`❌ Error en conversión: ${error.message}`, 'error');
+            }
+            
+            // Test 4: Función local obtenerNombrePais
+            if (typeof obtenerNombrePais === 'function') {
+                const nombreLocal = obtenerNombrePais('co');
+                addResult(`✅ Función local obtenerNombrePais('co'): '${nombreLocal}'`, 'success');
+            } else {
+                addResult('⚠️ Función obtenerNombrePais no está disponible', 'error');
+            }
+        });
+        
+        // Tests manuales
+        async function testCountriesService() {
+            addResult('🧪 Testing countriesService...', 'info');
+            
+            try {
+                const paises = await window.countriesService.obtenerPaises();
+                addResult(`Países obtenidos: ${JSON.stringify(paises.slice(0, 3))}...`, 'success');
+                
+                const paisesObjeto = await window.countriesService.obtenerPaisesComoObjeto();
+                addResult(`Países como objeto: ${Object.keys(paisesObjeto).length} códigos`, 'success');
+            } catch (error) {
+                addResult(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function testLocalStorage() {
+            // Simular jugadores con códigos de país
+            const jugadoresTest = [
+                { id: 1, nickname: 'Test1', pais: 'co', ficha: '🚗', dinero: 1500 },
+                { id: 2, nickname: 'Test2', pais: 'mx', ficha: '🎩', dinero: 1500 }
+            ];
+            
+            localStorage.setItem('jugadores', JSON.stringify(jugadoresTest));
+            const recovered = JSON.parse(localStorage.getItem('jugadores'));
+            
+            addResult(`✅ localStorage Test: ${recovered[0].pais} (${recovered[0].nickname})`, 'success');
+            addResult(`✅ localStorage Test: ${recovered[1].pais} (${recovered[1].nickname})`, 'success');
+        }
+        
+        function testRegistroModal() {
+            addResult('ℹ️ Para probar el modal, ve a la página de configuración', 'info');
+        }
+    </script>
+</body>
+</html>

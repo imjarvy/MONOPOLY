@@ -2,36 +2,114 @@ body {
     font-family: 'Trebuchet MS', sans-serif;
     background: linear-gradient(135deg, #f9f9f9, #dfe6e9);
     text-align: center;
-    padding: 40px;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction/* Botón Jugar */
+.btn-principal {
+    background: linear-gradient(135deg, #FF3B3B, #E53935, #FF5722, #FF3B3B);
+    background-size: 300% 300%;
+    color: white;
+    border: 3px solid rgba(255, 255, 255, 0.6);
+    padding: 18px 38px;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: 800;
+    box-shadow: 
+        0 15px 40px rgba(255, 59, 59, 0.8),
+        0 0 60px rgba(229, 57, 53, 0.6),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 170px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    animation: superPulse 2s ease-in-out infinite;
+}fy-content: center;
+    align-items: center;
 }
 
-h1 {
-    font-size: 3rem;
-    color: #2c3e50;
-    margin-bottom: 30px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+/* Video de fondo */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    overflow: hidden;
 }
+
+.background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    opacity: 0.3;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.52);
+    z-index: -1;
+}
+
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+/* Logo Monopoly como imagen */
+.monopoly-logo-container {
+    text-align: center;
+    margin: 40px 0 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.monopoly-logo-img {
+    max-width: 400px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.3));
+}
+
 
 #jugadores {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.jugador {
-    background: #ffffff;
-    border-left: 8px solid #27ae60;
-    border-radius: 12px;
-    padding: 15px;
-    width: 320px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    gap: 12px;
+    max-width: 500px;
+    width: 100%;
+    margin: 20px auto 25px auto;
+    padding: 0 10px;
 }
 
 .jugador:hover {
@@ -76,16 +154,153 @@ button {
     cursor: pointer;
     font-size: 1.1rem;
     box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    min-width: 120px;
 }
 
 button:hover {
     background: #219150;
+    transform: translateY(-2px);
+    box-shadow: 2px 6px 8px rgba(0, 0, 0, 0.3);
 }
 
 button:disabled {
     background: gray;
     cursor: not-allowed;
+}
+
+/* === DISEÑO DE BOTONES EN FILAS === */
+
+/* Primera fila: Botón Agregar Jugador */
+.button-row-1 {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 40px 0;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+/* Segunda fila: Botones principales en fila horizontal */
+.button-row-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 30px auto 40px auto;
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+    z-index: 10;
+}
+
+.btn-agregar {
+    background: #06B312;
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(6, 179, 18, 0.3);
+    transition: all 0.3s ease;
+    min-width: 200px;
+    letter-spacing: 0.5px;
+}
+
+.btn-agregar:hover {
+    background: #059A10;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(6, 179, 18, 0.4);
+}
+
+/* Botón Como Jugar */
+.btn-secundario {
+    background: #CCE5FF;
+    color: #1a252f;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(204, 229, 255, 0.4);
+    transition: all 0.3s ease;
+    min-width: 160px;
+    letter-spacing: 0.3px;
+}
+
+.btn-secundario:hover {
+    background: #B8DAFF;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(204, 229, 255, 0.5);
+    color: #0f1419;
+}
+
+/* Botón Principal - JUGAR */
+.btn-principal {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    transition: all 0.3s ease;
+    min-width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.btn-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.btn-text {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.btn-emoji {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.btn-principal:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
+}
+
+/* Botón Ranking */
+.btn-ranking {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 3px 10px rgba(255, 152, 0, 0.3);
+    transition: all 0.3s ease;
+    min-width: 130px;
+}
+
+.btn-ranking:hover {
+    background: linear-gradient(135deg, #f57c00, #e65100);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
 }
 
 .secundario {
@@ -94,4 +309,205 @@ button:disabled {
 
 .secundario:hover {
     background: #1f6391;
+}
+
+/* Contenedor de botones principales */
+.main-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Media Queries para Responsive */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .logo-image {
+        opacity: 1;
+    }
+    
+    #jugadores {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .jugador input {
+        width: 100px;
+        font-size: 0.9rem;
+    }
+    
+    /* Ajustes para las filas de botones */
+    .button-row-1 {
+        margin: 20px 0 15px 0;
+    }
+    
+    .btn-agregar {
+        padding: 12px 25px;
+        font-size: 1rem;
+        min-width: 160px;
+    }
+    
+    .button-row-2 {
+        gap: 12px;
+        margin: 15px 0;
+    }
+    
+    .btn-secundario, .btn-ranking {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        min-width: 110px;
+    }
+    
+    .btn-principal {
+        padding: 14px 28px;
+        font-size: 1.1rem;
+        min-width: 140px;
+    }
+    
+    .main-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    select {
+        font-size: 0.9rem;
+        padding: 3px;
+    }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .logo-image {
+        opacity: 1;
+    }
+    
+    #jugadores {
+        gap: 8px;
+        margin-bottom: 15px;
+        padding: 0 5px;
+    }
+    
+    .jugador {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .jugador input {
+        width: 80px;
+        font-size: 0.85rem;
+    }
+    
+    /* Diseño móvil para botones */
+    .button-row-1 {
+        margin: 15px 0 10px 0;
+    }
+    
+    .btn-agregar {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        min-width: 140px;
+        width: 90%;
+        max-width: 280px;
+    }
+    
+    .button-row-2 {
+        flex-direction: column;
+        gap: 12px;
+        margin: 15px 0;
+        width: 100%;
+    }
+    
+    .btn-secundario, .btn-ranking, .btn-principal {
+        width: 90%;
+        max-width: 280px;
+        margin: 0;
+    }
+    
+    .btn-secundario, .btn-ranking {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-principal {
+        padding: 14px 25px;
+        font-size: 1.1rem;
+        order: -1; /* El botón principal aparece primero en móviles */
+    }
+    
+    .btn-text {
+        font-size: 1rem;
+    }
+    
+    .btn-emoji {
+        font-size: 1.3rem;
+    }
+    
+    .main-buttons {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .acciones button {
+        font-size: 1rem;
+        margin-left: 6px;
+    }
+    
+    select {
+        font-size: 0.85rem;
+        padding: 2px;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 320px) {
+    body {
+        padding: 8px;
+    }
+    
+    .jugador input {
+        width: 70px;
+        font-size: 0.8rem;
+    }
+    
+    .btn-agregar {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        min-width: 120px;
+    }
+    
+    .btn-secundario, .btn-ranking {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+    }
+    
+    .btn-principal {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+    
+    .btn-text {
+        font-size: 0.9rem;
+    }
+    
+    .btn-emoji {
+        font-size: 1.1rem;
+    }
+    
+    .acciones button {
+        font-size: 0.9rem;
+        margin-left: 4px;
+    }
 }
