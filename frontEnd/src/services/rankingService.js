@@ -105,6 +105,7 @@ function getCountryName(countryCode) {
     return basicCountries[countryCode.toLowerCase()] || countryCode.toUpperCase();
 }
 
+
 window.rankingService = {
     getHistoricalRanking,
     getCountryFlag,

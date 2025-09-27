@@ -4,19 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/styles/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- Modal Component -->
     <link rel="stylesheet" href="src/components/modals/modal.css" />
-    <script src="src/components/modals/modal.js"></script>
+    <script src="./src/components/modals/modal.js"></script>
     <!-- Toast Component -->
-    <link rel="stylesheet" href="src/components/toast/toast.css" />
-    <script src="src/components/toast/toast.js"></script>
-    <!-- Countries Service - DEBE cargarse antes que index.js -->
-    <script src="src/services/countriesService.js"></script>
-    <script src="src/pages/index.js" defer></script>
+    <link rel="stylesheet" href="./src/components/toast/toast.css" />
+    <script src="./src/components/toast/toast.js"></script>
+    
+    <!-- ✅ VOLVER a cargar Countries Service como script normal -->
+    <script src="./src/services/countriesService.js"></script>
+
     <!-- Modal registro de usuarios -->
     <link rel="stylesheet" href="src/components/modals/registroUsuarios.css">
     <script src="src/components/modals/registroUsuarios.js"></script>
-    <!-- Estilos para botón de prueba -->
+    
+    <!-- Estilos existentes... -->
     <style>
       .btn-test {
         background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
@@ -42,11 +45,10 @@
     <title>Monopoly</title>
   </head>
   <body>
-    <!-- Video de fondo -->
+    <!-- Tu HTML existente -->
     <div class="video-background">
       <video autoplay muted loop class="background-video">
-        <source src="../public/assets/img/video.mp4" type="video/mp4">
-        <!-- Fallback si no encuentra el video -->
+        <source src="./public/assets/img/video.mp4" type="video/mp4">
         Tu navegador no soporta videos HTML5.
       </video>
       <div class="video-overlay"></div>
@@ -54,18 +56,16 @@
 
     <div class="main-container">
       <div class="monopoly-logo-container">
-        <img src="../public/assets/img/Monopoly-Emblem.webp" alt="Monopoly" class="monopoly-logo-img">
+        <img src="./public/assets/img/Monopoly-Emblem.webp" alt="Monopoly" class="monopoly-logo-img">
       </div>
       <div id="jugadores"></div>
       
-      <!-- Primera fila: Botón Agregar Jugador -->
       <div class="button-row-1">
         <button id="agregarBtn" class="btn-agregar">Agregar jugador</button>
       </div>
       
-      <!-- Segunda fila: Botones de navegación -->
       <div class="button-row-2">
-        <button class="btn-secundario" onclick="location.href='como-jugar.html'">
+        <button class="btn-secundario" onclick="location.href='src/pages/como-jugar.html'">
           Cómo jugar
         </button>
         <button class="btn-principal" onclick="guardarJugadores()">
@@ -78,7 +78,73 @@
           🏆 Ranking
         </button>
       </div>
-      
     </div>
+    
+    <!-- ✅ ELIMINAR el script de módulo problemático -->
+    <!-- 
+    <script type="module">
+        import { countriesService, getCountries } from './src/services/countriesService.js';
+        window.countriesService = countriesService;
+        window.getCountries = getCountries;
+        console.log('✅ Countries Service loaded as module');
+    </script>
+    -->
+    
+    <!-- ✅ AGREGAR script que crea el objeto countriesService globalmente -->
+    <script>
+        // Crear objeto countriesService usando las funciones ya cargadas
+        if (typeof getCountries !== 'undefined' && typeof obtenerPaisesComoObjeto !== 'undefined') {
+            window.countriesService = {
+                obtenerPaises: getCountries,
+                obtenerPaisesComoObjeto: obtenerPaisesComoObjeto,
+                getCountries: getCountries,
+                // Agregar función de obtener nombre de país
+                obtenerNombrePais: async function(codigo) {
+                    try {
+                        const paisesObj = await this.obtenerPaisesComoObjeto();
+                        return paisesObj[codigo.toLowerCase()] || codigo.toUpperCase();
+                    } catch (error) {
+                        console.error(`Error obteniendo país ${codigo}:`, error);
+                        return codigo.toUpperCase();
+                    }
+                }
+            };
+            console.log('✅ Countries Service object created globally');
+        } else {
+            console.warn('⚠️ Countries Service functions not found, creating minimal service');
+            window.countriesService = {
+                obtenerPaises: async () => [],
+                obtenerPaisesComoObjeto: async () => ({}),
+                obtenerNombrePais: async (codigo) => codigo.toUpperCase(),
+                getCountries: async () => []
+            };
+        }
+    </script>
+    
+    <!-- ✅ Scripts de módulos -->
+    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/pages/index.js" defer></script>
+    
+    <!-- ✅ FUNCIÓN DE DEBUG COMPLETA -->
+    <script>
+        // ✅ FUNCIÓN DE DEBUGGING RÁPIDO
+        window.debugEstado = function() {
+            console.log('🔍 ESTADO COMPLETO DEL SISTEMA:');
+            console.log('='.repeat(50));
+            console.log('👤 window.jugadores:', window.jugadores);
+            console.log('🎮 window.indexController exists:', !!window.indexController);
+            
+            if (window.indexController) {
+                console.log('📊 indexController.jugadores:', window.indexController.jugadores);
+                console.log('🔢 indexController.contador:', window.indexController.contador);
+            }
+            
+            console.log('💾 localStorage jugadores:', JSON.parse(localStorage.getItem('jugadores') || '[]'));
+            console.log('🏷️ Jugador cards en DOM:', document.querySelectorAll('.jugador-card').length);
+            console.log('='.repeat(50));
+        };
+        
+        console.log('💡 Usa debugEstado() para ver el estado completo');
+    </script>
   </body>
 </html>

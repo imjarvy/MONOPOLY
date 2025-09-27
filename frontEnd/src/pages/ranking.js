@@ -249,5 +249,9 @@ function mostrarSinDatos() {
     rankingContainer.style.display = 'none';
 }
 
+function irAlInicio() {
+  window.location.href = '../../index.html'; 
+}
+
 // Función global para reintentar carga (llamada desde el botón)
 window.cargarRanking = cargarRanking;

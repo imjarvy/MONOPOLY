@@ -29,6 +29,17 @@ async function obtenerPaisesComoObjeto() {
   }
 }
 
+// ✅ AGREGAR: Función para obtener nombre específico de país
+async function obtenerNombrePais(codigo) {
+  try {
+    const paisesObj = await obtenerPaisesComoObjeto();
+    return paisesObj[codigo.toLowerCase()] || codigo.toUpperCase();
+  } catch (error) {
+    console.error(`Error obteniendo país ${codigo}:`, error);
+    return codigo.toUpperCase();
+  }
+}
+
 // Crear objeto de servicio
 const countriesService = {
   obtenerPaises: getCountries,
@@ -36,10 +47,12 @@ const countriesService = {
   getCountries // Mantener compatibilidad
 };
 
-// Exportar tanto la función individual como el objeto
-export { getCountries, countriesService };
 
-// Exponer globalmente para uso en configuracion.js
+//export { getCountries, countriesService };
+// ✅ CAMBIO: Exponer globalmente sin ES6 modules
 if (typeof window !== 'undefined') {
   window.countriesService = countriesService;
+  window.getCountries = getCountries; // Para compatibilidad total
+  
+  console.log('✅ Countries Service loaded globally (with backend fetch)');
 }
