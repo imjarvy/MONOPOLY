@@ -1,0 +1,120 @@
+/* Estilos elegantes y minimalistas para el modal de registro de usuarios */
+.modal-form {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    padding: 32px 24px;
+    max-width: 480px;
+    margin: auto;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+.modal-form-group {
+    margin-bottom: 18px;
+}
+.modal-form-label {
+    font-size: 1rem;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+.modal-form-input, .modal-form-select {
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+.modal-form-input:focus, .modal-form-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+    outline: none;
+    background: #fafbff;
+}
+.modal-form-input::placeholder {
+    color: #9ca3af;
+    font-style: italic;
+}
+/* Estilo especial para el input de color */
+.color-input-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+.color-input-container:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+.color-input-container input[type="color"] {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    background: none;
+}
+.color-input-label {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 500;
+    user-select: none;
+    cursor: pointer;
+}
+.modal-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    margin-right: 8px;
+}
+.modal-btn-primary {
+    background: #10b981;
+    color: #fff;
+    font-weight: 600;
+}
+.modal-btn-primary:hover {
+    background: #059669;
+}
+.modal-btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+.modal-btn-secondary.selected {
+    background: #3b82f6;
+    color: #fff;
+    border-color: #3b82f6;
+}
+.modal-form-actions {
+    text-align: right;
+}
+.ficha-preview {
+    font-size: 2rem;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+.ficha-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+@media (max-width: 600px) {
+    .modal-form {
+        padding: 18px 8px;
+        max-width: 98vw;
+    }
+}
