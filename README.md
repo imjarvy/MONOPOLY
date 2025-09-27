@@ -4,22 +4,6 @@ Frontend for the Monopoly game application.
 
 ## Project Structure
 
-```
-/public
-  /assets
-    /img         # Images for cards, board, flags, etc.
-    /icons       # Game icons (dice, houses, hotels, etc.)
-/src
-  /components    # Reusable JS components (Board, PlayerPanel, ActionModal, Ranking, etc.)
-  /pages         # Main views (Settings, Game, Ranking)
-  /services      # Backend consumption modules (fetch)
-  /styles        # CSS files organized (by pages/components if necessary)
-  /utils         # Helper functions (dice, property, validations, helpers) here   you can put the controllers of the project
-  app.js         # Main logic and page router
-  main.js        # Entry point, initializer
-index.html       # Main HTML file
-
-
 
 ## PROMPT PARA EL JUEGO
 ####################################
@@ -31,24 +15,259 @@ Incluye la división de tareas entre 3 personas, descripciones claras de concept
 
 ## 1. Estructura de Carpetas Recomendada
 
-```plaintext
-/public
-  /assets
-    /img         # Imágenes de fichas, tablero, banderas, etc.
-    /icons       # Iconos del juego (dados, casas, hoteles, etc.)
-/src
-  /components    # Componentes JS reutilizables (Tablero, PanelJugador, ModalAccion, Ranking, etc.)
-  /pages         # Vistas principales (Configuración, Juego, Ranking)
-  /services      # Módulos para consumo del backend (fetch)
-  /styles        # Archivos CSS organizados (por páginas/componentes si es necesario)
-  /utils         # Funciones auxiliares (dados, patrimonio, validaciones, helpers)
-  app.js         # Lógica principal y enrutador de páginas
-  main.js        # Punto de entrada, inicializador
-index.html       # Archivo HTML principal
-README.md        # Documentación principal
+# Monopoly Game Frontend
+
+Frontend moderno para el juego Monopoly con arquitectura **Clean Component Architecture (CCA)**.
+
+## Arquitectura del Proyecto
+
+Este proyecto implementa una **Clean Component Architecture** que combina:
+- ✅ **Principios SOLID** para código mantenible
+- ✅ **Separación de responsabilidades** clara
+- ✅ **Patrón MVC** con controladores especializados
+- ✅ **Factory Pattern** para creación de objetos
+- ✅ **Manager Pattern** para gestión de estado
+- ✅ **Validator Pattern** para validaciones
+- ✅ **Renderer Pattern** para UI
+
+## Estructura de Carpetas
+
+```
+monopoly-frontend/
+├── index.html                    # Página principal de entrada
+├── README.md                     # Documentación del proyecto
+├── public/                       # Recursos estáticos públicos
+│   └── assets/                   # Imágenes, videos, iconos
+│       ├── img/
+│       │   ├── Monopoly-Emblem.webp
+│       │   └── video.mp4
+│       └── ...
+├── src/                          # Código fuente principal
+│   ├── app.js                    # Configuración global y entrada
+│   ├── main.js                   # Punto de entrada de la aplicación
+│   │
+│   ├── components/               # Componentes reutilizables de UI
+│   │   ├── tablero/              # Componente del tablero de juego
+│   │   │   ├── tablero.js        # Lógica principal del tablero
+│   │   │   ├── tablero.css       # Estilos del tablero
+│   │   │   ├── tablero.html      # Vista del tablero
+│   │   │   └── dados.js          # Sistema de dados
+│   │   ├── toast/                # Sistema de notificaciones
+│   │   │   ├── toast.js          # Lógica de notificaciones
+│   │   │   └── toast.css         # Estilos de toast
+│   │   ├── modals/               # Sistema de modales
+│   │   │   ├── modal.js          # Modal base
+│   │   │   ├── modal.css         # Estilos de modales
+│   │   │   ├── dadosModal.js     # Modal específico para dados
+│   │   │   └── registroUsuarios.js # Modal de registro
+│   │   └── panelJugador.js       # Panel de información del jugador
+│   │
+│   ├── pages/                    # Páginas/Vistas principales
+│   │   ├── index.js              # Lógica de la página principal
+│   │   ├── configuracion.js      # Página de configuración
+│   │   ├── configuracion.html    # Vista de configuración
+│   │   ├── ranking.js            # Página de ranking
+│   │   ├── ranking.html          # Vista de ranking
+│   │   ├── jugadores.html        # Vista de gestión de jugadores
+│   │   └── como-jugar.html       # Página de instrucciones
+│   │
+│   ├── controllers/              # Controladores (Patrón MVC)
+│   │   ├── indexController.js    # Controlador de la página principal
+│   │   ├── tableroController.js  # Controlador del tablero de juego
+│   │   └── gameController.js     # Controlador principal del juego
+│   │
+│   ├── services/                 # Servicios para comunicación con backend
+│   │   ├── boardService.js       # Servicio del tablero (fetch)
+│   │   ├── countriesService.js   # API de países (fetch)
+│   │   ├── cardsService.js       # Servicio de cartas (fetch)
+│   │   ├── rankingService.js     # Servicio de ranking (fetch)
+│   │   └── scoreService.js       # Servicio de puntuaciones (fetch)
+│   │
+│   ├── utils/                    # Utilidades y helpers
+│   │   ├── jugadorHelper.js      # Helper para operaciones de jugadores
+│   │   └── tableroHelper.js      # Helper para operaciones de tablero
+│   │
+│   ├── validators/               # Validadores (Patrón Validator)
+│   │   ├── jugadorValidator.js   # Validaciones de jugadores
+│   │   └── tableroValidator.js   # Validaciones de tablero
+│   │
+│   ├── renderers/                # Renderizadores de UI (Patrón Renderer)
+│   │   ├── jugadorRenderer.js    # Renderizado de jugadores
+│   │   └── tableroRenderer.js    # Renderizado de tablero
+│   │
+│   ├── factories/                # Factories para creación de objetos (Patrón Factory)
+│   │   └── casillaFactory.js     # Factory para crear casillas
+│   │
+│   ├── managers/                 # Managers para gestión de estado (Patrón Manager)
+│   │   └── fichasManager.js      # Gestión de fichas de jugadores
+│   │
+│   ├── compatibility/            # Funciones de compatibilidad
+│   │   └── globalFunctions.js    # Funciones globales para HTML
+│   │
+│   └── styles/                   # Hojas de estilo CSS
+│       ├── main.css              # Estilos principales
+│       ├── index.css             # Estilos de la página principal
+│       ├── configuracion.css     # Estilos de configuración
+│       ├── ranking.css           # Estilos de ranking
+│       └── panelJugador.css      # Estilos del panel de jugador
 ```
 
+## Principios de la Clean Component Architecture
+
+### 1. **Single Responsibility Principle (SRP)**
+- Cada archivo tiene una responsabilidad específica
+- Controllers manejan lógica de negocio
+- Renderers solo se encargan de la UI
+- Validators solo validan datos
+
+### 2. **Open/Closed Principle (OCP)**
+- Fácil extensión sin modificar código existente
+- Uso de Factory patterns para nuevos tipos
+- Interfaces consistentes
+
+### 3. **Dependency Inversion (DIP)**
+- Controllers dependen de abstracciones, no implementaciones
+- Services son inyectados, no hardcodeados
+
+### 4. **Separación de Capas**
+```
+┌─────────────────┐
+│  Components     │ ← Vista (HTML + CSS)
+├─────────────────┤
+│  Controllers    │ ← Lógica de Control
+├─────────────────┤
+│  Services       │ ← Comunicación Backend
+├─────────────────┤
+│  Utils/Helpers  │ ← Funciones Auxiliares
+└─────────────────┘
+```
+
+## Patrones de Diseño Implementados
+
+| Patrón | Ubicación | Propósito |
+|---------|-----------|-----------|
+| **MVC** | `/controllers` | Separar lógica de vista |
+| **Factory** | `/factories` | Crear objetos complejos |
+| **Manager** | `/managers` | Gestionar estado |
+| **Validator** | `/validators` | Validar datos |
+| **Renderer** | `/renderers` | Renderizar UI |
+| **Service** | `/services` | Comunicación backend |
+| **Helper** | `/utils` | Funciones auxiliares |
+
+## Flujo de Datos
+
+```
+HTML (onclick) → GlobalFunctions → Controller → Validator → Manager/Factory → Renderer → DOM
+                                       ↓
+                                   Service (API) ← Backend
+```
+
+## Características Técnicas
+
+### ✅ **Modularidad**
+- Código dividido en módulos específicos
+- Imports/exports ES6 para dependencias
+- Compatibilidad con HTML tradicional
+
+### ✅ **Escalabilidad**
+- Fácil agregar nuevos componentes
+- Estructura preparada para crecimiento
+- Separación clara de responsabilidades
+
+### ✅ **Mantenibilidad**
+- Código limpio y documentado
+- Funciones pequeñas (máx 30 líneas)
+- Nombres descriptivos y consistentes
+
+### ✅ **Testabilidad**
+- Componentes independientes
+- Inyección de dependencias
+- Mocks fáciles de implementar
+
+## Tecnologías Utilizadas
+
+- **JavaScript ES6+** - Módulos, clases, async/await
+- **HTML5** - Estructura semántica
+- **CSS3** - Estilos modernos con Flexbox/Grid
+- **Bootstrap 4** - Framework CSS
+- **REST APIs** - Comunicación con backend
+
+## Scripts y Comandos
+
+### Desarrollo
+```bash
+# Servidor de desarrollo
+npx live-server frontEnd/
+
+# O con VS Code Live Server
+# Abrir frontEnd/index.html con Live Server
+```
+
+### Testing
+```bash
+# Probar sistema Toast
+window.probarTodosLosToasts()
+
+# Verificar componentes
+console.log(window.Toast, window.indexController)
+```
+
+## Convenciones de Código
+
+### **Nomenclatura**
+- **Controllers**: `nombreController.js`
+- **Services**: `nombreService.js` (solo para backend)
+- **Helpers**: `nombreHelper.js`
+- **Validators**: `nombreValidator.js`
+- **Renderers**: `nombreRenderer.js`
+- **Factories**: `nombreFactory.js`
+- **Managers**: `nombreManager.js`
+
+### **Estructura de Archivos**
+```javascript
+// 1. Imports
+import { ... } from '...';
+
+// 2. Constantes/Config
+const CONFIG = {...};
+
+// 3. Clase principal
+export class NombreClase {
+    constructor() {...}
+    
+    // Métodos públicos primero
+    metodoPublico() {...}
+    
+    // Métodos privados después
+    _metodoPrivado() {...}
+}
+
+// 4. Funciones auxiliares
+function funcionAuxiliar() {...}
+
+// 5. Exports
+export { ... };
+```
+
+## Equipo de Desarrollo
+
+Este proyecto fue desarrollado siguiendo metodologías ágiles con división clara de responsabilidades:
+
+- **Frontend Architecture**: Diseño de arquitectura limpia
+- **Component Development**: Desarrollo de componentes reutilizables
+- **Integration & Testing**: Integración y pruebas del sistema
+
+## Próximas Mejoras
+
+- [ ] Implementar testing unitario (Jest)
+- [ ] Agregar TypeScript para tipado fuerte
+- [ ] Implementar PWA (Progressive Web App)
+- [ ] Optimizar para performance (lazy loading)
+- [ ] Agregar internacionalización (i18n)
+
 ---
+
+**🎮 ¡Disfruta jugando Monopoly con arquitectura limpia y moderna!**
 
 ## 2. División en Etapas para 3 Personas
 
