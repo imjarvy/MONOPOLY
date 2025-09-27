@@ -622,6 +622,21 @@ window.mostrarToast = (type, message, title, duration) => {
  */
 window.Toast = {
     /**
+     * Referencia al manager (para debug)
+     */
+    get manager() {
+        return initToastManager();
+    },
+
+    /**
+     * Método show directo (para compatibilidad)
+     */
+    show: (message, type = 'info', title = null, duration = 4000) => {
+        const manager = initToastManager();
+        return manager.show(type, message, title, duration);
+    },
+
+    /**
      * Muestra un toast de éxito
      * @param {string} message - Mensaje de éxito
      * @param {string} [title] - Título opcional
