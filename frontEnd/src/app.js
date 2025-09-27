@@ -1,95 +1,319 @@
-import { renderizarPanelJugadores } from './components/panelJugador.js';
-
-let jugadores = [
-  { nickname: "Juan", pais: "CO", dinero: 1500, propiedades: [], hipotecas: [], posicion: 0 },
-  { nickname: "Ana", pais: "MX", dinero: 1500, propiedades: [], hipotecas: [], posicion: 0 }
-];
-let turnoActual = 0;
-let estadoJuego = 'esperando_dados'; // otros estados: 'accion_casilla', 'compra', 'fin'
-
 /**
- * Cambia el turno al siguiente jugador y actualiza el panel.
- * Se llama después de cada movimiento de ficha.
+ * APP.JS - ENRUTADOR PRINCIPAL DEL MONOPOLY
+ * 
+ * Responsabilidades:
+ * - Navegación entre páginas (configuración, juego, ranking)
+ * - Gestión del estado global de la aplicación
+ * - Inicialización de módulos según la página actual
+ * - Comunicación entre componentes
  */
-function siguienteTurno() {
-  const jugadorAnterior = jugadores[turnoActual].nickname;
-  turnoActual = (turnoActual + 1) % jugadores.length;
-  estadoJuego = 'esperando_dados';
-  
-  // Notificación de cambio de turno
-  if (window.Toast) {
-    window.Toast.info(
-      `Es el turno de ${jugadores[turnoActual].nickname}`,
-      "Cambio de Turno"
-    );
-  }
-  
-  renderizarPanelJugadores(jugadores, turnoActual);
-}
 
-/**
- * Mueve la ficha del jugador actual en el tablero y actualiza el DOM.
- * @param {number} casillas - Número de casillas a mover
- * Se llama desde dados.js al lanzar los dados.
- */
-export function moverFichaActual(casillas) {
-  const jugadorActual = jugadores[turnoActual];
-  const posicionAnterior = jugadorActual.posicion;
-  
-  jugadorActual.posicion = (jugadorActual.posicion + casillas) % 40;
-  
-  // Notificación de movimiento
-  if (window.Toast) {
-    window.Toast.success(
-      `${jugadorActual.nickname} se movió ${casillas} espacios (casilla ${posicionAnterior} → ${jugadorActual.posicion})`,
-      "Movimiento Realizado"
-    );
+// ============== IMPORTACIONES ==============
+import { inicializarJuegoMonopoly } from './controllers/gameController.js';
+
+// ============== CONFIGURACIÓN GLOBAL ==============
+const APP_CONFIG = {
+    pages: {
+        CONFIGURACION: 'configuracion',
+        TABLERO: 'tablero',
+        RANKING: 'ranking',
+        COMO_JUGAR: 'como-jugar'
+    },
+    storage: {
+        JUGADORES: 'jugadores',
+        PARTIDA_ACTUAL: 'partida-actual',
+        CONFIGURACION: 'monopoly-config'
+    }
+};
+
+// ============== ESTADO GLOBAL DE LA APLICACIÓN ==============
+window.MonopolyApp = {
+    currentPage: null,
+    jugadores: [],
+    configuracion: {},
     
-    // Verificar si pasó por la salida (posición 0)
-    if (posicionAnterior + casillas >= 40) {
-      window.Toast.success(
-        `${jugadorActual.nickname} pasó por la SALIDA. +$200`,
-        "¡Cobrar Salario!"
-      );
-      jugadorActual.dinero += 200;
+    // Métodos públicos para otros módulos
+    navegarA: function(pagina) {
+        navegarAPagina(pagina);
+    },
+    
+    obtenerJugadores: function() {
+        return this.jugadores;
+    },
+    
+    guardarJugadores: function(jugadores) {
+        this.jugadores = jugadores;
+        localStorage.setItem(APP_CONFIG.storage.JUGADORES, JSON.stringify(jugadores));
+    },
+    
+    // Métodos de utilidad para debug
+    limpiarDatos: function() {
+        localStorage.clear();
+        this.jugadores = [];
+        this.configuracion = {};
+        console.log('Datos de la aplicación limpiados');
+    },
+    
+    obtenerEstado: function() {
+        return {
+            currentPage: this.currentPage,
+            jugadores: this.jugadores,
+            configuracion: this.configuracion,
+            localStorage: {
+                jugadores: localStorage.getItem(APP_CONFIG.storage.JUGADORES),
+                configuracion: localStorage.getItem(APP_CONFIG.storage.CONFIGURACION)
+            }
+        };
     }
-  }
-  
-  actualizarFichas(jugadores);
-  siguienteTurno();
+};
+
+// ============== FUNCIONES DE NAVEGACIÓN ==============
+
+/**
+ * Navega a una página específica del juego
+ * @param {string} pagina - Nombre de la página (configuracion, tablero, ranking)
+ */
+function navegarAPagina(pagina) {
+    console.log(`Navegando a: ${pagina}`);
+    
+    switch (pagina) {
+        case APP_CONFIG.pages.CONFIGURACION:
+            window.location.href = 'src/pages/index.html';
+            break;
+            
+        case APP_CONFIG.pages.TABLERO:
+            navegarATablero();
+            break;
+            
+        case APP_CONFIG.pages.RANKING:
+            window.location.href = 'src/pages/ranking.html';
+            break;
+            
+        case APP_CONFIG.pages.COMO_JUGAR:
+            window.location.href = 'como-jugar.html';
+            break;
+            
+        default:
+            console.error(`Página no encontrada: ${pagina}`);
+    }
 }
 
 /**
- * Actualiza visualmente las fichas de los jugadores en el tablero.
- * Elimina fichas anteriores y coloca la ficha de cada jugador en su casilla actual.
- * @param {Array} jugadores - Lista de jugadores con su posición
+ * Navegación específica al tablero con validaciones
  */
-function actualizarFichas(jugadores) {
-  // Remover fichas existentes
-  document.querySelectorAll('.ficha-jugador').forEach(el => el.remove());
-
-  jugadores.forEach((jugador, idx) => {
-    const casilla = document.querySelector(`[data-position="${jugador.posicion}"]`);
-    if (casilla) {
-      const ficha = document.createElement('div');
-      ficha.className = 'ficha-jugador' + (idx === turnoActual ? ' activo' : '');
-      ficha.textContent = jugador.nickname[0].toUpperCase();
-      ficha.style.cssText = `
-        background: ${idx === 0 ? '#FF6B6B' : idx === 1 ? '#4ECDC4' : '#45B7D1'};
-        color: white;
-        font-weight: bold;
-        border-radius: 50%;
-        width: 25px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        margin: 2px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        ${idx === turnoActual ? 'animation: pulse 1s infinite; transform: scale(1.1);' : ''}
-      `;
-      casilla.appendChild(ficha);
+function navegarATablero() {
+    const jugadores = obtenerJugadoresGuardados();
+    
+    if (!jugadores || jugadores.length < 2) {
+        if (typeof mostrarModalInfo === 'function') {
+            mostrarModalInfo('Error', 'No hay jugadores configurados. Configura al menos 2 jugadores primero.');
+        } else if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Configura al menos 2 jugadores antes de empezar.", "Jugadores Requeridos");
+        } else {
+            alert('⚠️ Configura al menos 2 jugadores antes de empezar.');
+        }
+        navegarAPagina(APP_CONFIG.pages.CONFIGURACION);
+        return;
     }
-  });
+    
+    // Guardar estado antes de navegar
+    MonopolyApp.jugadores = jugadores;
+    window.location.href = 'src/components/tablero/tablero.html';
 }
+
+/**
+ * Regresa a la página anterior o a configuración por defecto
+ */
+function volverAtras() {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        navegarAPagina(APP_CONFIG.pages.CONFIGURACION);
+    }
+}
+
+/**
+ * Navega al index.html principal
+ */
+function irAlInicio() {
+    // Detectar desde qué ubicación se está llamando
+    const currentPath = window.location.pathname;
+    
+    if (currentPath.includes('/src/pages/')) {
+        // Desde pages/ -> sube dos niveles
+        window.location.href = '../../index.html';
+    } else if (currentPath.includes('/src/components/')) {
+        // Desde components/ -> sube tres niveles  
+        window.location.href = '../../../index.html';
+    } else {
+        // Desde raíz de frontEnd
+        window.location.href = 'index.html';
+    }
+}
+
+// ============== GESTIÓN DE ESTADO ==============
+
+/**
+ * Obtiene los jugadores guardados en localStorage
+ * @returns {Array} Array de jugadores o array vacío
+ */
+function obtenerJugadoresGuardados() {
+    try {
+        const jugadoresString = localStorage.getItem(APP_CONFIG.storage.JUGADORES);
+        return jugadoresString ? JSON.parse(jugadoresString) : [];
+    } catch (error) {
+        console.error('Error al obtener jugadores:', error);
+        return [];
+    }
+}
+
+/**
+ * Guarda jugadores en localStorage y actualiza estado global
+ * @param {Array} jugadores - Array de objetos jugador
+ */
+function guardarJugadoresEnEstado(jugadores) {
+    MonopolyApp.jugadores = jugadores;
+    localStorage.setItem(APP_CONFIG.storage.JUGADORES, JSON.stringify(jugadores));
+    console.log('Jugadores guardados en estado global:', jugadores);
+}
+
+/**
+ * Obtiene la configuración actual del juego
+ * @returns {Object} Objeto de configuración
+ */
+function obtenerConfiguracion() {
+    try {
+        const configString = localStorage.getItem(APP_CONFIG.storage.CONFIGURACION);
+        return configString ? JSON.parse(configString) : {};
+    } catch (error) {
+        console.error('Error al obtener configuración:', error);
+        return {};
+    }
+}
+
+/**
+ * Guarda la configuración del juego
+ * @param {Object} config - Objeto de configuración
+ */
+function guardarConfiguracion(config) {
+    MonopolyApp.configuracion = config;
+    localStorage.setItem(APP_CONFIG.storage.CONFIGURACION, JSON.stringify(config));
+}
+
+// ============== INICIALIZACIÓN DE LA APLICACIÓN ==============
+
+/**
+ * Inicializa la aplicación según la página actual
+ */
+function inicializarApp() {
+    console.log('Inicializando Monopoly App...');
+    
+    // Cargar estado previo
+    MonopolyApp.jugadores = obtenerJugadoresGuardados();
+    MonopolyApp.configuracion = obtenerConfiguracion();
+    
+    // Detectar página actual
+    const path = window.location.pathname;
+    const filename = window.location.pathname.split('/').pop();
+    
+    if (path.includes('configuracion') || filename === 'configuracion.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.CONFIGURACION;
+        inicializarConfiguracion();
+    } else if (path.includes('tablero') || filename === 'tablero.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.TABLERO;
+        inicializarTablero();
+    } else if (path.includes('ranking') || filename === 'ranking.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.RANKING;
+        inicializarRanking();
+    } else if (path.includes('como-jugar') || filename === 'como-jugar.html') {
+        MonopolyApp.currentPage = APP_CONFIG.pages.COMO_JUGAR;
+        console.log('Página como-jugar inicializada');
+    }
+    
+    console.log(`Página actual: ${MonopolyApp.currentPage}`);
+}
+
+/**
+ * Inicializa la página de configuración
+ */
+function inicializarConfiguracion() {
+    console.log('Inicializando página de configuración...');
+    // La lógica específica está en configuracion.js
+}
+
+/**
+ * Inicializa la página del tablero
+ */
+function inicializarTablero() {
+    console.log('Inicializando tablero de juego...');
+    
+    // Validar que hay jugadores
+    if (!MonopolyApp.jugadores || MonopolyApp.jugadores.length < 2) {
+        console.warn('No hay suficientes jugadores, redirigiendo a configuración...');
+        navegarAPagina(APP_CONFIG.pages.CONFIGURACION);
+        return;
+    }
+    
+    // **NUEVA INTEGRACIÓN**: Inicializar la lógica del juego
+    inicializarJuegoMonopoly(MonopolyApp.jugadores);
+    
+    // La lógica específica está en tablero.js
+}
+/**
+ * Inicializa la página de ranking
+ */
+function inicializarRanking() {
+    console.log('Inicializando página de ranking...');
+    // La lógica específica está en ranking.js
+}
+
+// ============== FUNCIONES GLOBALES PARA RETROCOMPATIBILIDAD ==============
+
+/**
+ * Función global para guardar jugadores (usada por configuracion.js)
+ * @deprecated Usar MonopolyApp.guardarJugadores() en su lugar
+ */
+window.guardarJugadores = function() {
+    console.warn('Función guardarJugadores() está obsoleta. Usar navegarATablero()');
+    navegarATablero();
+};
+
+/**
+ * Función global para navegar al tablero
+ */
+window.navegarATablero = navegarATablero;
+
+/**
+ * Función global para obtener jugadores
+ */
+window.obtenerJugadores = function() {
+    return MonopolyApp.obtenerJugadores();
+};
+
+/**
+ * Función global para navegar a páginas (usada por configuracion.js)
+ */
+window.navegarAPagina = navegarAPagina;
+
+/**
+ * Función global para volver atrás (usada por configuracion.html)
+ */
+window.volverAtras = volverAtras;
+
+/**
+ * Función global para ir al inicio (usada desde cualquier página)
+ */
+window.irAlInicio = irAlInicio;
+
+// ============== INICIALIZACIÓN ==============
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', inicializarApp);
+
+// Manejar navegación del navegador
+window.addEventListener('popstate', function(event) {
+    console.log('Navegación detectada, reinicializando...');
+    inicializarApp();
+});
+
+console.log('App.js cargado - Enrutador principal inicializado');

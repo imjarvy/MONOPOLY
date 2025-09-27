@@ -1,4 +1,4 @@
-import { moverFichaActual } from '../../app.js';
+import { moverFichaActual } from '../../controllers/gameController.js';
 const areaDados = document.getElementById('area-dados');
 
 /**
