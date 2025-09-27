@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monopoly</title>
+    <title>mon5opoly</title>
     <link rel="stylesheet" href="tablero.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"> 
     <!-- Modal Component -->
@@ -29,6 +29,11 @@
         <div class="col-lg-3 col-md-4 col-sm-12">
             <div id="panel-jugadores"></div>
             <div id="area-dados"></div>
+            <div id="area-finalizacion">
+                <button class="btn btn-danger btn-block mt-3" onclick="event.preventDefault(); event.stopPropagation(); mostrarModalFinalizarJuego(); return false;">
+                    🏁 Finalizar Juego
+                </button>
+            </div>
         </div>
     </div>
     <!-- Setup de jugadores de ejemplo -->
@@ -41,5 +46,7 @@
     <script type="module" src="../modals/propiedadModal.js"></script>
     <!-- Modal de información del jugador -->
     <script src="../modals/jugadorInfoModal.js"></script>
+    <!-- Modal de finalización del juego -->
+    <script src="../modals/finalizarJuegoModal.js"></script>
 </body>
 </html>

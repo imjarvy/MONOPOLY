@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Finalizar Juego</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Modal Component -->
+    <link rel="stylesheet" href="../modals/modal.css" />
+    <!-- Toast Component -->
+    <link rel="stylesheet" href="../toast/toast.css" />
+    <script src="../modals/modal.js"></script>
+    <script src="../toast/toast.js"></script>
+</head>
+<body class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Test Modal Finalizar Juego</h2>
+            
+            <div class="alert alert-info">
+                <strong>Datos de prueba:</strong> Se han creado jugadores ficticios en localStorage para probar el modal.
+            </div>
+            
+            <button class="btn btn-danger btn-lg" onclick="mostrarModalFinalizarJuego()">
+                🏁 Finalizar Juego (TEST)
+            </button>
+            
+            <br><br>
+            
+            <button class="btn btn-info" onclick="testRedirección()">
+                🔧 Test Solo Redirección
+            </button>
+            
+            <script>
+            function testRedirección() {
+                console.log('Probando redirección...');
+                redirigirAlIndex();
+            }
+            </script>
+        </div>
+    </div>
+    
+    <script>
+        // Crear jugadores de prueba en localStorage
+        const jugadoresPrueba = [
+            {
+                id: 1,
+                nickname: "Player1",
+                pais: "co",
+                ficha: "🚗",
+                color: "#ff0000",
+                dinero: 2500,
+                propiedades: [
+                    {
+                        id: 1,
+                        nombre: "Avenida Mediterráneo",
+                        color: "brown",
+                        precio: 60,
+                        hipoteca: 30,
+                        casas: 2,
+                        hotel: false,
+                        hipotecada: false
+                    },
+                    {
+                        id: 3,
+                        nombre: "Avenida Báltica",
+                        color: "brown", 
+                        precio: 60,
+                        hipoteca: 30,
+                        casas: 1,
+                        hotel: false,
+                        hipotecada: false
+                    }
+                ]
+            },
+            {
+                id: 2,
+                nickname: "Player2",
+                pais: "mx",
+                ficha: "🎩",
+                color: "#00ff00",
+                dinero: 1800,
+                propiedades: [
+                    {
+                        id: 11,
+                        nombre: "St. Charles Place",
+                        color: "pink",
+                        precio: 140,
+                        hipoteca: 70,
+                        casas: 0,
+                        hotel: true,
+                        hipotecada: false
+                    }
+                ]
+            },
+            {
+                id: 3,
+                nickname: "Player3",
+                pais: "ar",
+                ficha: "🐕",
+                color: "#0000ff",
+                dinero: 500,
+                propiedades: [
+                    {
+                        id: 5,
+                        nombre: "Oriental Avenue",
+                        color: "lightblue",
+                        precio: 100,
+                        hipoteca: 50,
+                        casas: 0,
+                        hotel: false,
+                        hipotecada: true
+                    }
+                ]
+            }
+        ];
+        
+        localStorage.setItem('jugadores', JSON.stringify(jugadoresPrueba));
+        localStorage.setItem('turnoActual', '0');
+    </script>
+    
+    <!-- Modal de finalización del juego -->
+    <script src="../modals/finalizarJuegoModal.js"></script>
+</body>
+</html>

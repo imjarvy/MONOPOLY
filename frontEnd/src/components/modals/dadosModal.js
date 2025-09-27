@@ -21,6 +21,16 @@ function mostrarModalDados() {
         return;
     }
     
+    // Verificar si el jugador puede tirar dados (sistema de cárcel)
+    if (typeof obtenerJugadorActual === 'function') {
+        const jugadorActual = obtenerJugadorActual();
+        if (jugadorActual && typeof puedeJugarTurno === 'function') {
+            if (!puedeJugarTurno(jugadorActual)) {
+                return; // puedeJugarTurno ya maneja mostrar el modal de cárcel
+            }
+        }
+    }
+    
     modalDadosAbierto = true;
     
     const contenido = `

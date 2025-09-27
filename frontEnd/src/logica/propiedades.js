@@ -171,13 +171,31 @@ export async function puedeConstructir(jugador, propiedad) {
     return { puede: false, razon: 'Necesitas tener todas las propiedades del mismo color' };
   }
   
+  // Verificar construcción uniforme (regla oficial del Monopoly)
+  const propiedadesMismoColor = jugador.propiedades?.filter(p => 
+    p.color === propiedad.color && !p.hipotecada
+  ) || [];
+  
+  // Encontrar la propiedad con menos casas del grupo
+  const minCasas = Math.min(...propiedadesMismoColor.map(p => p.casas));
+  
+  // No se puede construir si esta propiedad ya tiene más casas que el mínimo del grupo
+  if (propiedad.casas > minCasas) {
+    return { puede: false, razon: 'Debes construir de manera uniforme. Primero construye en las propiedades con menos casas' };
+  }
+  
   // Verificar límites de construcción
   if (propiedad.hotel) {
     return { puede: false, razon: 'Ya hay un hotel construido' };
   }
   
   if (propiedad.casas >= 4) {
-    // Puede construir hotel
+    // Puede construir hotel solo si todas las propiedades del color tienen 4 casas
+    const todasCon4Casas = propiedadesMismoColor.every(p => p.casas >= 4 || p.hotel);
+    if (!todasCon4Casas) {
+      return { puede: false, razon: 'Todas las propiedades del color deben tener 4 casas antes de construir un hotel' };
+    }
+    
     if (jugador.dinero >= PRECIO_HOTEL) {
       return { puede: true, tipo: 'hotel', costo: PRECIO_HOTEL };
     } else {

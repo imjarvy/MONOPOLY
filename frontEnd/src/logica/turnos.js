@@ -16,7 +16,10 @@ function obtenerJugadores() {
     ...jugador,
     propiedades: jugador.propiedades || [],
     hipotecas: jugador.hipotecas || [],
-    posicion: jugador.posicion || 0
+    posicion: jugador.posicion || 0,
+    enCarcel: jugador.enCarcel || false,
+    turnosEnCarcel: jugador.turnosEnCarcel || 0,
+    cartaLibertad: jugador.cartaLibertad || false
   }));
 }
 
@@ -272,18 +275,289 @@ function procesarCasillaEspecial(casilla, jugador) {
       break;
       
     case 30: // Ve a la cárcel
-      // Aquí podrías implementar lógica de cárcel
-      if (window.Toast) {
-        window.Toast.warning(
-          `${jugador.nickname} debe ir a la cárcel`,
-          "¡Ve a la Cárcel!"
-        );
-      }
+      enviarACarcel(jugador);
       break;
       
     default:
       console.log(`Casilla especial ${casilla.name} procesada`);
   }
+}
+
+/**
+ * Sistema de Cárcel del Monopoly
+ */
+
+/**
+ * Envía a un jugador a la cárcel
+ * @param {Object} jugador - Jugador a enviar a la cárcel
+ */
+function enviarACarcel(jugador) {
+  jugador.posicion = 10; // Casilla de cárcel
+  jugador.enCarcel = true;
+  jugador.turnosEnCarcel = 0;
+  
+  guardarJugadores(jugadores);
+  actualizarFichas(jugadores);
+  renderizarPanelJugadores(jugadores);
+  
+  if (window.Toast) {
+    window.Toast.warning(
+      `${jugador.nickname} ha sido enviado a la cárcel`,
+      "¡A la Cárcel!"
+    );
+  }
+  
+  // Completar el turno inmediatamente
+  setTimeout(() => completarAccionJugador(), 1000);
+}
+
+/**
+ * Verifica si un jugador puede tirar dados (no está bloqueado en cárcel)
+ * @param {Object} jugador - Jugador a verificar
+ * @returns {boolean}
+ */
+function puedeJugarTurno(jugador) {
+  // Si no está en cárcel, puede jugar normalmente
+  if (!jugador.enCarcel) return true;
+  
+  // Si está en cárcel, mostrar opciones de salida
+  mostrarOpcionesCarcel(jugador);
+  return false;
+}
+
+/**
+ * Muestra las opciones para salir de la cárcel
+ * @param {Object} jugador - Jugador en cárcel
+ */
+function mostrarOpcionesCarcel(jugador) {
+  const opcionesHTML = `
+    <div class="modal-carcel">
+      <div class="carcel-header">
+        <h3>🏛️ Estás en la Cárcel</h3>
+        <p>${jugador.nickname}, llevas ${jugador.turnosEnCarcel} turno${jugador.turnosEnCarcel !== 1 ? 's' : ''} en la cárcel</p>
+      </div>
+      
+      <div class="opciones-carcel">
+        <h4>Opciones para salir:</h4>
+        
+        <div class="opcion-carcel">
+          <button class="btn btn-primary" onclick="intentarSalidaDobles()" 
+                  ${jugador.turnosEnCarcel >= 3 ? 'disabled' : ''}>
+            🎲 Tirar dados (salir con dobles)
+            ${jugador.turnosEnCarcel >= 3 ? '<br><small>Ya no puedes usar esta opción</small>' : ''}
+          </button>
+        </div>
+        
+        <div class="opcion-carcel">
+          <button class="btn btn-success" onclick="pagarFianza()" 
+                  ${jugador.dinero < 50 ? 'disabled' : ''}>
+            💰 Pagar fianza ($50)
+            ${jugador.dinero < 50 ? '<br><small>No tienes suficiente dinero</small>' : ''}
+          </button>
+        </div>
+        
+        ${jugador.cartaLibertad ? `
+          <div class="opcion-carcel">
+            <button class="btn btn-warning" onclick="usarCartaLibertad()">
+              🎫 Usar carta "Sal libre de la cárcel"
+            </button>
+          </div>
+        ` : ''}
+        
+        ${jugador.turnosEnCarcel >= 3 ? `
+          <div class="opcion-carcel forzada">
+            <strong>⚠️ Debes salir obligatoriamente pagando la fianza</strong>
+          </div>
+        ` : ''}
+      </div>
+      
+      <div class="info-carcel">
+        <small>
+          • Puedes tirar dados hasta 3 turnos para salir con dobles<br>
+          • Si no sacas dobles en 3 intentos, debes pagar la fianza<br>
+          • Puedes pagar la fianza en cualquier momento
+        </small>
+      </div>
+    </div>
+  `;
+  
+  window.Modal.show(opcionesHTML, {
+    title: "Opciones de Cárcel",
+    size: 'md',
+    closeOnOverlay: false,
+    preventAutoClose: true
+  });
+}
+
+/**
+ * Intenta salir de la cárcel tirando dados
+ */
+window.intentarSalidaDobles = function() {
+  const jugador = obtenerJugadorActual();
+  
+  if (jugador.turnosEnCarcel >= 3) {
+    window.Toast.error("Ya no puedes usar esta opción", "Máximo de Intentos");
+    return;
+  }
+  
+  window.Modal.close();
+  
+  // Tirar dados automáticamente
+  const dado1 = Math.floor(Math.random() * 6) + 1;
+  const dado2 = Math.floor(Math.random() * 6) + 1;
+  const esDoble = dado1 === dado2;
+  
+  jugador.turnosEnCarcel++;
+  
+  if (esDoble) {
+    // ¡Libertad con dobles!
+    liberarDeCarcel(jugador);
+    
+    if (window.Toast) {
+      window.Toast.success(
+        `¡Sacaste dobles (${dado1}-${dado2})! Sales libre de la cárcel`,
+        "¡Libertad!"
+      );
+    }
+    
+    // Mover normalmente con los dados
+    const totalDados = dado1 + dado2;
+    moverJugador(jugador, totalDados);
+  } else {
+    if (window.Toast) {
+      window.Toast.info(
+        `Sacaste ${dado1}-${dado2} (no dobles). Te quedas en la cárcel`,
+        `Intento ${jugador.turnosEnCarcel}/3`
+      );
+    }
+    
+    guardarJugadores(jugadores);
+    renderizarPanelJugadores(jugadores);
+    
+    // Si ya llevó 3 turnos, debe pagar obligatoriamente
+    if (jugador.turnosEnCarcel >= 3) {
+      setTimeout(() => {
+        if (jugador.dinero >= 50) {
+          pagarFianzaForzada();
+        } else {
+          // Bancarrota por no poder pagar fianza
+          window.Toast.error(
+            `${jugador.nickname} no puede pagar la fianza y queda eliminado`,
+            "Bancarrota"
+          );
+          // Aquí podrías implementar lógica de bancarrota
+        }
+      }, 2000);
+    } else {
+      setTimeout(() => completarAccionJugador(), 1000);
+    }
+  }
+  
+  // Mostrar resultado de dados
+  if (window.dadosModal && typeof window.dadosModal.mostrarResultado === 'function') {
+    window.dadosModal.mostrarResultado(dado1, dado2, esDoble ? "¡DOBLES! Sales de la cárcel" : `Intento ${jugador.turnosEnCarcel}/3 - Te quedas en la cárcel`);
+  }
+};
+
+/**
+ * Paga la fianza para salir de la cárcel
+ */
+window.pagarFianza = function() {
+  const jugador = obtenerJugadorActual();
+  
+  if (jugador.dinero < 50) {
+    window.Toast.error("No tienes suficiente dinero para la fianza", "Pago Fallido");
+    return;
+  }
+  
+  window.Modal.close();
+  
+  jugador.dinero -= 50;
+  liberarDeCarcel(jugador);
+  
+  if (window.Toast) {
+    window.Toast.success(
+      `Has pagado $50 de fianza. ¡Sales libre de la cárcel!`,
+      "Fianza Pagada"
+    );
+  }
+  
+  // Después de pagar, el jugador puede tirar dados normalmente
+  guardarJugadores(jugadores);
+  renderizarPanelJugadores(jugadores);
+  
+  setTimeout(() => {
+    window.Toast.info("Ahora puedes tirar los dados", "Tu Turno");
+    estadoJuego = 'esperando_dados';
+  }, 1500);
+};
+
+/**
+ * Usa una carta de libertad para salir de la cárcel
+ */
+window.usarCartaLibertad = function() {
+  const jugador = obtenerJugadorActual();
+  
+  if (!jugador.cartaLibertad) {
+    window.Toast.error("No tienes una carta de libertad", "Carta No Disponible");
+    return;
+  }
+  
+  window.Modal.close();
+  
+  jugador.cartaLibertad = false;
+  liberarDeCarcel(jugador);
+  
+  if (window.Toast) {
+    window.Toast.success(
+      `Has usado tu carta "Sal libre de la cárcel"`,
+      "Carta Usada"
+    );
+  }
+  
+  // Después de usar la carta, el jugador puede tirar dados normalmente
+  guardarJugadores(jugadores);
+  renderizarPanelJugadores(jugadores);
+  
+  setTimeout(() => {
+    window.Toast.info("Ahora puedes tirar los dados", "Tu Turno");
+    estadoJuego = 'esperando_dados';
+  }, 1500);
+};
+
+/**
+ * Pago forzado de fianza (cuando se cumplen 3 turnos)
+ */
+function pagarFianzaForzada() {
+  const jugador = obtenerJugadorActual();
+  
+  jugador.dinero -= 50;
+  liberarDeCarcel(jugador);
+  
+  if (window.Toast) {
+    window.Toast.warning(
+      `Tras 3 turnos, debes pagar $50 de fianza obligatoriamente`,
+      "Pago Forzado"
+    );
+  }
+  
+  guardarJugadores(jugadores);
+  renderizarPanelJugadores(jugadores);
+  
+  setTimeout(() => {
+    window.Toast.info("Ahora puedes tirar los dados", "Tu Turno");
+    estadoJuego = 'esperando_dados';
+  }, 2000);
+}
+
+/**
+ * Libera a un jugador de la cárcel
+ * @param {Object} jugador - Jugador a liberar
+ */
+function liberarDeCarcel(jugador) {
+  jugador.enCarcel = false;
+  jugador.turnosEnCarcel = 0;
+  // El jugador sigue en la posición 10 pero ya no está "en cárcel"
 }
 
 /**
@@ -360,6 +634,8 @@ export function obtenerJugadorActual() {
 // Hacer funciones disponibles globalmente para compatibilidad
 window.moverFichaActual = moverFichaActual;
 window.inicializarJuego = inicializarJuego;
+window.obtenerJugadorActual = obtenerJugadorActual;
+window.puedeJugarTurno = puedeJugarTurno;
 
 /**
  * Función global para actualizar la interfaz del juego
@@ -370,3 +646,77 @@ window.actualizarInterfazJuego = function() {
   actualizarFichas(jugadores);
   renderizarPanelJugadores(jugadores, turnoActual);
 };
+
+// Agregar estilos CSS para el modal de la cárcel
+const estilosCarcel = document.createElement('style');
+estilosCarcel.textContent = `
+  .modal-carcel {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .carcel-header {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .carcel-header h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+  }
+  
+  .opciones-carcel h4 {
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .opcion-carcel {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+  }
+  
+  .opcion-carcel button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .opcion-carcel button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .opcion-carcel.forzada {
+    background: #fff3cd;
+    border-color: #ffc107;
+    color: #856404;
+  }
+  
+  .info-carcel {
+    background: #e7f3ff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .info-carcel small {
+    color: #0066cc;
+  }
+`;
+
+if (!document.getElementById('modal-carcel-styles')) {
+  estilosCarcel.id = 'modal-carcel-styles';
+  document.head.appendChild(estilosCarcel);
+}
