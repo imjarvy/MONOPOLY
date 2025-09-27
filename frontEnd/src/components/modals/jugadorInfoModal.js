@@ -7,7 +7,7 @@
  * Muestra el modal con información completa de un jugador específico
  * @param {string} jugadorId - ID del jugador del cual mostrar información
  */
-function mostrarModalInfoJugador(jugadorId) {
+async function mostrarModalInfoJugador(jugadorId) {
   // Obtener información del jugador
   const jugadores = obtenerJugadoresActuales();
   const jugador = jugadores.find(j => j.id.toString() === jugadorId);
@@ -20,7 +20,11 @@ function mostrarModalInfoJugador(jugadorId) {
     return;
   }
 
-  const contenido = crearContenidoModal(jugador);
+  // Obtener datos adicionales necesarios
+  const datosTablero = await obtenerDatosTablero();
+  const nombreCasilla = await obtenerNombreCasilla(jugador.posicion || 0);
+  
+  const contenido = await crearContenidoModal(jugador, jugadores, datosTablero, nombreCasilla);
   
   // Mostrar el modal usando el sistema existente
   window.Modal.show(contenido, {
@@ -34,9 +38,12 @@ function mostrarModalInfoJugador(jugadorId) {
 /**
  * Crea el contenido HTML del modal con toda la información del jugador
  */
-function crearContenidoModal(jugador) {
+async function crearContenidoModal(jugador, todosJugadores, datosTablero, nombreCasilla) {
   const propiedadesAgrupadas = agruparPropiedadesPorColor(jugador.propiedades || []);
   const estadisticas = calcularEstadisticas(jugador);
+  const desempeño = calcularDesempeño(jugador, todosJugadores);
+  const oportunidades = calcularOportunidades(jugador, todosJugadores, datosTablero);
+  const ranking = calcularRanking(jugador, todosJugadores);
   
   return `
     <div class="jugador-modal-container">
@@ -49,23 +56,26 @@ function crearContenidoModal(jugador) {
           <div class="avatar-info">
             <h3 class="jugador-name">${jugador.nickname}</h3>
             <div class="jugador-country">${obtenerNombrePais(jugador.pais)}</div>
+            <div class="ranking-badge">🏆 Puesto ${ranking.posicion}° de ${todosJugadores.length}</div>
           </div>
         </div>
         <div class="jugador-wealth">
-          <div class="wealth-amount">$${jugador.dinero}</div>
-          <div class="wealth-label">Patrimonio</div>
+          <div class="wealth-amount">$${jugador.dinero.toLocaleString()}</div>
+          <div class="wealth-label">Efectivo</div>
+          <div class="wealth-total">$${estadisticas.valorTotal.toLocaleString()} total</div>
         </div>
       </div>
 
       <!-- Estadísticas principales -->
       <div class="stats-section">
-        <h4 class="section-title">📊 Estadísticas</h4>
+        <h4 class="section-title">📊 Estadísticas del Imperio</h4>
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-icon">🏠</div>
             <div class="stat-info">
               <div class="stat-number">${estadisticas.totalPropiedades}</div>
               <div class="stat-label">Propiedades</div>
+              <div class="stat-subtitle">${Math.round((estadisticas.totalPropiedades / 28) * 100)}% del tablero</div>
             </div>
           </div>
           <div class="stat-card">
@@ -73,41 +83,134 @@ function crearContenidoModal(jugador) {
             <div class="stat-info">
               <div class="stat-number">${estadisticas.totalConstrucciones}</div>
               <div class="stat-label">Construcciones</div>
+              <div class="stat-subtitle">${estadisticas.hoteles} hoteles</div>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon">🏦</div>
+            <div class="stat-icon">�</div>
             <div class="stat-info">
-              <div class="stat-number">${estadisticas.propiedadesHipotecadas}</div>
-              <div class="stat-label">Hipotecadas</div>
+              <div class="stat-number">${estadisticas.monopolios}</div>
+              <div class="stat-label">Monopolios</div>
+              <div class="stat-subtitle">${oportunidades.monopoliosCompletables} completables</div>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">💎</div>
             <div class="stat-info">
-              <div class="stat-number">$${estadisticas.valorTotal}</div>
-              <div class="stat-label">Valor Total</div>
+              <div class="stat-number">$${estadisticas.rentaPotencial.toLocaleString()}</div>
+              <div class="stat-label">Renta/Turno</div>
+              <div class="stat-subtitle">Potencial máximo</div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Desempeño avanzado -->
+      <div class="performance-section">
+        <h4 class="section-title">⚡ Análisis de Desempeño</h4>
+        <div class="performance-grid">
+          <div class="performance-card liquidity-${desempeño.liquidez.nivel}">
+            <div class="performance-header">
+              <span class="performance-icon">💰</span>
+              <span class="performance-title">Liquidez</span>
+              <span class="performance-level">${desempeño.liquidez.etiqueta}</span>
+            </div>
+            <div class="performance-desc">${desempeño.liquidez.descripcion}</div>
+            <div class="performance-bar">
+              <div class="performance-fill" style="width: ${desempeño.liquidez.porcentaje}%"></div>
+            </div>
+          </div>
+          <div class="performance-card">
+            <div class="performance-header">
+              <span class="performance-icon">📈</span>
+              <span class="performance-title">ROI Promedio</span>
+              <span class="performance-level">${desempeño.roi.toFixed(1)}%</span>
+            </div>
+            <div class="performance-desc">Retorno sobre inversión</div>
+          </div>
+          <div class="performance-card">
+            <div class="performance-header">
+              <span class="performance-icon">🎯</span>
+              <span class="performance-title">Eficiencia</span>
+              <span class="performance-level">${desempeño.eficiencia}%</span>
+            </div>
+            <div class="performance-desc">Propiedades desarrolladas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Oportunidades estratégicas -->
+      ${oportunidades.monopoliosCompletables > 0 ? `
+      <div class="opportunities-section">
+        <h4 class="section-title">🎯 Oportunidades Estratégicas</h4>
+        <div class="opportunities-grid">
+          ${oportunidades.detalles.map(oportunidad => `
+            <div class="opportunity-card">
+              <div class="opportunity-header" style="background-color: ${oportunidad.color}">
+                <span class="opportunity-name">${oportunidad.nombre}</span>
+              </div>
+              <div class="opportunity-body">
+                <div class="opportunity-progress">
+                  <span>${oportunidad.tienes}/${oportunidad.total} propiedades</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${(oportunidad.tienes/oportunidad.total)*100}%"></div>
+                  </div>
+                </div>
+                <div class="opportunity-missing">
+                  <strong>Falta:</strong> ${oportunidad.faltan.join(', ')}
+                </div>
+                <div class="opportunity-potential">
+                  💰 Potencial: $${oportunidad.rentaPotencial.toLocaleString()}/turno
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ` : ''}
+
       <!-- Propiedades por color -->
       <div class="propiedades-section">
-        <h4 class="section-title">🏘️ Propiedades</h4>
+        <h4 class="section-title">🏘️ Cartera de Propiedades</h4>
         ${propiedadesAgrupadas.length > 0 ? 
           propiedadesAgrupadas.map(grupo => crearGrupoPropiedad(grupo)).join('') :
-          '<div class="no-propiedades">Este jugador no posee propiedades aún</div>'
+          '<div class="no-propiedades">Este jugador no posee propiedades aún<br><span class="suggestion">💡 Considera comprar propiedades para generar ingresos pasivos</span></div>'
         }
       </div>
 
-      <!-- Posición actual -->
+      <!-- Posición y estado actual -->
       <div class="posicion-section">
-        <h4 class="section-title">📍 Posición Actual</h4>
-        <div class="posicion-info">
-          <div class="posicion-casilla">
-            <span class="casilla-numero">Casilla ${jugador.posicion || 0}</span>
-            <span class="casilla-nombre">${obtenerNombreCasilla(jugador.posicion || 0)}</span>
+        <h4 class="section-title">📍 Estado Actual del Jugador</h4>
+        <div class="estado-grid">
+          <div class="estado-card">
+            <div class="estado-icon">🎲</div>
+            <div class="estado-info">
+              <div class="estado-title">Posición Actual</div>
+              <div class="estado-value">Casilla ${jugador.posicion || 0}</div>
+              <div class="estado-subtitle">${nombreCasilla}</div>
+            </div>
+          </div>
+          <div class="estado-card">
+            <div class="estado-icon">🔄</div>
+            <div class="estado-info">
+              <div class="estado-title">Próximo Turno</div>
+              <div class="estado-value">${obtenerEstadoTurno(jugador, todosJugadores)}</div>
+              <div class="estado-subtitle">Preparación estratégica</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen estratégico -->
+      <div class="strategic-summary">
+        <h4 class="section-title">🧠 Análisis Estratégico AI</h4>
+        <div class="strategy-card">
+          <div class="strategy-recommendation">
+            <strong>Recomendación:</strong> ${obtenerRecomendacionEstrategica(jugador, estadisticas, oportunidades, desempeño)}
+          </div>
+          <div class="strategy-tips">
+            <div class="tip">💡 ${obtenerConsejoPrincipal(jugador, estadisticas)}</div>
+            <div class="tip">⚠️ ${obtenerAdvertencia(desempeño, estadisticas)}</div>
           </div>
         </div>
       </div>
@@ -193,17 +296,42 @@ function crearTarjetaPropiedad(propiedad) {
  */
 function calcularEstadisticas(jugador) {
   const propiedades = jugador.propiedades || [];
+  const casas = propiedades.reduce((total, p) => total + (p.casas || 0), 0);
+  const hoteles = propiedades.reduce((total, p) => total + (p.hotel ? 1 : 0), 0);
+  
+  // Contar monopolios actuales
+  const grupos = {};
+  propiedades.forEach(prop => {
+    const key = prop.color || prop.type || 'otros';
+    if (!grupos[key]) grupos[key] = [];
+    grupos[key].push(prop);
+  });
+  
+  let monopolios = 0;
+  Object.values(grupos).forEach(grupo => {
+    if (esGrupoCompleto({propiedades: grupo, color: grupo[0]?.color, tipo: grupo[0]?.type})) {
+      monopolios++;
+    }
+  });
+  
+  // Calcular renta potencial total
+  const rentaPotencial = propiedades.reduce((total, p) => {
+    if (p.hipotecada) return total;
+    return total + calcularRentaActual(p);
+  }, 0);
   
   return {
     totalPropiedades: propiedades.length,
-    totalConstrucciones: propiedades.reduce((total, p) => 
-      total + (p.casas || 0) + (p.hotel ? 1 : 0), 0
-    ),
+    totalConstrucciones: casas + hoteles,
+    casas: casas,
+    hoteles: hoteles,
     propiedadesHipotecadas: propiedades.filter(p => p.hipotecada).length,
+    monopolios: monopolios,
+    rentaPotencial: rentaPotencial,
     valorTotal: jugador.dinero + propiedades.reduce((total, p) => 
       total + (p.price || p.precio || 0) + 
-      ((p.casas || 0) * (p.housePrice || 0)) + 
-      (p.hotel ? (p.hotelPrice || 0) : 0), 0
+      ((p.casas || 0) * (p.housePrice || 50)) + 
+      (p.hotel ? (p.hotelPrice || 200) : 0), 0
     )
   };
 }
@@ -211,24 +339,6 @@ function calcularEstadisticas(jugador) {
 /**
  * Funciones auxiliares
  */
-function obtenerNombrePais(codigoPais) {
-  // Mapeo básico de códigos de país a nombres
-  const paises = {
-    'co': 'Colombia',
-    'mx': 'México', 
-    'ar': 'Argentina',
-    'es': 'España',
-    'cl': 'Chile',
-    'br': 'Brasil',
-    'us': 'Estados Unidos',
-    'ca': 'Canadá',
-    'pe': 'Perú',
-    'ec': 'Ecuador',
-    'uy': 'Uruguay'
-  };
-  return paises[codigoPais] || codigoPais.toUpperCase();
-}
-
 function obtenerNombrePais(codigoPais) {
   // Mapeo básico de códigos de país a nombres
   const paises = {
@@ -352,6 +462,194 @@ function calcularRentaActual(propiedad) {
 }
 
 /**
+ * Calcula métricas de desempeño avanzadas
+ */
+function calcularDesempeño(jugador, todosJugadores) {
+  const propiedades = jugador.propiedades || [];
+  const dineroTotal = jugador.dinero;
+  const activosTotal = propiedades.reduce((total, p) => total + (p.price || p.precio || 0), 0);
+  const patrimonioTotal = dineroTotal + activosTotal;
+  
+  // Liquidez: porcentaje de dinero vs patrimonio total
+  const porcentajeLiquidez = patrimonioTotal > 0 ? (dineroTotal / patrimonioTotal) * 100 : 0;
+  let liquidez = {
+    porcentaje: porcentajeLiquidez,
+    nivel: porcentajeLiquidez > 40 ? 'high' : porcentajeLiquidez > 20 ? 'medium' : 'low',
+    etiqueta: porcentajeLiquidez > 40 ? 'Alta' : porcentajeLiquidez > 20 ? 'Media' : 'Baja',
+    descripcion: porcentajeLiquidez > 40 ? 'Excelente flexibilidad financiera' : 
+                 porcentajeLiquidez > 20 ? 'Liquidez moderada para emergencias' : 
+                 'Riesgo alto - considera vender activos'
+  };
+  
+  // ROI promedio
+  const inversionTotal = propiedades.reduce((total, p) => 
+    total + (p.price || p.precio || 0) + ((p.casas || 0) * 50) + (p.hotel ? 200 : 0), 0);
+  const rentaTotal = propiedades.reduce((total, p) => total + calcularRentaActual(p), 0);
+  const roi = inversionTotal > 0 ? (rentaTotal * 10 / inversionTotal) * 100 : 0; // ROI anualizado aproximado
+  
+  // Eficiencia: propiedades desarrolladas
+  const propiedadesDesarrolladas = propiedades.filter(p => p.casas > 0 || p.hotel).length;
+  const eficiencia = propiedades.length > 0 ? (propiedadesDesarrolladas / propiedades.length) * 100 : 0;
+  
+  return {
+    liquidez,
+    roi,
+    eficiencia: Math.round(eficiencia)
+  };
+}
+
+/**
+ * Calcula oportunidades estratégicas disponibles
+ */
+function calcularOportunidades(jugador, todosJugadores, datosTablero) {
+  if (!datosTablero) {
+    return { monopoliosCompletables: 0, detalles: [] };
+  }
+  
+  const propiedadesJugador = jugador.propiedades || [];
+  const todasPropiedades = [];
+  
+  // Recopilar todas las propiedades del tablero
+  ['bottom', 'left', 'top', 'right'].forEach(lado => {
+    if (datosTablero[lado]) {
+      datosTablero[lado].forEach(casilla => {
+        if (casilla.type === 'property' || casilla.type === 'railroad' || casilla.type === 'utility') {
+          todasPropiedades.push(casilla);
+        }
+      });
+    }
+  });
+  
+  // Agrupar por color
+  const gruposPorColor = {};
+  todasPropiedades.forEach(prop => {
+    const key = prop.color || prop.type || 'otros';
+    if (!gruposPorColor[key]) {
+      gruposPorColor[key] = {
+        color: prop.color || '#666',
+        nombre: obtenerNombreGrupo(prop.color, prop.type),
+        propiedades: [],
+        tipo: prop.type
+      };
+    }
+    gruposPorColor[key].propiedades.push(prop);
+  });
+  
+  const oportunidades = [];
+  
+  Object.values(gruposPorColor).forEach(grupo => {
+    const propiedadesDelJugador = propiedadesJugador.filter(pj => 
+      (pj.color === grupo.color) || (pj.type === grupo.tipo && grupo.tipo !== 'property')
+    );
+    
+    if (propiedadesDelJugador.length > 0 && propiedadesDelJugador.length < grupo.propiedades.length) {
+      const propiedadesFaltantes = grupo.propiedades.filter(gp => 
+        !propiedadesDelJugador.some(pj => pj.name === gp.name || pj.nombre === gp.name)
+      );
+      
+      const rentaPotencial = grupo.propiedades.reduce((total, p) => 
+        total + (p.rent?.withHotel || p.rent?.base || 0), 0);
+      
+      oportunidades.push({
+        color: grupo.color,
+        nombre: grupo.nombre,
+        tienes: propiedadesDelJugador.length,
+        total: grupo.propiedades.length,
+        faltan: propiedadesFaltantes.map(p => p.name).slice(0, 3), // Máximo 3 para no saturar
+        rentaPotencial: rentaPotencial
+      });
+    }
+  });
+  
+  return {
+    monopoliosCompletables: oportunidades.length,
+    detalles: oportunidades.slice(0, 4) // Máximo 4 oportunidades mostradas
+  };
+}
+
+/**
+ * Calcula el ranking del jugador
+ */
+function calcularRanking(jugador, todosJugadores) {
+  const jugadoresOrdenados = [...todosJugadores].sort((a, b) => {
+    const patrimonioA = a.dinero + (a.propiedades || []).reduce((total, p) => total + (p.price || p.precio || 0), 0);
+    const patrimonioB = b.dinero + (b.propiedades || []).reduce((total, p) => total + (p.price || p.precio || 0), 0);
+    return patrimonioB - patrimonioA;
+  });
+  
+  const posicion = jugadoresOrdenados.findIndex(j => j.id === jugador.id) + 1;
+  
+  return {
+    posicion,
+    total: todosJugadores.length
+  };
+}
+
+/**
+ * Obtiene el estado del turno del jugador
+ */
+function obtenerEstadoTurno(jugador, todosJugadores) {
+  const turnoActual = localStorage.getItem('turnoActual');
+  if (turnoActual !== null) {
+    const indexTurnoActual = parseInt(turnoActual);
+    const indexJugador = todosJugadores.findIndex(j => j.id === jugador.id);
+    
+    if (indexJugador === indexTurnoActual) {
+      return "Es tu turno";
+    } else {
+      const diferencia = (indexJugador - indexTurnoActual + todosJugadores.length) % todosJugadores.length;
+      return diferencia === 1 ? "Próximo turno" : `En ${diferencia} turnos`;
+    }
+  }
+  return "Pendiente";
+}
+
+/**
+ * Genera recomendación estratégica usando IA
+ */
+function obtenerRecomendacionEstrategica(jugador, stats, oportunidades, desempeño) {
+  if (stats.monopolios > 0) {
+    return "Desarrolla tus monopolios con casas y hoteles para maximizar las rentas";
+  } else if (oportunidades.monopoliosCompletables > 0) {
+    return `Enfócate en completar monopolios. Tienes ${oportunidades.monopoliosCompletables} oportunidades pendientes`;
+  } else if (desempeño.liquidez.nivel === 'low') {
+    return "Considera hipotecar propiedades para mantener liquidez y aprovechar oportunidades";
+  } else if (stats.totalPropiedades < 3) {
+    return "Agresivo: Compra más propiedades para construir tu imperio inmobiliario";
+  } else {
+    return "Mantén el equilibrio entre liquidez y desarrollo de propiedades";
+  }
+}
+
+/**
+ * Genera consejo principal
+ */
+function obtenerConsejoPrincipal(jugador, stats) {
+  if (stats.totalPropiedades === 0) {
+    return "Empieza comprando propiedades en esquinas frecuentadas";
+  } else if (stats.monopolios === 0) {
+    return "Busca intercambios para formar tu primer monopolio";
+  } else {
+    return "Diversifica tu cartera para reducir riesgos";
+  }
+}
+
+/**
+ * Genera advertencia basada en el desempeño
+ */
+function obtenerAdvertencia(desempeño, stats) {
+  if (desempeño.liquidez.nivel === 'low') {
+    return "Liquidez baja: riesgo de no poder pagar rentas altas";
+  } else if (desempeño.eficiencia < 30) {
+    return "Propiedades sin desarrollar: estás perdiendo potencial de ingresos";
+  } else if (stats.propiedadesHipotecadas > stats.totalPropiedades * 0.5) {
+    return "Demasiadas hipotecas: limita tu capacidad de generar rentas";
+  } else {
+    return "Buen equilibrio financiero: mantén esta estrategia";
+  }
+}
+
+/**
  * Obtiene los estilos CSS para el modal
  */
 function obtenerEstilosModal() {
@@ -405,6 +703,16 @@ function obtenerEstilosModal() {
       text-transform: uppercase;
     }
     
+    .ranking-badge {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+    
     .jugador-wealth {
       text-align: right;
       min-width: 120px;
@@ -421,6 +729,13 @@ function obtenerEstilosModal() {
     .wealth-label {
       color: #666;
       font-size: 0.85rem;
+    }
+    
+    .wealth-total {
+      color: #059669;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-top: 2px;
     }
     
     .section-title {
@@ -483,6 +798,13 @@ function obtenerEstilosModal() {
     .stat-label {
       font-size: 0.8rem;
       color: #666;
+    }
+    
+    .stat-subtitle {
+      font-size: 0.7rem;
+      color: #059669;
+      font-weight: 500;
+      margin-top: 2px;
     }
     
     .propiedad-grupo {
@@ -637,6 +959,228 @@ function obtenerEstilosModal() {
       border-radius: 8px;
       font-style: italic;
       font-size: 1.1rem;
+    }
+    
+    .suggestion {
+      color: #059669;
+      font-weight: 500;
+      font-style: normal;
+      font-size: 0.9rem;
+    }
+    
+    /* Sección de Desempeño */
+    .performance-section {
+      margin: 25px 0;
+    }
+    
+    .performance-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .performance-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .performance-card.liquidity-high {
+      border-left: 4px solid #10b981;
+    }
+    
+    .performance-card.liquidity-medium {
+      border-left: 4px solid #f59e0b;
+    }
+    
+    .performance-card.liquidity-low {
+      border-left: 4px solid #ef4444;
+    }
+    
+    .performance-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .performance-icon {
+      font-size: 1.2rem;
+    }
+    
+    .performance-title {
+      font-weight: 600;
+      color: #374151;
+      flex: 1;
+    }
+    
+    .performance-level {
+      font-weight: bold;
+      color: #059669;
+    }
+    
+    .performance-desc {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    .performance-bar {
+      width: 100%;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .performance-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      transition: width 0.3s ease;
+    }
+    
+    /* Sección de Oportunidades */
+    .opportunities-section {
+      margin: 25px 0;
+    }
+    
+    .opportunities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+    }
+    
+    .opportunity-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .opportunity-header {
+      color: white;
+      padding: 12px 16px;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .opportunity-body {
+      padding: 16px;
+    }
+    
+    .opportunity-progress {
+      margin-bottom: 12px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      transition: width 0.3s ease;
+    }
+    
+    .opportunity-missing {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    
+    .opportunity-potential {
+      color: #059669;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    /* Estado actual */
+    .estado-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .estado-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .estado-icon {
+      font-size: 2rem;
+      opacity: 0.8;
+    }
+    
+    .estado-info {
+      flex: 1;
+    }
+    
+    .estado-title {
+      font-size: 0.85rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .estado-value {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #333;
+      margin: 4px 0;
+    }
+    
+    .estado-subtitle {
+      font-size: 0.8rem;
+      color: #059669;
+    }
+    
+    /* Análisis Estratégico */
+    .strategic-summary {
+      margin-top: 25px;
+    }
+    
+    .strategy-card {
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #0284c7;
+      border-left: 4px solid #0284c7;
+    }
+    
+    .strategy-recommendation {
+      font-size: 1rem;
+      color: #0c4a6e;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    
+    .strategy-tips {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .tip {
+      font-size: 0.9rem;
+      color: #374151;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 10px 12px;
+      border-radius: 8px;
+      border-left: 3px solid #10b981;
     }
   `;
 }
