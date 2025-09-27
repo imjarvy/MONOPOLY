@@ -20,7 +20,10 @@ export function renderizarPanelJugadores(jugadores, turnoActual) {
       <h3 class="panel-title">Jugadores</h3>
       <div class="jugadores-lista">
         ${jugadores.map((jugador, idx) => `
-          <div class="jugador-item ${idx === turnoActual ? 'turno-activo' : ''}" data-jugador-id="${jugador.id}" ${idx === turnoActual ? `style="border-color: ${jugador.color}; background: linear-gradient(135deg, ${jugador.color}15, #f8f9fa);"` : ''}>
+          <div class="jugador-item ${idx === turnoActual ? 'turno-activo' : ''}" 
+               data-jugador-id="${jugador.id}" 
+               onclick="mostrarModalInfoJugador('${jugador.id}')"
+               style="cursor: pointer; ${idx === turnoActual ? `border-color: ${jugador.color}; background: linear-gradient(135deg, ${jugador.color}15, #f8f9fa);` : ''}">
             <div class="jugador-header">
               <div class="jugador-ficha" style="background-color: ${jugador.color}">
                 ${jugador.ficha}
@@ -80,6 +83,12 @@ export function renderizarPanelJugadores(jugadores, turnoActual) {
         margin-bottom: 10px;
         border: 2px solid transparent;
         transition: all 0.3s ease;
+      }
+
+      .jugador-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-color: rgba(0, 0, 0, 0.1);
       }
 
       .jugador-item.turno-activo {

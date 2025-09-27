@@ -163,8 +163,9 @@ function mostrarModalDados() {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            max-width: 500px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
         }
 
         .dados-header h3 {
@@ -188,40 +189,44 @@ function mostrarModalDados() {
             margin-bottom: 30px;
             background: #fafbff;
             border-radius: 16px;
-            padding: 24px;
+            padding: 32px;
             border: 1px solid #e5e7eb;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 24px;
+            width: 100%;
         }
 
         .dados-container {
             display: flex;
             justify-content: center;
-            gap: 50px;
-            padding: 20px;
+            align-items: center;
+            gap: 80px;
+            padding: 30px;
             background: #f1f5f9;
-            border-radius: 12px;
+            border-radius: 16px;
             border: 1px solid #cbd5e1;
+            width: 100%;
+            max-width: 600px;
         }
 
         .dado {
             position: relative;
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             transform-style: preserve-3d;
             transition: transform 0.6s;
         }
 
         .cara {
             position: absolute;
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             background: linear-gradient(145deg, #ffffff, #f8fafc);
             border: 2px solid #d1d5db;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -229,17 +234,17 @@ function mostrarModalDados() {
         }
 
         /* Posicionamiento 3D de caras */
-        .cara-1 { transform: rotateY(0deg) translateZ(45px); }
-        .cara-2 { transform: rotateY(90deg) translateZ(45px); }
-        .cara-3 { transform: rotateY(180deg) translateZ(45px); }
-        .cara-4 { transform: rotateY(-90deg) translateZ(45px); }
-        .cara-5 { transform: rotateX(90deg) translateZ(45px); }
-        .cara-6 { transform: rotateX(-90deg) translateZ(45px); }
+        .cara-1 { transform: rotateY(0deg) translateZ(50px); }
+        .cara-2 { transform: rotateY(90deg) translateZ(50px); }
+        .cara-3 { transform: rotateY(180deg) translateZ(50px); }
+        .cara-4 { transform: rotateY(-90deg) translateZ(50px); }
+        .cara-5 { transform: rotateX(90deg) translateZ(50px); }
+        .cara-6 { transform: rotateX(-90deg) translateZ(50px); }
 
         /* Puntos de dados reales */
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             background: #374151;
             border-radius: 50%;
             position: absolute;
@@ -373,15 +378,15 @@ function mostrarModalDados() {
             background: #3b82f6;
             color: white;
             border: 1px solid #3b82f6;
-            border-radius: 6px;
-            padding: 16px 32px;
-            font-size: 1.1em;
+            border-radius: 8px;
+            padding: 18px 40px;
+            font-size: 1.2em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             margin: 0;
-            min-width: 200px;
-            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+            min-width: 240px;
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
         }
 
         .btn-lanzar:hover {
@@ -408,26 +413,30 @@ function mostrarModalDados() {
             background: linear-gradient(135deg, #f3f4f6, #ffffff);
             border: 1px solid #e5e7eb;
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px 30px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 500px;
         }
 
         .resultado-text {
-            font-size: 1.3em;
+            font-size: 1.4em;
             font-weight: 600;
             color: #374151;
             letter-spacing: 0.3px;
+            line-height: 1.4;
         }
 
         /* Sección manual */
         .manual-section {
             background: #fafbff;
             border-radius: 16px;
-            padding: 20px;
+            padding: 28px;
             margin: 0;
             border: 1px solid #e5e7eb;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             border-left: 6px solid #10b981;
+            width: 100%;
         }
 
         .manual-section h4 {
@@ -446,13 +455,15 @@ function mostrarModalDados() {
 
         .inputs-row {
             display: flex;
-            gap: 20px;
+            gap: 40px;
             justify-content: center;
             background: white;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 25px 35px;
+            border-radius: 16px;
             border: 2px solid #e5e7eb;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
         }
 
         .input-group {
@@ -469,17 +480,18 @@ function mostrarModalDados() {
         }
 
         .input-group input {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             padding: 0;
             border: 2px solid #d1d5db;
-            border-radius: 8px;
+            border-radius: 12px;
             background: #ffffff;
             color: #374151;
-            font-size: 1.5em;
+            font-size: 1.6em;
             text-align: center;
             transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: 600;
         }
 
         .input-group input::placeholder {
@@ -497,12 +509,13 @@ function mostrarModalDados() {
             background: #10b981;
             color: white;
             border: 1px solid #10b981;
-            border-radius: 6px;
-            padding: 12px 24px;
+            border-radius: 8px;
+            padding: 14px 32px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 3px 6px rgba(16, 185, 129, 0.2);
+            font-size: 1.1em;
         }
 
         .btn-manual:hover {
@@ -515,19 +528,21 @@ function mostrarModalDados() {
         /* Botones de acción */
         .dados-actions {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
-            margin-top: 24px;
+            margin-top: 30px;
+            width: 100%;
         }
 
         .btn-secondary, .btn-primary {
-            padding: 12px 25px;
-            border-radius: 6px;
+            padding: 14px 30px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1em;
+            font-size: 1.1em;
             border: 1px solid;
+            min-width: 140px;
         }
 
         .btn-secondary {
@@ -577,34 +592,35 @@ function mostrarModalDados() {
         /* Responsive */
         @media (max-width: 768px) {
             .dados-modal-container {
-                padding: 20px;
+                padding: 24px;
                 min-height: 450px;
             }
             
             .dados-container {
-                gap: 30px;
+                gap: 50px;
+                padding: 25px;
             }
             
             .dado {
-                width: 70px;
-                height: 70px;
+                width: 80px;
+                height: 80px;
             }
             
             .cara {
-                width: 70px;
-                height: 70px;
+                width: 80px;
+                height: 80px;
             }
 
-            .cara-1 { transform: rotateY(0deg) translateZ(35px); }
-            .cara-2 { transform: rotateY(90deg) translateZ(35px); }
-            .cara-3 { transform: rotateY(180deg) translateZ(35px); }
-            .cara-4 { transform: rotateY(-90deg) translateZ(35px); }
-            .cara-5 { transform: rotateX(90deg) translateZ(35px); }
-            .cara-6 { transform: rotateX(-90deg) translateZ(35px); }
+            .cara-1 { transform: rotateY(0deg) translateZ(40px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(40px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(40px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(40px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(40px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(40px); }
 
             .dot {
-                width: 10px;
-                height: 10px;
+                width: 12px;
+                height: 12px;
             }
             
             .dados-actions {
@@ -613,8 +629,49 @@ function mostrarModalDados() {
             }
 
             .inputs-row {
+                gap: 25px;
+                padding: 20px;
+            }
+            
+            .input-group input {
+                width: 60px;
+                height: 60px;
+                font-size: 1.4em;
+            }
+            
+            .btn-lanzar {
+                min-width: 200px;
+                padding: 16px 32px;
+                font-size: 1.1em;
+            }
+            
+            .manual-section {
+                padding: 20px;
+            }
+            
+            .dados-main-area {
+                padding: 24px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .dados-container {
+                gap: 30px;
                 flex-direction: column;
-                gap: 15px;
+                align-items: center;
+                padding: 20px;
+            }
+            
+            .inputs-row {
+                gap: 20px;
+            }
+            
+            .resultado-dados {
+                padding: 20px;
+            }
+            
+            .resultado-text {
+                font-size: 1.2em;
             }
         }
 
