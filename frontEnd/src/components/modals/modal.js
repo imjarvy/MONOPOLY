@@ -2,10 +2,38 @@
  * Modal Component - Componente modal reutilizable
  * Uso: Modal.show(content, options)
  */
+
+// Sistema global de gestión de timeouts de modales
+const ModalTimeoutManager = {
+    timeouts: new Map(),
+    
+    add(modalId, timeoutId) {
+        this.timeouts.set(modalId, timeoutId);
+    },
+    
+    cancel(modalId) {
+        if (this.timeouts.has(modalId)) {
+            clearTimeout(this.timeouts.get(modalId));
+            this.timeouts.delete(modalId);
+            return true;
+        }
+        return false;
+    },
+    
+    cancelAll() {
+        for (const [modalId, timeoutId] of this.timeouts) {
+            clearTimeout(timeoutId);
+        }
+        this.timeouts.clear();
+    }
+};
+
 class Modal {
     constructor() {
         this.modalElement = null;
         this.isOpen = false;
+        this.closeTimeout = null; // Para cancelar timeouts pendientes
+        this.modalId = null; // ID único para cada modal
     }
 
     /**
@@ -18,9 +46,16 @@ class Modal {
      * @param {Function} options.onClose - Callback al cerrar
      * @param {string} options.size - Tamaño del modal: 'sm', 'md', 'lg' (default: 'md')
      */
-    show(content, options = {}) {
+    async show(content, options = {}) {
+        // CANCELAR TODOS LOS TIMEOUTS PENDIENTES ANTES DE ABRIR NUEVO MODAL
+        ModalTimeoutManager.cancelAll();
+        
         if (this.isOpen) {
-            this.close();
+            // FORZAR CIERRE del modal anterior para permitir el nuevo
+            this.forceCloseModal();
+            
+            // Pequeña pausa para asegurar que el modal anterior se cierre completamente
+            await new Promise(resolve => setTimeout(resolve, 50));
         }
 
         const {
@@ -34,6 +69,9 @@ class Modal {
         // Crear estructura del modal
         this.modalElement = document.createElement('div');
         this.modalElement.className = 'modal-overlay';
+        this.modalId = 'modal_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        this.modalElement.setAttribute('data-modal-id', this.modalId);
+        
         this.modalElement.innerHTML = `
             <div class="modal-container modal-${size}">
                 <div class="modal-header">
@@ -67,8 +105,11 @@ class Modal {
         // Cerrar con ESC
         document.addEventListener('keydown', this.handleEscKey.bind(this));
 
-        // Animación de entrada
+        // FORZAR LIMPIEZA DE CLASES Y ANIMACIÓN DE ENTRADA
         requestAnimationFrame(() => {
+            // Asegurar que no tenga clases conflictivas
+            this.modalElement.classList.remove('modal-hide');
+            // Agregar clase de mostrar
             this.modalElement.classList.add('modal-show');
         });
 
@@ -80,23 +121,91 @@ class Modal {
      * @param {Function} callback - Función a ejecutar al cerrar
      */
     close(callback = null) {
+        // Protección: No cerrar modales durante acciones pendientes
+        if (window.esperandoAccionJugador && !this.forceClose) {
+            return;
+        }
+        
         if (!this.isOpen || !this.modalElement) return;
-
+        
+        // Cancelar cualquier timeout de cierre pendiente para ESTE modal
+        ModalTimeoutManager.cancel(this.modalId);
+        if (this.closeTimeout) {
+            clearTimeout(this.closeTimeout);
+            this.closeTimeout = null;
+        }
+        
         this.modalElement.classList.add('modal-hide');
         
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
+            // Verificar que el modal que estamos cerrando es el correcto
+            const currentModalInDom = document.querySelector(`[data-modal-id="${this.modalId}"]`);
+            if (!currentModalInDom) {
+                ModalTimeoutManager.cancel(this.modalId);
+                return;
+            }
+            
+            // Verificar nuevamente antes de remover del DOM
+            if (window.esperandoAccionJugador && !this.forceClose) {
+                // Restaurar el modal
+                if (this.modalElement) {
+                    this.modalElement.classList.remove('modal-hide');
+                }
+                ModalTimeoutManager.cancel(this.modalId);
+                return;
+            }
+            
             if (this.modalElement && this.modalElement.parentNode) {
                 document.body.removeChild(this.modalElement);
             }
+            
+            // Limpiar referencias
+            const currentModalId = this.modalId;
             this.modalElement = null;
             this.isOpen = false;
+            this.forceClose = false;
+            this.closeTimeout = null;
+            this.modalId = null;
+            
+            ModalTimeoutManager.cancel(currentModalId);
             
             if (callback && typeof callback === 'function') {
                 callback();
             }
         }, 300);
+        
+        // Registrar el timeout en el manager
+        this.closeTimeout = timeoutId;
+        ModalTimeoutManager.add(this.modalId, timeoutId);
 
         document.removeEventListener('keydown', this.handleEscKey.bind(this));
+    }
+    
+    /**
+     * Fuerza el cierre del modal ignorando protecciones
+     */
+    forceCloseModal(callback = null) {
+        // Resetear estado inmediatamente
+        this.isOpen = false;
+        
+        // Si hay modal element, removerlo inmediatamente
+        if (this.modalElement && this.modalElement.parentNode) {
+            this.modalElement.parentNode.removeChild(this.modalElement);
+        }
+        
+        // Cancelar timeouts
+        ModalTimeoutManager.cancel(this.modalId);
+        if (this.closeTimeout) {
+            clearTimeout(this.closeTimeout);
+            this.closeTimeout = null;
+        }
+        
+        // Reset variables
+        this.modalElement = null;
+        this.modalId = null;
+        
+        // Ejecutar callback si existe
+        if (callback) callback();
     }
 
     /**
@@ -123,12 +232,11 @@ const ModalComponent = new Modal();
 
 // Exportar para uso directo
 window.Modal = {
-    show: (content, options) => ModalComponent.show(content, options),
+    show: async (content, options) => await ModalComponent.show(content, options),
     close: (callback) => ModalComponent.close(callback),
+    forceClose: (callback) => ModalComponent.forceCloseModal(callback),
     isOpen: () => ModalComponent.isModalOpen()
 };
 
 // Confirmar que el modal se cargó correctamente
 console.log('Modal component cargado correctamente');
-console.log('window.Modal:', window.Modal);
-console.log('window.Modal.show:', window.Modal ? window.Modal.show : 'undefined');

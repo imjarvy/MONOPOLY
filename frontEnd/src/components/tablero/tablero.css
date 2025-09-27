@@ -171,3 +171,29 @@
     font-size: clamp(1.5rem, 4vw, 2rem);
   }
 }
+
+/* === CORRECCIÓN DE CONFLICTOS CSS PARA TOAST === */
+/* Asegurar que el toast funcione correctamente en el tablero */
+.toast-container {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 10000 !important; /* Mayor que cualquier elemento del tablero */
+    pointer-events: none !important;
+}
+
+.toast {
+    position: relative !important;
+    pointer-events: auto !important;
+    z-index: 10001 !important;
+}
+
+/* Prevenir que Bootstrap interfiera con el toast */
+body.container {
+    overflow: visible !important;
+}
+
+html, body {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}

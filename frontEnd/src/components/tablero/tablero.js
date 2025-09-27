@@ -1,4 +1,5 @@
 import { getBoard } from '../../services/boardService.js';
+import { inicializarJuego } from '../../logica/turnos.js';
 
 const tablero = document.querySelector('.tablero');
 
@@ -113,6 +114,11 @@ boardData.bottom.forEach((casilla, idx) => {
   centro.className = 'centro';
   centro.textContent = 'MONOPOLY';
   tablero.appendChild(centro);
+  
+  // Inicializar sistema de turnos después de renderizar el tablero
+  setTimeout(() => {
+    inicializarJuego();
+  }, 100);
 }
 
 function getPositionClass(position) {

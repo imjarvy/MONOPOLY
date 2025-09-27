@@ -3,8 +3,26 @@
  * Incluye animación física y entrada manual
  */
 
+// Variable para prevenir múltiples llamadas simultáneas
+let modalDadosAbierto = false;
+
 // Función principal para mostrar el modal de dados
 function mostrarModalDados() {
+    // Prevenir múltiples llamadas simultáneas
+    if (modalDadosAbierto) {
+        return;
+    }
+    
+    // Verificar si hay una acción de jugador pendiente
+    if (typeof window.esperandoAccionJugador !== 'undefined' && window.esperandoAccionJugador) {
+        if (typeof window.Toast !== 'undefined' && window.Toast) {
+            window.Toast.warning("Completa la acción actual antes de lanzar los dados", "Acción Pendiente");
+        }
+        return;
+    }
+    
+    modalDadosAbierto = true;
+    
     const contenido = `
         <div class="dados-modal-container">
             <!-- Título minimalista -->
@@ -642,7 +660,10 @@ function mostrarModalDados() {
         title: '',
         customStyles: estilos,
         size: 'lg',
-        closeOnOverlay: false
+        closeOnOverlay: false,
+        onClose: () => {
+            modalDadosAbierto = false;
+        }
     });
 }
 
@@ -754,7 +775,7 @@ function lanzarDadosManual() {
 }
 
 // Función para confirmar movimiento
-function confirmarMovimiento() {
+async function confirmarMovimiento() {
     if (ultimoResultado.total === 0) {
         if (typeof window.Toast !== 'undefined' && window.Toast) {
             window.Toast.warning("Primero debes lanzar los dados", "Acción Requerida");
@@ -764,16 +785,33 @@ function confirmarMovimiento() {
         return;
     }
     
-    // Aquí integrar con la lógica del juego
-    console.log(`Moviendo ficha ${ultimoResultado.total} espacios:`, ultimoResultado);
+    // Guardar el valor antes de cualquier reset
+    const espaciosAMover = ultimoResultado.total;
     
-    // Llamar a función del juego principal (si existe)
-    if (typeof moverJugador === 'function') {
-        moverJugador(ultimoResultado.total, ultimoResultado);
+    // Cerrar modal PRIMERO
+    modalDadosAbierto = false; // Resetear el flag antes de cerrar
+    window.Modal.forceClose(); // Usar forceClose para dados
+    
+    try {
+        // Importar y ejecutar el movimiento usando ES6 modules
+        const module = await import('../../logica/turnos.js');
+        if (module.moverFichaActual) {
+            await module.moverFichaActual(espaciosAMover);
+        } else {
+            console.error('❌ [DEBUG] No se pudo encontrar la función moverFichaActual');
+        }
+    } catch (error) {
+        console.error('❌ [DEBUG] Error al importar turnos.js:', error);
+        // Fallback: llamar función global si existe
+        if (typeof window.moverFichaActual === 'function') {
+            await window.moverFichaActual(espaciosAMover);
+        } else if (typeof moverJugador === 'function') {
+            moverJugador(espaciosAMover, ultimoResultado);
+        }
     }
     
-    // Cerrar modal
-    window.Modal.close();
+    // Resetear el resultado DESPUÉS de todo
+    ultimoResultado = { dado1: 0, dado2: 0, total: 0 };
 }
 
 // Hacer función disponible globalmente
