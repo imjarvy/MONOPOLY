@@ -1,5 +1,7 @@
 # Karen
--revisar toast
--compra e hipoteca de viviendas, creacion de hoteles, implementar en logic, en app.js
--configuración final del juego, usar modal 
--crear un div y poner la imagen public/assets/img/monopoly-logo.png como fondo
+- ✅ **SOLUCIONADO**: Cuando doy en el boton de finalizar juego, no redirecciona a la pagina index.html, simplemente se recarga(probar redireccionamiento a ranking)
+- ✅ **IMPLEMENTADO**: crear una funcion que redireccione a la pagina principal y utilizarla en finalizar juego es para que me saque del tablero y me lleve a la pagina principal
+  - **Solución**: Función `confirmarYFinalizarJuego()` específica para el botón "Confirmar y Finalizar" del modal
+  - **Función**: Previene la recarga de página y redirige correctamente al index.html
+# Jarvy
+- como-jugar-html: en esta seccion se debe crear un tutorial de como jugar monopoly y explicar las reglas (usar videos e imagenes) usar transiciones y animaciones para que no se vea una pagina estatica y aburrida

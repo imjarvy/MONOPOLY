@@ -85,10 +85,10 @@ async function mostrarModalFinalizarJuego() {
       </div>
       
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="window.Modal.close()">
+        <button type="button" class="btn btn-secondary" onclick="window.Modal.close()">
           Cancelar
         </button>
-        <button class="btn btn-success" onclick="event.preventDefault(); event.stopPropagation(); confirmarFinalizacion(event); return false;">
+        <button type="button" class="btn btn-success" onclick="confirmarYFinalizarJuego(event); return false;" onsubmit="return false;">
           🏁 Confirmar y Finalizar
         </button>
       </div>
@@ -221,10 +221,36 @@ async function confirmarFinalizacion(event) {
       window.Toast.info('Redirigiendo al menú principal...', 'Redirección');
     }
     
-    // Redirigir al index después de un breve delay
+    // Redirigir al index.html después de un breve delay
     setTimeout(() => {
-      const targetUrl = '../../../index.html';
-      window.location.replace(targetUrl);
+      console.log('🔄 INICIANDO REDIRECCIÓN AL INDEX...');
+      console.log('📍 URL actual:', window.location.href);
+      console.log('📍 Path actual:', window.location.pathname);
+      
+      // Probamos varias rutas posibles para llegar al index.html
+      const possibleUrls = [
+        '../../../index.html',           // Ruta relativa desde tablero
+        '../../index.html',              // Ruta alternativa
+        '/frontEnd/index.html',          // Ruta absoluta desde raíz
+        '../index.html'                  // Otra ruta posible
+      ];
+      
+      // Intentar la primera opción
+      const targetUrl = possibleUrls[0];
+      console.log('🎯 URL objetivo (opción 1):', targetUrl);
+      
+      try {
+        console.log('🔄 Ejecutando window.location.replace...');
+        window.location.replace(targetUrl);
+      } catch (error) {
+        console.error('❌ Error con replace opción 1, intentando href:', error);
+        try {
+          window.location.href = targetUrl;
+        } catch (error2) {
+          console.error('❌ Error con href opción 1, intentando opción 2:', error2);
+          window.location.replace(possibleUrls[1]);
+        }
+      }
     }, 2000);
     
   } catch (error) {
@@ -233,17 +259,144 @@ async function confirmarFinalizacion(event) {
       window.Toast.error('Error al finalizar el juego', 'Error');
     }
     
-    // Incluso con error, intentar redirigir
+    // Incluso con error, intentar redirigir al index
     if (window.Toast) {
-      window.Toast.warning('Error en el proceso, redirigiendo de todas formas...', 'Redirección');
+      window.Toast.warning('Error en el proceso, redirigiendo al menú principal...', 'Redirección');
     }
     setTimeout(() => {
-      window.location.replace('../../../index.html');
+      console.log('🔄 REDIRECCIÓN DE EMERGENCIA AL INDEX...');
+      const indexUrl = '../../../index.html';
+      console.log('🎯 URL index de emergencia:', indexUrl);
+      
+      try {
+        window.location.replace(indexUrl);
+      } catch (error2) {
+        console.error('❌ Error final con replace, intentando href:', error2);
+        try {
+          window.location.href = indexUrl;
+        } catch (error3) {
+          console.error('❌ Error total, intentando ruta absoluta:', error3);
+          window.location.replace('/frontEnd/index.html');
+        }
+      }
     }, 2000);
   }
   
   return false;
-}/**
+}
+
+/**
+ * NUEVA FUNCIÓN: Maneja específicamente el botón "Confirmar y Finalizar" del modal
+ */
+async function confirmarYFinalizarJuego(event) {
+  console.log('🎯 BOTÓN CONFIRMAR Y FINALIZAR PRESIONADO');
+  
+  // CRÍTICO: Detener TODOS los eventos INMEDIATAMENTE
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    console.log('✅ Eventos detenidos');
+  }
+  
+  // CRÍTICO: Evitar que la función continue si se llama múltiples veces
+  if (window.finalizandoJuego) {
+    console.log('⚠️ Ya se está finalizando el juego, evitando doble ejecución');
+    return false;
+  }
+  window.finalizandoJuego = true;
+  
+  try {
+    console.log('🔄 Iniciando proceso de finalización...');
+    
+    const jugadores = JSON.parse(localStorage.getItem('jugadores') || '[]');
+    
+    if (jugadores.length === 0) {
+      console.log('❌ No hay jugadores en la partida');
+      window.finalizandoJuego = false;
+      return false;
+    }
+    
+    // Calcular resultados
+    console.log('📊 Calculando patrimonios...');
+    const resultados = await Promise.all(jugadores.map(calcularPatrimonio));
+    
+    // Enviar al backend
+    console.log('📡 Enviando al backend...');
+    const enviosExitosos = await enviarPuntajesBackend(resultados);
+    console.log(`📊 Enviados ${enviosExitosos}/${resultados.length} jugadores al backend`);
+
+    // Limpiar localStorage del juego
+    console.log('🧹 Limpiando localStorage...');
+    localStorage.removeItem('jugadores');
+    localStorage.removeItem('turnoActual');
+    
+    // CRÍTICO: Forzar redirección INMEDIATAMENTE
+    console.log('🔄 EJECUTANDO REDIRECCIÓN INMEDIATA...');
+    forzarRedireccionAlIndex();
+    
+  } catch (error) {
+    console.error('❌ Error en confirmarYFinalizarJuego:', error);
+    window.finalizandoJuego = false;
+    
+    // Fallback de emergencia: redirigir directo sin demora
+    console.log('🆘 REDIRECCIÓN DE EMERGENCIA INMEDIATA...');
+    forzarRedireccionAlIndex();
+  }
+  
+  // CRÍTICO: Siempre devolver false para prevenir cualquier acción por defecto
+  return false;
+}
+
+/**
+ * FUNCIÓN FORZADA DE REDIRECCIÓN - Sin delays, sin esperas
+ */
+function forzarRedireccionAlIndex() {
+  console.log('🚀 FORZANDO REDIRECCIÓN AL INDEX AHORA...');
+  
+  // Cerrar modal INMEDIATAMENTE
+  try {
+    if (window.Modal && typeof window.Modal.close === 'function') {
+      window.Modal.close();
+      console.log('✅ Modal cerrado');
+    }
+  } catch (error) {
+    console.error('❌ Error cerrando modal:', error);
+  }
+  
+  // REDIRECCIÓN INMEDIATA - Sin setTimeout y sin toasts adicionales
+  console.log('🎯 REDIRECCIÓN INMEDIATA SIN DELAY...');
+  console.log('📍 URL actual:', window.location.href);
+  
+  const possibleUrls = [
+    '../../../index.html',
+    '../../index.html', 
+    '/frontEnd/index.html',
+    '../index.html'
+  ];
+  
+  // Intentar todas las rutas una por una SIN delays
+  for (let i = 0; i < possibleUrls.length; i++) {
+    const url = possibleUrls[i];
+    console.log(`🎯 Intentando ruta ${i + 1}:`, url);
+    
+    try {
+      window.location.replace(url);
+      return; // Si llega aquí, la redirección debería funcionar
+    } catch (error) {
+      console.error(`❌ Error con ruta ${i + 1}:`, error);
+      if (i < possibleUrls.length - 1) {
+        continue; // Probar la siguiente
+      } else {
+        // Último intento desesperado
+        console.log('🆘 ÚLTIMO INTENTO: href directo...');
+        window.location.href = '../../../index.html';
+      }
+    }
+  }
+}
+
+/**
  * Envía los puntajes de todos los jugadores al backend
  * @param {Array} resultados - Array con los resultados de cada jugador
  * @returns {number} - Número de envíos exitosos
@@ -303,6 +456,7 @@ function redirigirAlIndex() {
 // Hacer las funciones disponibles globalmente
 window.mostrarModalFinalizarJuego = mostrarModalFinalizarJuego;
 window.confirmarFinalizacion = confirmarFinalizacion;
+window.confirmarYFinalizarJuego = confirmarYFinalizarJuego;
 
 // Agregar estilos CSS para el modal
 const estilosFinalizacion = document.createElement('style');
