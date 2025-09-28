@@ -234,33 +234,46 @@ class DadosModal {
     }
   }
 
-  /**
-   * Confirma el movimiento y cierra el modal
-   */
-  confirmarMovimiento() {
-    if (!this.ultimoResultado) {
-      if (window.Toast) {
-        window.Toast.warning("Debes lanzar los dados primero", "Atención");
-      }
-      return;
+ /**
+ * Confirma el movimiento y cierra el modal
+ */
+confirmarMovimiento() {
+    // ✅ VALIDACIÓN ROBUSTA:
+    if (!this.ultimoResultado || typeof this.ultimoResultado.total !== 'number') {
+        console.error('❌ No hay resultado de dados válido:', this.ultimoResultado);
+        if (window.Toast) {
+            window.Toast.warning("Debes lanzar los dados primero", "Atención");
+        }
+        return;
     }
 
-    // Llamar función de movimiento del juego
+    console.log('🎲 Confirmando movimiento con resultado:', this.ultimoResultado);
+
+    // ✅ VERIFICAR QUE LA FUNCIÓN EXISTE:
     if (typeof window.moverFichaActual === 'function') {
-      window.moverFichaActual(this.ultimoResultado.total);
+        console.log('📞 Llamando a moverFichaActual con:', this.ultimoResultado.total);
+        window.moverFichaActual(this.ultimoResultado.total);
+    } else {
+        console.error('❌ window.moverFichaActual no está definida');
+        if (window.Toast) {
+            window.Toast.error("Error: función de movimiento no encontrada", "Error");
+        }
+        return;
     }
 
-    // Mostrar toast de confirmación
+    // ✅ MOSTRAR CONFIRMACIÓN Y CERRAR:
     if (window.Toast) {
-      window.Toast.success(
-        `Movimiento confirmado: ${this.ultimoResultado.total} espacios`,
-        "Movimiento"
-      );
+        window.Toast.success(
+            `Movimiento confirmado: ${this.ultimoResultado.total} espacios`,
+            "Movimiento"
+        );
     }
 
     this.close();
-  }
-
+    
+    // ✅ RESETEAR RESULTADO DESPUÉS DE USAR:
+    this.ultimoResultado = null;
+}
   /**
    * Muestra el modal
    */
