@@ -112,7 +112,14 @@ boardData.bottom.forEach((casilla, idx) => {
   // Add center
   const centro = document.createElement('div');
   centro.className = 'centro';
-  centro.textContent = 'MONOPOLY';
+  
+  // Agregar logo completo de Monopoly (igual que en el index)
+  const logo = document.createElement('img');
+  logo.src = '../../../../public/assets/img/Monopoly-Emblem.webp';
+  logo.alt = 'Monopoly';
+  logo.className = 'monopoly-center-logo';
+  
+  centro.appendChild(logo);
   tablero.appendChild(centro);
   
   // Inicializar sistema de turnos después de renderizar el tablero
