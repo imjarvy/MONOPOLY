@@ -437,67 +437,71 @@ function mostrarModalDados() {
             line-height: 1.4;
         }
 
-        /* Sección manual */
+        /* Sección manual - MOBILE FIRST */
         .manual-section {
             background: #fafbff;
-            border-radius: 16px;
-            padding: 28px;
+            border-radius: 12px; /* Reducido para mobile */
+            padding: 20px; /* Reducido para mobile */
             margin: 0;
             border: 1px solid #e5e7eb;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-left: 6px solid #10b981;
+            border-left: 4px solid #10b981; /* Reducido para mobile */
             width: 100%;
         }
 
         .manual-section h4 {
-            margin-bottom: 20px;
-            font-size: 1.1em;
+            margin-bottom: 16px; /* Reducido para mobile */
+            font-size: 1.05em; /* Reducido para mobile */
             font-weight: 600;
             color: #374151;
+            text-align: center; /* NUEVO: Centrado para mobile */
         }
 
         .manual-inputs {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px; /* Reducido para mobile */
             align-items: center;
         }
 
         .inputs-row {
             display: flex;
-            gap: 40px;
+            gap: 20px; /* Reducido para mobile */
             justify-content: center;
             background: white;
-            padding: 25px 35px;
-            border-radius: 16px;
+            padding: 18px 22px; /* Reducido para mobile */
+            border-radius: 12px; /* Reducido para mobile */
             border: 2px solid #e5e7eb;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            max-width: 400px;
+            max-width: 280px; /* REDUCIDO: más apropiado para mobile */
             width: 100%;
+            box-sizing: border-box; /* NUEVO: Control de tamaño */
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px; /* Reducido para mobile */
+            flex: 0 0 auto; /* NUEVO: Tamaño fijo */
         }
 
         .input-group label {
             font-weight: 600;
             color: #374151;
-            font-size: 1rem;
+            font-size: 0.9rem; /* Reducido para mobile */
+            white-space: nowrap; /* NUEVO: Evitar saltos */
         }
 
         .input-group input {
-            width: 70px;
-            height: 70px;
+            width: 50px; /* REDUCIDO: más apropiado para mobile */
+            height: 50px; /* REDUCIDO: más apropiado para mobile */
             padding: 0;
             border: 2px solid #d1d5db;
-            border-radius: 12px;
+            border-radius: 10px; /* Reducido para mobile */
             background: #ffffff;
             color: #374151;
-            font-size: 1.6em;
+            font-size: 1.3em; /* Reducido para mobile */
             text-align: center;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -520,12 +524,15 @@ function mostrarModalDados() {
             color: white;
             border: 1px solid #10b981;
             border-radius: 8px;
-            padding: 14px 32px;
+            padding: 12px 24px; /* REDUCIDO: más apropiado para mobile */
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 3px 6px rgba(16, 185, 129, 0.2);
-            font-size: 1.1em;
+            font-size: 0.95em; /* REDUCIDO: más apropiado para mobile */
+            min-height: 44px; /* NUEVO: Touch-friendly */
+            min-width: 120px; /* NUEVO: Tamaño mínimo funcional */
+            max-width: 200px; /* NUEVO: Control de tamaño máximo */
         }
 
         .btn-manual:hover {
@@ -533,6 +540,12 @@ function mostrarModalDados() {
             border-color: #059669;
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-manual:active {
+            background: #047857;
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
         }
 
         /* Botones de acción */
@@ -587,6 +600,126 @@ function mostrarModalDados() {
             box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
         }
 
+        /* =========================== */
+        /* FORZAR ESTILOS MOBILE SMALL */
+        /* =========================== */
+        @media screen and (max-width: 600px) {
+            .manual-section {
+                padding: 16px !important;
+                border-radius: 10px !important;
+                margin: 0 !important;
+            }
+            
+            .manual-section h4 {
+                font-size: 1rem !important;
+                margin-bottom: 12px !important;
+                text-align: center;
+            }
+            
+            .inputs-row {
+                max-width: 200px !important;
+                padding: 16px 20px !important;
+                gap: 16px !important;
+                background: rgba(248, 250, 252, 0.8) !important;
+                border-radius: 10px !important;
+                border: 1px solid #e5e7eb !important;
+                margin: 0 auto !important;
+                box-sizing: border-box !important;
+            }
+            
+            .input-group {
+                min-width: 55px !important;
+                flex: 0 0 auto !important;
+            }
+            
+            .input-group input {
+                width: 42px !important;
+                height: 42px !important;
+                font-size: 1.1em !important;
+                border-radius: 8px !important;
+                text-align: center !important;
+                border: 2px solid #d1d5db !important;
+                background: white !important;
+                box-sizing: border-box !important;
+                font-weight: 600 !important;
+            }
+            
+            .input-group input:focus {
+                border-color: #3b82f6 !important;
+                box-shadow: 0 0 6px rgba(59, 130, 246, 0.3) !important;
+            }
+            
+            .input-group label {
+                font-size: 0.85rem !important;
+                color: #374151 !important;
+                font-weight: 500 !important;
+                margin-bottom: 4px !important;
+                white-space: nowrap !important;
+            }
+            
+            .btn-manual {
+                padding: 10px 20px !important;
+                font-size: 0.9rem !important;
+                min-height: 44px !important;
+                min-width: 120px !important;
+                max-width: 180px !important;
+                margin-top: 8px !important;
+                background: #10b981 !important;
+                border-radius: 8px !important;
+                font-weight: 600 !important;
+            }
+        }
+
+        /* PANTALLAS MUY PEQUEÑAS */
+        @media screen and (max-width: 400px) {
+            .inputs-row {
+                max-width: 180px !important;
+                padding: 12px 16px !important;
+                gap: 14px !important;
+            }
+            
+            .input-group input {
+                width: 38px !important;
+                height: 38px !important;
+                font-size: 1em !important;
+            }
+            
+            .input-group label {
+                font-size: 0.8rem !important;
+            }
+            
+            .btn-manual {
+                padding: 8px 16px !important;
+                font-size: 0.85rem !important;
+                min-width: 110px !important;
+            }
+        }
+
+        /* PANTALLAS EXTRA PEQUEÑAS */
+        @media screen and (max-width: 350px) {
+            .inputs-row {
+                max-width: 160px !important;
+                padding: 10px 12px !important;
+                gap: 12px !important;
+            }
+            
+            .input-group input {
+                width: 35px !important;
+                height: 35px !important;
+                font-size: 0.95em !important;
+            }
+            
+            .input-group label {
+                font-size: 0.75rem !important;
+            }
+            
+            .btn-manual {
+                padding: 8px 14px !important;
+                font-size: 0.8rem !important;
+                min-width: 100px !important;
+            }
+        }
+
         /* Efectos especiales para dobles */
         .dobles-effect {
             animation: celebracion 1s ease-in-out;
@@ -599,89 +732,1147 @@ function mostrarModalDados() {
             50% { transform: scale(1.05); }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* ===== RESPONSIVE DESIGN COMPLETO INTEGRADO ===== */
+        
+        /* PANTALLAS GRANDES - Computadores de escritorio (1200px y más) */
+        @media screen and (min-width: 1200px) {
             .dados-modal-container {
-                padding: 24px;
-                min-height: 450px;
+                padding: 40px;
+                min-height: 600px;
+                max-width: 900px;
+            }
+            
+            .dados-header h3 {
+                font-size: 2.2em;
+                margin-bottom: 12px;
+            }
+            
+            .dados-header p {
+                font-size: 1.2rem;
+                margin-bottom: 32px;
+            }
+            
+            .dados-main-area {
+                padding: 40px;
+                margin-bottom: 36px;
+            }
+            
+            .dados-container {
+                gap: 100px;
+                padding: 40px;
+                max-width: 700px;
+            }
+            
+            .dado {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .cara {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(60px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(60px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(60px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(60px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(60px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(60px); }
+            
+            .dot {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .btn-lanzar {
+                padding: 20px 50px;
+                font-size: 1.3em;
+                min-width: 280px;
+            }
+            
+            .resultado-dados {
+                padding: 32px 40px;
+                max-width: 600px;
+            }
+            
+            .resultado-text {
+                font-size: 1.6em;
+            }
+            
+            .manual-section {
+                padding: 36px;
+            }
+            
+            .inputs-row {
+                gap: 60px;
+                padding: 32px 45px;
+                max-width: 500px;
+            }
+            
+            .input-group input {
+                width: 80px;
+                height: 80px;
+                font-size: 1.8em;
+            }
+            
+            .btn-manual {
+                padding: 16px 40px;
+                font-size: 1.2em;
+            }
+            
+            .dados-actions {
+                gap: 30px;
+                margin-top: 40px;
+            }
+            
+            .btn-secondary, .btn-primary {
+                padding: 16px 40px;
+                font-size: 1.2em;
+                min-width: 180px;
+            }
+        }
+
+        /* LAPTOPS Y COMPUTADORES MEDIANOS (992px - 1199px) */
+        @media screen and (min-width: 992px) and (max-width: 1199px) {
+            .dados-modal-container {
+                padding: 36px;
+                min-height: 550px;
+                max-width: 800px;
+            }
+            
+            .dados-header h3 {
+                font-size: 2.1em;
+                margin-bottom: 10px;
+            }
+            
+            .dados-main-area {
+                padding: 36px;
+                margin-bottom: 32px;
+            }
+            
+            .dados-container {
+                gap: 90px;
+                padding: 36px;
+                max-width: 650px;
+            }
+            
+            .dado {
+                width: 110px;
+                height: 110px;
+            }
+            
+            .cara {
+                width: 110px;
+                height: 110px;
+            }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(55px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(55px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(55px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(55px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(55px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(55px); }
+            
+            .dot {
+                width: 15px;
+                height: 15px;
+            }
+            
+            .btn-lanzar {
+                padding: 19px 45px;
+                font-size: 1.25em;
+                min-width: 260px;
+            }
+            
+            .resultado-text {
+                font-size: 1.5em;
+            }
+            
+            .manual-section {
+                padding: 32px;
+            }
+            
+            .inputs-row {
+                gap: 50px;
+                padding: 28px 40px;
+            }
+            
+            .input-group input {
+                width: 75px;
+                height: 75px;
+                font-size: 1.7em;
+            }
+        }
+
+        /* TABLETS - Pantalla mediana (768px - 991px) */
+        @media screen and (min-width: 768px) and (max-width: 991px) {
+            .dados-modal-container {
+                padding: 32px;
+                min-height: 500px;
+                max-width: 700px;
+            }
+            
+            .dados-header h3 {
+                font-size: 2em;
+                margin-bottom: 8px;
+            }
+            
+            .dados-header p {
+                font-size: 1.05rem;
+                margin-bottom: 28px;
+            }
+            
+            .dados-main-area {
+                padding: 32px;
+                margin-bottom: 28px;
+            }
+            
+            .dados-container {
+                gap: 70px;
+                padding: 32px;
+                max-width: 550px;
+            }
+            
+            .dado {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .cara {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(45px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(45px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(45px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(45px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(45px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(45px); }
+
+            .dot {
+                width: 13px;
+                height: 13px;
+            }
+            
+            .btn-lanzar {
+                padding: 16px 38px;
+                font-size: 1.15em;
+                min-width: 220px;
+            }
+            
+            .resultado-dados {
+                padding: 24px 28px;
+                max-width: 450px;
+            }
+            
+            .resultado-text {
+                font-size: 1.3em;
+            }
+            
+            .manual-section {
+                padding: 28px;
+            }
+            
+            .inputs-row {
+                gap: 35px;
+                padding: 24px 32px;
+                max-width: 380px;
+            }
+            
+            .input-group input {
+                width: 65px;
+                height: 65px;
+                font-size: 1.5em;
+            }
+            
+            .btn-manual {
+                padding: 13px 28px;
+                font-size: 1.05em;
+            }
+            
+            .dados-actions {
+                gap: 18px;
+                margin-top: 28px;
+            }
+            
+            .btn-secondary, .btn-primary {
+                padding: 13px 26px;
+                font-size: 1.05em;
+                min-width: 120px;
+            }
+        }
+
+        /* MÓVILES GRANDES Y TABLETS PEQUEÑAS (481px - 767px) */
+        @media screen and (min-width: 481px) and (max-width: 767px) {
+            .dados-modal-container {
+                padding: 28px;
+                min-height: 480px;
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .dados-header h3 {
+                font-size: 1.8em;
+                margin-bottom: 6px;
+            }
+            
+            .dados-header p {
+                font-size: 1rem;
+                margin-bottom: 24px;
+            }
+            
+            .dados-main-area {
+                padding: 28px;
+                margin-bottom: 24px;
             }
             
             .dados-container {
                 gap: 50px;
-                padding: 25px;
+                padding: 28px;
+                width: 100%;
+                max-width: none;
             }
             
             .dado {
-                width: 80px;
-                height: 80px;
+                width: 75px;
+                height: 75px;
             }
             
             .cara {
-                width: 80px;
-                height: 80px;
+                width: 75px;
+                height: 75px;
             }
-
-            .cara-1 { transform: rotateY(0deg) translateZ(40px); }
-            .cara-2 { transform: rotateY(90deg) translateZ(40px); }
-            .cara-3 { transform: rotateY(180deg) translateZ(40px); }
-            .cara-4 { transform: rotateY(-90deg) translateZ(40px); }
-            .cara-5 { transform: rotateX(90deg) translateZ(40px); }
-            .cara-6 { transform: rotateX(-90deg) translateZ(40px); }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(37.5px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(37.5px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(37.5px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(37.5px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(37.5px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(37.5px); }
 
             .dot {
-                width: 12px;
-                height: 12px;
+                width: 11px;
+                height: 11px;
+            }
+            
+            .btn-lanzar {
+                padding: 14px 32px;
+                font-size: 1.1em;
+                min-width: 200px;
+                min-height: 48px;
+            }
+            
+            .resultado-dados {
+                padding: 22px 26px;
+                width: 100%;
+                max-width: none;
+            }
+            
+            .resultado-text {
+                font-size: 1.25em;
+                line-height: 1.3;
+            }
+            
+            .manual-section {
+                padding: 24px;
+                width: 100%;
+            }
+            
+            .inputs-row {
+                gap: 30px;
+                padding: 20px 28px;
+                width: 100%;
+                max-width: none;
+                justify-content: center;
+            }
+            
+            .input-group input {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3em;
+                min-height: 48px;
+            }
+            
+            .btn-manual {
+                padding: 12px 24px;
+                font-size: 1rem;
+                min-height: 48px;
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .dados-actions {
+                flex-direction: row;
+                gap: 12px;
+                margin-top: 24px;
+                width: 100%;
+            }
+            
+            .btn-secondary, .btn-primary {
+                padding: 12px 20px;
+                font-size: 1rem;
+                min-height: 48px;
+                flex: 1;
+                max-width: none;
+            }
+        }
+
+        /* MÓVILES PEQUEÑOS (320px - 480px) */
+        @media screen and (max-width: 480px) {
+            .dados-modal-container {
+                padding: 16px; /* Reducido para más espacio */
+                min-height: 450px;
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .dados-header h3 {
+                font-size: 1.5em; /* Reducido un poco */
+                margin-bottom: 6px;
+                line-height: 1.2;
+            }
+            
+            .dados-header p {
+                font-size: 0.9rem; /* Reducido */
+                margin-bottom: 18px; /* Reducido */
+                line-height: 1.3;
+            }
+            
+            .dados-main-area {
+                padding: 16px; /* Reducido */
+                margin-bottom: 16px; /* Reducido */
+                gap: 16px; /* Reducido */
+            }
+            
+            .dados-container {
+                gap: 20px; /* Reducido de 25px */
+                flex-direction: row; /* CAMBIO: Mantener horizontal para evitar que se salga */
+                align-items: center;
+                justify-content: space-around; /* CAMBIO: Distribución uniforme */
+                padding: 14px; /* Reducido */
+                width: 100%;
+                max-width: 280px; /* NUEVO: Limitar ancho máximo */
+                margin: 0 auto; /* NUEVO: Centrar */
+            }
+            
+            .dado {
+                width: 55px; /* Reducido de 65px */
+                height: 55px;
+                flex: 0 0 55px; /* NUEVO: Evitar que se deforme */
+            }
+            
+            .cara {
+                width: 55px;
+                height: 55px;
+                border-radius: 6px; /* Reducido */
+            }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(27.5px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(27.5px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(27.5px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(27.5px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(27.5px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(27.5px); }
+
+            .dot {
+                width: 8px; /* Reducido */
+                height: 8px;
+            }
+            
+            .btn-lanzar {
+                padding: 12px 24px; /* Reducido */
+                font-size: 0.9rem; /* Reducido */
+                min-width: 160px; /* Reducido */
+                min-height: 44px; /* Mantenido para touch */
+                width: 100%;
+                max-width: 220px; /* NUEVO: Limitar ancho */
+            }
+            
+            .resultado-dados {
+                padding: 14px 16px; /* Reducido */
+                width: 100%;
+                border-radius: 8px; /* Reducido */
+            }
+            
+            .resultado-text {
+                font-size: 1rem; /* Reducido */
+                line-height: 1.2; /* Ajustado */
+            }
+            
+            .manual-section {
+                padding: 14px; /* Reducido */
+                width: 100%;
+                border-radius: 10px; /* Reducido */
+            }
+            
+            .manual-section h4 {
+                margin-bottom: 12px; /* Reducido */
+                font-size: 0.95rem; /* Reducido */
+            }
+            
+            .inputs-row {
+                gap: 18px; /* AUMENTADO: mejor espaciado visual */
+                padding: 14px 18px; /* AUMENTADO: más cómodo */
+                width: 100%;
+                flex-direction: row; /* Mantener horizontal */
+                justify-content: center;
+                align-items: center;
+                max-width: 220px; /* AUMENTADO: más espacio funcional */
+                margin: 0 auto; 
+                box-sizing: border-box; 
+                background: rgba(248, 250, 252, 0.5); /* NUEVO: Fondo sutil */
+                border-radius: 8px; /* NUEVO: Estilo visual */
+            }
+            
+            .input-group {
+                flex: 0 0 auto; 
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-width: 60px; /* AUMENTADO: espacio mínimo */
+            }
+            
+            .input-group input {
+                width: 44px; /* AUMENTADO: más touch-friendly */
+                height: 44px; /* AUMENTADO: mejor para dedos */
+                font-size: 1.2em; /* AUMENTADO: más legible */
+                min-height: 44px; /* Touch-friendly estándar */
+                border-radius: 8px; 
+                border: 2px solid #d1d5db;
+                box-sizing: border-box; 
+                text-align: center;
+                margin: 0; 
+                background: white;
+                font-weight: 600; /* NUEVO: Números más visibles */
+            }
+            
+            .input-group input:focus {
+                border-color: #3b82f6; /* NUEVO: Color de foco */
+                outline: none;
+                box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+            }
+            
+            .input-group label {
+                font-size: 0.85rem; /* AUMENTADO: más legible */
+                margin-bottom: 6px; /* AUMENTADO: mejor espaciado */
+                white-space: nowrap; 
+                color: #374151; /* NUEVO: Color más definido */
+                font-weight: 500; /* NUEVO: Etiquetas más visibles */
+            }
+            
+            .btn-manual {
+                padding: 12px 20px; /* AUMENTADO: más área de toque */
+                font-size: 0.95rem; /* AUMENTADO: más legible */
+                min-height: 48px; /* AUMENTADO: mejor touch target */
+                width: auto;
+                min-width: 130px; /* AUMENTADO: botón más funcional */
+                max-width: 180px; /* AUMENTADO: sin restricciones excesivas */
+                background: #10b981; /* NUEVO: Verde más moderno */
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600; /* NUEVO: Texto más visible */
+                cursor: pointer;
+                margin-top: 10px; /* AUMENTADO: mejor espaciado */
+                box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); /* NUEVO: Sombra sutil */
+                transition: all 0.2s ease; /* NUEVO: Animación suave */
+            }
+            
+            .btn-manual:hover {
+                background: #059669; /* NUEVO: Hover moderno */
+                box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+                transform: translateY(-1px); /* NUEVO: Efecto hover sutil */
+            }
+            
+            .btn-manual:active {
+                background: #047857; /* NUEVO: Estado activo */
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
             }
             
             .dados-actions {
                 flex-direction: column;
-                gap: 15px;
+                gap: 8px; /* Reducido */
+                margin-top: 16px; /* Reducido */
+                width: 100%;
             }
+            
+            .btn-secondary, .btn-primary {
+                padding: 12px 16px; /* Reducido */
+                font-size: 0.9rem; /* Reducido */
+                min-height: 44px; /* Mantenido para touch */
+                width: 100%;
+                border-radius: 6px; /* Reducido */
+            }
+        }
 
-            .inputs-row {
-                gap: 25px;
-                padding: 20px;
+        /* MÓVILES MUY PEQUEÑOS (menos de 320px) */
+        @media screen and (max-width: 319px) {
+            .dados-modal-container {
+                padding: 12px; /* Reducido aún más */
+                min-height: 400px; /* Reducido */
             }
             
-            .input-group input {
-                width: 60px;
-                height: 60px;
-                font-size: 1.4em;
+            .dados-header h3 {
+                font-size: 1.3em; /* Reducido */
+                margin-bottom: 4px;
             }
             
-            .btn-lanzar {
-                min-width: 200px;
-                padding: 16px 32px;
-                font-size: 1.1em;
-            }
-            
-            .manual-section {
-                padding: 20px;
+            .dados-header p {
+                font-size: 0.85rem; /* Reducido */
+                margin-bottom: 14px; /* Reducido */
             }
             
             .dados-main-area {
-                padding: 24px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .dados-container {
-                gap: 30px;
-                flex-direction: column;
-                align-items: center;
-                padding: 20px;
+                padding: 12px; /* Reducido */
+                gap: 12px; /* Reducido */
             }
             
-            .inputs-row {
-                gap: 20px;
+            .dados-container {
+                gap: 16px; /* Reducido */
+                padding: 10px; /* Reducido */
+                flex-direction: row; /* CAMBIO: Mantener horizontal */
+                align-items: center;
+                justify-content: space-around; /* CAMBIO: Distribución uniforme */
+                max-width: 220px; /* NUEVO: Limitar ancho máximo */
+                margin: 0 auto; /* NUEVO: Centrar */
+            }
+            
+            .dado {
+                width: 45px; /* REDUCIDO: de 55px a 45px */
+                height: 45px;
+                flex: 0 0 45px; /* NUEVO: Tamaño fijo */
+            }
+            
+            .cara {
+                width: 45px;
+                height: 45px;
+                border-radius: 5px; /* Reducido */
+            }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(22.5px); } /* Ajustado */
+            .cara-2 { transform: rotateY(90deg) translateZ(22.5px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(22.5px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(22.5px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(22.5px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(22.5px); }
+
+            .dot {
+                width: 6px; /* REDUCIDO: de 8px a 6px */
+                height: 6px;
+            }
+            
+            .btn-lanzar {
+                padding: 10px 20px; /* Reducido */
+                font-size: 0.85rem; /* Reducido */
+                min-width: 140px; /* Reducido */
+                min-height: 44px; /* Mantenido para touch */
+                max-width: 180px; /* NUEVO: Limitar ancho */
             }
             
             .resultado-dados {
-                padding: 20px;
+                padding: 12px 14px; /* Reducido */
             }
             
             .resultado-text {
+                font-size: 0.9rem; /* Reducido */
+                line-height: 1.2;
+            }
+            
+            .manual-section {
+                padding: 12px; /* Reducido */
+            }
+            
+            .manual-section h4 {
+                margin-bottom: 10px; /* Reducido */
+                font-size: 0.9rem; /* Reducido */
+            }
+            
+            .inputs-row {
+                gap: 12px; /* REDUCIDO: de 16px a 12px */
+                padding: 10px 12px; /* REDUCIDO: menos padding */
+                width: 100%;
+                max-width: 160px; /* NUEVO: Limitar ancho aún más */
+                margin: 0 auto; /* NUEVO: Centrar */
+                box-sizing: border-box;
+            }
+            
+            .input-group {
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .input-group input {
+                width: 35px; /* REDUCIDO: de 45px a 35px */
+                height: 35px; /* REDUCIDO: de 45px a 35px */
+                font-size: 1rem; /* Reducido */
+                min-height: 35px; /* Ajustado */
+                border-radius: 6px; /* Reducido */
+                border: 1px solid #d1d5db; /* Border más fino */
+                box-sizing: border-box;
+                text-align: center;
+                margin: 0;
+            }
+            
+            .input-group label {
+                font-size: 0.75rem; /* REDUCIDO */
+                margin-bottom: 3px; /* Reducido */
+                white-space: nowrap;
+            }
+            
+            .btn-manual {
+                padding: 8px 14px; /* Reducido */
+                font-size: 0.85rem; /* Reducido */
+                min-height: 40px; /* Reducido pero manteniendo usabilidad */
+                max-width: 140px; /* NUEVO: Limitar ancho */
+            }
+            
+            .dados-actions {
+                gap: 6px; /* Reducido */
+                margin-top: 14px; /* Reducido */
+            }
+            
+            .btn-secondary, .btn-primary {
+                padding: 10px 14px; /* Reducido */
+                font-size: 0.85rem; /* Reducido */
+                min-height: 40px; /* Reducido pero usable */
+                border-radius: 5px; /* Reducido */
+            }
+        }
+                height: 45px;
+                font-size: 1.1em;
+                min-height: 44px;
+            }
+            
+            .btn-manual {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                min-height: 44px;
+            }
+            
+            .btn-secondary, .btn-primary {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+                min-height: 44px;
+            }
+        }
+
+        /* ORIENTACIÓN LANDSCAPE PARA MÓVILES */
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .dados-modal-container {
+                padding: 12px; /* Reducido */
+                min-height: auto;
+                max-height: 90vh; /* Aumentado un poco */
+                overflow-y: auto;
+                width: 98%; /* Aumentado */
+                max-width: 650px; /* Reducido */
+            }
+            
+            .dados-header {
+                margin-bottom: 12px; /* Reducido */
+            }
+            
+            .dados-header h3 {
+                font-size: 1.3em; /* Reducido */
+                margin-bottom: 3px; /* Reducido */
+            }
+            
+            .dados-header p {
+                font-size: 0.85rem; /* Reducido */
+                margin-bottom: 10px; /* Reducido */
+            }
+            
+            .dados-main-area {
+                padding: 12px; /* Reducido */
+                margin-bottom: 12px; /* Reducido */
+                gap: 12px; /* Reducido */
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            
+            .dados-container {
+                gap: 20px; /* Reducido de 30px */
+                flex-direction: row;
+                padding: 12px; /* Reducido */
+                flex: 0 0 auto;
+                background: #f8fafc;
+                border-radius: 10px; /* Reducido */
+                max-width: 200px; /* NUEVO: Limitar ancho */
+            }
+            
+            .dado {
+                width: 40px; /* REDUCIDO: de 50px a 40px */
+                height: 40px;
+                flex: 0 0 40px; /* NUEVO: Tamaño fijo */
+            }
+            
+            .cara {
+                width: 40px;
+                height: 40px;
+                border-radius: 4px; /* Reducido */
+            }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(20px); } /* Ajustado */
+            .cara-2 { transform: rotateY(90deg) translateZ(20px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(20px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(20px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(20px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(20px); }
+
+            .dot {
+                width: 5px; /* REDUCIDO: de 7px a 5px */
+                height: 5px;
+            }
+            
+            .btn-lanzar {
+                padding: 8px 16px; /* Reducido */
+                font-size: 0.8rem; /* Reducido */
+                min-width: 100px; /* Reducido */
+                min-height: 36px; /* Reducido pero funcional */
+                flex: 0 0 auto;
+                max-width: 120px; /* NUEVO: Limitar ancho */
+            }
+            
+            .resultado-dados {
+                padding: 8px 12px; /* Reducido */
+                flex: 1;
+                margin: 0 10px; /* Reducido */
+            }
+            
+            .resultado-text {
+                font-size: 0.8em; /* Reducido */
+                line-height: 1.2;
+            }
+            
+            .manual-section {
+                padding: 12px; /* Reducido */
+                margin-bottom: 12px; /* Reducido */
+            }
+            
+            .manual-section h4 {
+                margin-bottom: 8px; /* Reducido */
+                font-size: 0.85em; /* Reducido */
+            }
+            
+            .inputs-row {
+                gap: 16px; /* AUMENTADO: para mejor espaciado */
+                padding: 10px 16px; /* AUMENTADO: más respirable */
+                max-width: 200px; /* AUMENTADO: más espacio funcional */
+                margin: 0 auto; 
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: nowrap; /* NUEVO: evitar salto de línea */
+            }
+            
+            .input-group {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-width: 60px; /* NUEVO: espacio mínimo funcional */
+            }
+            
+            .input-group input {
+                width: 40px; /* RESTAURADO: tamaño funcional */
+                height: 40px; /* RESTAURADO: tamaño funcional */
+                font-size: 1rem; /* RESTAURADO: texto legible */
+                min-height: 40px; /* Touch-friendly */
+                border-radius: 6px; 
+                text-align: center;
+                border: 2px solid #ddd;
+                background: white;
+                box-sizing: border-box;
+            }
+            
+            .input-group input:focus {
+                border-color: #007bff;
+                outline: none;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+            }
+            
+            .input-group label {
+                font-size: 0.8rem; 
+                margin-bottom: 4px; 
+                color: #555;
+                font-weight: 500;
+            }
+            
+            .btn-manual {
+                padding: 10px 18px; /* AUMENTADO: más área de toque */
+                font-size: 0.85rem; /* AUMENTADO: más legible */
+                min-height: 40px; /* Touch-friendly */
+                min-width: 120px; /* AUMENTADO: botón funcional */
+                max-width: 160px; /* AUMENTADO: sin restricciones excesivas */
+                margin-top: 8px;
+                background: #28a745;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 500;
+            }
+            
+            .btn-manual:hover {
+                background: #218838;
+            }
+            
+            .btn-manual:active {
+                background: #1e7e34;
+            }
+            
+            .dados-actions {
+                flex-direction: row;
+                gap: 8px; /* Reducido */
+                margin-top: 12px; /* Reducido */
+                justify-content: center;
+            }
+            
+            .btn-secondary, .btn-primary {
+                padding: 8px 16px; /* Reducido */
+                font-size: 0.8rem; /* Reducido */
+                min-height: 32px; /* Reducido */
+                flex: 0 0 auto;
+                min-width: 80px; /* Reducido */
+                max-width: 120px; /* NUEVO: Limitar ancho */
+            }
+        }
+
+        /* PANTALLAS EXTRA PEQUEÑAS (menos de 280px) */
+        @media screen and (max-width: 279px) {
+            .dados-modal-container {
+                padding: 8px;
+                min-height: 380px;
+            }
+            
+            .dados-header h3 {
                 font-size: 1.2em;
+                margin-bottom: 3px;
+            }
+            
+            .dados-header p {
+                font-size: 0.8rem;
+                margin-bottom: 12px;
+            }
+            
+            .dados-main-area {
+                padding: 8px;
+                gap: 8px;
+            }
+            
+            .dados-container {
+                gap: 12px;
+                padding: 8px;
+                max-width: 180px;
+            }
+            
+            .dado {
+                width: 35px;
+                height: 35px;
+                flex: 0 0 35px;
+            }
+            
+            .cara {
+                width: 35px;
+                height: 35px;
+                border-radius: 4px;
+            }
+            
+            .cara-1 { transform: rotateY(0deg) translateZ(17.5px); }
+            .cara-2 { transform: rotateY(90deg) translateZ(17.5px); }
+            .cara-3 { transform: rotateY(180deg) translateZ(17.5px); }
+            .cara-4 { transform: rotateY(-90deg) translateZ(17.5px); }
+            .cara-5 { transform: rotateX(90deg) translateZ(17.5px); }
+            .cara-6 { transform: rotateX(-90deg) translateZ(17.5px); }
+
+            .dot {
+                width: 5px;
+                height: 5px;
+            }
+            
+            .btn-lanzar {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+                min-width: 120px;
+                min-height: 40px;
+                max-width: 160px;
+            }
+            
+            .resultado-dados {
+                padding: 10px 12px;
+            }
+            
+            .resultado-text {
+                font-size: 0.85rem;
+                line-height: 1.2;
+            }
+            
+            .manual-section {
+                padding: 10px;
+            }
+            
+            .inputs-row {
+                gap: 12px; /* Espacio funcional */
+                padding: 8px 14px; /* Más respirable */
+                max-width: 160px; /* AUMENTADO: más funcional */
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+            
+            .input-group {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-width: 50px; /* Espacio mínimo */
+            }
+            
+            .input-group input {
+                width: 36px; /* AUMENTADO: más funcional */
+                height: 36px; /* AUMENTADO: más funcional */
+                font-size: 0.95rem; /* AUMENTADO: más legible */
+                min-height: 36px; /* Touch-friendly */
+                border-radius: 5px;
+                text-align: center;
+                border: 2px solid #ddd;
+                background: white;
+                box-sizing: border-box;
+            }
+            
+            .input-group input:focus {
+                border-color: #007bff;
+                outline: none;
+                box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+            }
+            
+            .input-group label {
+                font-size: 0.75rem; /* Legible pero compacto */
+                margin-bottom: 3px; 
+                color: #555;
+                font-weight: 500;
+            }
+            
+            .btn-manual {
+                padding: 8px 14px; /* AUMENTADO: más área funcional */
+                font-size: 0.8rem; /* AUMENTADO: más legible */
+                min-height: 36px; /* Touch-friendly */
+                min-width: 100px; /* AUMENTADO: funcional */
+                max-width: 140px; /* AUMENTADO: sin restricciones excesivas */
+                margin-top: 6px;
+                background: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: 500;
+            }
+            
+            .btn-secondary, .btn-primary {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                min-height: 36px;
+            }
+        }
+
+        /* OPTIMIZACIONES ADICIONALES PARA TOUCH Y ACCESIBILIDAD */
+        @media screen and (max-width: 768px) {
+            /* Touch optimization para todos los botones */
+            .btn-lanzar,
+            .btn-manual,
+            .btn-secondary,
+            .btn-primary {
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+                touch-action: manipulation;
+            }
+            
+            /* Mejorar contraste y legibilidad */
+            .input-group input {
+                border-width: 2px;
+                font-weight: 600;
+            }
+            
+            .input-group input:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+                transform: scale(1.02);
+            }
+            
+            /* Estados activos más claros */
+            .btn-lanzar:active {
+                transform: scale(0.98);
+                background: #1d4ed8;
+            }
+            
+            .btn-manual:active {
+                transform: scale(0.98);
+                background: #047857;
+            }
+            
+            .btn-primary:active {
+                transform: scale(0.98);
+                background: #047857;
+            }
+            
+            .btn-secondary:active {
+                transform: scale(0.98);
+                background: #d1d5db;
+            }
+            
+            /* Mejorar la visibilidad de los dados en pantallas pequeñas */
+            .dado:hover {
+                transform: scale(1.05);
+            }
+            
+            .cara {
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            }
+            
+            /* Animaciones más suaves para móviles */
+            .dado,
+            .cara,
+            .btn-lanzar,
+            .btn-manual,
+            .btn-primary,
+            .btn-secondary {
+                transition: all 0.2s ease;
+            }
+        }
+
+        /* AJUSTES ESPECÍFICOS PARA iOS Y ANDROID */
+        @media screen and (max-width: 768px) {
+            /* Prevenir zoom en iOS */
+            .input-group input {
+                font-size: 16px;
+                -webkit-appearance: none;
+                appearance: none;
+            }
+            
+            /* Mejorar renderizado en dispositivos móviles */
+            .dado,
+            .cara {
+                -webkit-transform-style: preserve-3d;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+            }
+            
+            /* Optimizar animaciones para dispositivos móviles */
+            @keyframes girarDado {
+                0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+                25% { transform: rotateX(90deg) rotateY(90deg) rotateZ(45deg); }
+                50% { transform: rotateX(180deg) rotateY(180deg) rotateZ(90deg); }
+                75% { transform: rotateX(270deg) rotateY(270deg) rotateZ(135deg); }
+                100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+            }
+            
+            .dado.girando {
+                animation: girarDado 1.5s ease-out;
             }
         }
 
@@ -804,15 +1995,42 @@ function lanzarDadosManual() {
     const manual2 = document.getElementById('manualDado2');
     const resultado = document.getElementById('resultadoDados');
     const btnConfirmar = document.getElementById('btnConfirmar');
+    const btnManual = document.querySelector('.btn-manual');
     
     const valor1 = parseInt(manual1.value);
     const valor2 = parseInt(manual2.value);
     
-    // Validar valores
-    if (!valor1 || !valor2 || valor1 < 1 || valor1 > 6 || valor2 < 1 || valor2 > 6) {
-        resultado.innerHTML = '<span class="resultado-text">Por favor ingresa valores válidos (1-6)</span>';
+    // Limpiar estilos de error previos
+    manual1.style.borderColor = '#d1d5db';
+    manual2.style.borderColor = '#d1d5db';
+    
+    // Validar valores con mejor feedback visual
+    if (!manual1.value || !manual2.value) {
+        resultado.innerHTML = '<span class="resultado-text" style="color: #dc2626;">⚠️ Por favor ingresa ambos valores</span>';
+        if (!manual1.value) manual1.style.borderColor = '#dc2626';
+        if (!manual2.value) manual2.style.borderColor = '#dc2626';
         return;
     }
+    
+    if (isNaN(valor1) || isNaN(valor2) || valor1 < 1 || valor1 > 6 || valor2 < 1 || valor2 > 6) {
+        resultado.innerHTML = '<span class="resultado-text" style="color: #dc2626;">⚠️ Los valores deben ser entre 1 y 6</span>';
+        if (valor1 < 1 || valor1 > 6) manual1.style.borderColor = '#dc2626';
+        if (valor2 < 1 || valor2 > 6) manual2.style.borderColor = '#dc2626';
+        return;
+    }
+    
+    // Feedback visual de éxito
+    btnManual.style.background = '#059669';
+    btnManual.textContent = 'Aplicado ✓';
+    
+    setTimeout(() => {
+        btnManual.style.background = '#10b981';
+        btnManual.textContent = 'Usar Valores';
+    }, 1500);
+    
+    // Limpiar dados automáticos si existían
+    document.getElementById('btnLanzarAuto').disabled = false;
+    document.getElementById('btnLanzarAuto').textContent = 'Lanzar Dados';
     
     // Mostrar dados con valores específicos
     const dado1Element = document.getElementById('dado1');
@@ -824,9 +2042,9 @@ function lanzarDadosManual() {
     ultimoResultado = { dado1: valor1, dado2: valor2, total: valor1 + valor2 };
     
     resultado.innerHTML = `
-        <span class="resultado-text">
-            Manual: ${valor1} + ${valor2} = ${ultimoResultado.total}
-            ${valor1 === valor2 ? '<br>¡Dobles! Puedes lanzar otra vez' : ''}
+        <span class="resultado-text" style="color: #059669;">
+            🎲 Manual: ${valor1} + ${valor2} = ${ultimoResultado.total}
+            ${valor1 === valor2 ? '<br>🎉 ¡Dobles! Puedes lanzar otra vez' : ''}
         </span>
     `;
     

@@ -1,5 +1,8 @@
 // Modal de registro de usuarios para Monopoly
-// Elegante, minimalista y funcional
+// PRONT:Crea un modal de registro de usuarios para un juego de Monopoly con las siguientes características:
+// - Permite seleccionar una ficha y un color únicos para cada jugador
+// - Muestra un resumen de la configuración antes de iniciar el juego y consuma la api del backend 
+//  que trae la lista de países, además puedes escoger su color favorito.
 
 function mostrarModalRegistroUsuarios() {
     // Fichas y colores únicos

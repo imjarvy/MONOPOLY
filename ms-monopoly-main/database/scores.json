@@ -8,7 +8,7 @@
         "country_code": "co"
     },
     "daniel": {
-        "score": 16114,
+        "score": 17539,
         "country_code": "be"
     },
     "cris cris": {
@@ -28,10 +28,14 @@
         "country_code": "au"
     },
     "nayib": {
-        "score": 16486,
+        "score": 17986,
         "country_code": "ba"
     },
     "karen": {
+        "score": 2800,
+        "country_code": "bd"
+    },
+    "laura": {
         "score": 1500,
         "country_code": "bd"
     }

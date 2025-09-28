@@ -1,7 +1,9 @@
 /**
- * Modal Component - Componente modal reutilizable
- * Uso: Modal.show(content, options)
+ *"PRONT: realiza un modal reutilizable como funcion se llama que se llama cuando necesitemos desde componentes, 
+ debe contener un fondo difuminado para que no distriga la atención del usuario se hace click fuera del 
+ modal, funciones de verificar si esta abierto el modal y cerrado
  */
+
 
 // Sistema global de gestión de timeouts de modales
 const ModalTimeoutManager = {

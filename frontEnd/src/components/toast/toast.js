@@ -1,8 +1,7 @@
 /**
- * Toast Component - Sistema de Notificaciones Moderno
- * 
- * Sistema completo de notificaciones toast con animaciones suaves,
- * diferentes tipos de mensajes y control total sobre la experiencia.
+ * PRONT: Hazme un sistema de toast enterprise-grade con todas las características modernas: gestión
+ *  de estado, animaciones fluidas, responsive design, API intuitiva, documentación completa y 
+ * funcionalidades avanzadas como pausa en hover, control programático y efectos visuales sofisticados.
  * 
  * @fileoverview Sistema de toast moderno con soporte para múltiples tipos
  * @author Tu Nombre
@@ -14,25 +13,6 @@
  * - warning: Advertencias importantes (amarillo con ⚠) - 5s duración
  * - info: Información general (azul con ⓘ) - 4s duración
  * 
- * CARACTERÍSTICAS:
- * - Auto-posicionamiento (top-right)
- * - Animaciones fluidas de entrada/salida
- * - Progreso visual con barra
- * - Pausa automática en hover
- * - Responsive design
- * - Control programático (hide, hideAll)
- * - Soporte para toast permanentes (duration = 0)
- * 
- * USO RÁPIDO:
- * Toast.success('¡Éxito!');
- * Toast.error('Error crítico');
- * Toast.warning('Cuidado');
- * Toast.info('Información');
- * 
- * INSTALACIÓN:
- * 1. Incluir toast.js en tu HTML
- * 2. Incluir toast.css (opcional, estilos están embebidos)
- * 3. Usar window.Toast en cualquier lugar
  */
 
 class ToastManager {
