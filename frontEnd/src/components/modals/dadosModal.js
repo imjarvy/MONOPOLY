@@ -34,7 +34,8 @@ function mostrarModalDados() {
     modalDadosAbierto = true;
     
     const contenido = `
-        <div class="dados-modal-container">
+        <div class="dados-modal-container" data-version="2.1-${Date.now()}">
+            <!-- 🔧 DEBUG: DADOS MODAL v2.1 RESPONSIVE UPDATED -->
             <!-- Título minimalista -->
             <div class="dados-header">
                 <h3>Lanzar Dados</h3>
@@ -466,24 +467,28 @@ function mostrarModalDados() {
 
         .inputs-row {
             display: flex;
-            gap: 20px; /* Reducido para mobile */
-            justify-content: center;
+            gap: 24px; /* AUMENTADO: mejor separación visual */
+            justify-content: space-between; /* CAMBIADO: distribución uniforme */
             background: white;
-            padding: 18px 22px; /* Reducido para mobile */
-            border-radius: 12px; /* Reducido para mobile */
+            padding: 18px 28px; /* AUMENTADO: más padding horizontal */
+            border-radius: 12px; 
             border: 2px solid #e5e7eb;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            max-width: 280px; /* REDUCIDO: más apropiado para mobile */
+            max-width: 320px; /* AUMENTADO: más espacio para inputs */
+            min-width: 300px; /* NUEVO: Ancho mínimo garantizado */
             width: 100%;
-            box-sizing: border-box; /* NUEVO: Control de tamaño */
+            box-sizing: border-box; 
+            margin: 0 auto; /* NUEVO: Centrado automático */
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px; /* Reducido para mobile */
-            flex: 0 0 auto; /* NUEVO: Tamaño fijo */
+            gap: 6px; 
+            flex: 0 0 70px; /* AUMENTADO: más espacio fijo */
+            min-width: 70px; /* NUEVO: Ancho mínimo */
+            max-width: 70px; /* NUEVO: Ancho máximo controlado */
         }
 
         .input-group label {
@@ -604,35 +609,45 @@ function mostrarModalDados() {
         /* FORZAR ESTILOS MOBILE SMALL */
         /* =========================== */
         @media screen and (max-width: 600px) {
-            .manual-section {
+            .dados-modal-container .manual-section {
                 padding: 16px !important;
                 border-radius: 10px !important;
                 margin: 0 !important;
             }
             
-            .manual-section h4 {
+            .dados-modal-container .manual-section h4 {
                 font-size: 1rem !important;
                 margin-bottom: 12px !important;
-                text-align: center;
+                text-align: center !important;
             }
             
-            .inputs-row {
-                max-width: 200px !important;
-                padding: 16px 20px !important;
-                gap: 16px !important;
+            .dados-modal-container .inputs-row {
+                max-width: 250px !important; /* AUMENTADO: más espacio para 2 inputs */
+                min-width: 240px !important; /* NUEVO: Ancho mínimo garantizado */
+                padding: 16px 24px !important; /* AUMENTADO: más padding horizontal */
+                gap: 20px !important; /* AUMENTADO: mejor separación visual */
                 background: rgba(248, 250, 252, 0.8) !important;
                 border-radius: 10px !important;
                 border: 1px solid #e5e7eb !important;
                 margin: 0 auto !important;
                 box-sizing: border-box !important;
+                display: flex !important;
+                justify-content: space-between !important; /* CAMBIADO: distribuir uniformemente */
+                align-items: center !important;
+                width: auto !important; /* NUEVO: Permitir ancho automático */
             }
             
-            .input-group {
-                min-width: 55px !important;
-                flex: 0 0 auto !important;
+            .dados-modal-container .input-group {
+                min-width: 60px !important; /* AUMENTADO: más espacio garantizado */
+                max-width: 60px !important; /* NUEVO: Ancho fijo para evitar deformación */
+                flex: 0 0 60px !important; /* CAMBIADO: Tamaño fijo sin flexibilidad */
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important; /* NUEVO: Centrado vertical */
             }
             
-            .input-group input {
+            .dados-modal-container .input-group input {
                 width: 42px !important;
                 height: 42px !important;
                 font-size: 1.1em !important;
@@ -642,22 +657,26 @@ function mostrarModalDados() {
                 background: white !important;
                 box-sizing: border-box !important;
                 font-weight: 600 !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             
-            .input-group input:focus {
+            .dados-modal-container .input-group input:focus {
                 border-color: #3b82f6 !important;
                 box-shadow: 0 0 6px rgba(59, 130, 246, 0.3) !important;
+                outline: none !important;
             }
             
-            .input-group label {
+            .dados-modal-container .input-group label {
                 font-size: 0.85rem !important;
                 color: #374151 !important;
                 font-weight: 500 !important;
                 margin-bottom: 4px !important;
                 white-space: nowrap !important;
+                text-align: center !important;
             }
             
-            .btn-manual {
+            .dados-modal-container .btn-manual {
                 padding: 10px 20px !important;
                 font-size: 0.9rem !important;
                 min-height: 44px !important;
@@ -667,28 +686,46 @@ function mostrarModalDados() {
                 background: #10b981 !important;
                 border-radius: 8px !important;
                 font-weight: 600 !important;
+                border: none !important;
+                color: white !important;
+                cursor: pointer !important;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            
+            .dados-modal-container .btn-manual:hover {
+                background: #059669 !important;
+                transform: translateY(-1px) !important;
             }
         }
 
         /* PANTALLAS MUY PEQUEÑAS */
         @media screen and (max-width: 400px) {
-            .inputs-row {
-                max-width: 180px !important;
-                padding: 12px 16px !important;
-                gap: 14px !important;
+            .dados-modal-container .inputs-row {
+                max-width: 220px !important; /* AUMENTADO: más espacio */
+                min-width: 210px !important; /* NUEVO: Mínimo garantizado */
+                padding: 12px 20px !important; /* AUMENTADO: más padding */
+                gap: 18px !important; /* AUMENTADO: mejor separación */
             }
             
-            .input-group input {
+            .dados-modal-container .input-group {
+                min-width: 55px !important; /* AUMENTADO */
+                max-width: 55px !important; /* NUEVO: Ancho fijo */
+                flex: 0 0 55px !important; /* Tamaño fijo */
+            }
+            
+            .dados-modal-container .input-group input {
                 width: 38px !important;
                 height: 38px !important;
                 font-size: 1em !important;
             }
             
-            .input-group label {
+            .dados-modal-container .input-group label {
                 font-size: 0.8rem !important;
             }
             
-            .btn-manual {
+            .dados-modal-container .btn-manual {
                 padding: 8px 16px !important;
                 font-size: 0.85rem !important;
                 min-width: 110px !important;
@@ -697,23 +734,30 @@ function mostrarModalDados() {
 
         /* PANTALLAS EXTRA PEQUEÑAS */
         @media screen and (max-width: 350px) {
-            .inputs-row {
-                max-width: 160px !important;
-                padding: 10px 12px !important;
-                gap: 12px !important;
+            .dados-modal-container .inputs-row {
+                max-width: 200px !important; /* AUMENTADO: más espacio */
+                min-width: 190px !important; /* NUEVO: Mínimo garantizado */
+                padding: 10px 18px !important; /* AUMENTADO: más padding */
+                gap: 16px !important; /* AUMENTADO: mejor separación */
             }
             
-            .input-group input {
+            .dados-modal-container .input-group {
+                min-width: 50px !important; /* AUMENTADO */
+                max-width: 50px !important; /* NUEVO: Ancho fijo */
+                flex: 0 0 50px !important; /* Tamaño fijo */
+            }
+            
+            .dados-modal-container .input-group input {
                 width: 35px !important;
                 height: 35px !important;
                 font-size: 0.95em !important;
             }
             
-            .input-group label {
+            .dados-modal-container .input-group label {
                 font-size: 0.75rem !important;
             }
             
-            .btn-manual {
+            .dados-modal-container .btn-manual {
                 padding: 8px 14px !important;
                 font-size: 0.8rem !important;
                 min-width: 100px !important;
@@ -1991,6 +2035,7 @@ function lanzarDadosAuto() {
 
 // Función para valores manuales
 function lanzarDadosManual() {
+    console.log('🎯 lanzarDadosManual ejecutada');
     const manual1 = document.getElementById('manualDado1');
     const manual2 = document.getElementById('manualDado2');
     const resultado = document.getElementById('resultadoDados');
@@ -2101,3 +2146,6 @@ async function confirmarMovimiento() {
 
 // Hacer función disponible globalmente
 window.mostrarModalDados = mostrarModalDados;
+window.lanzarDadosManual = lanzarDadosManual;
+window.lanzarDadosAuto = lanzarDadosAuto;
+window.confirmarMovimiento = confirmarMovimiento;

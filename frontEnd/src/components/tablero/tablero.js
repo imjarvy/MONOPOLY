@@ -1,3 +1,7 @@
+/**
+ * PRONT: Crea un sistema de renderizado de tablero de Monopoly dinámico y responsivo que consuma datos desde 
+ * boardService.js
+ */
 import { getBoard } from '../../services/boardService.js';
 import { inicializarJuego } from '../../logica/turnos.js';
 
