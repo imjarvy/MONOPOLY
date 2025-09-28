@@ -1,12 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Cómo Jugar - Monopoly</title>
+    <link rel="stylesheet" href="./styles/como-jugar.css">
 </head>
 <body>
-    <h1>Cómo jugar a Monopoly</h1>
-    <p>Instrucciones sobre cómo jugar al juego de Monopoly...</p>
+    <!-- Video de fondo -->
+    <div class="video-background">
+        <video class="background-video" autoplay muted loop>
+            <source src="../public/assets/img/video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header con logo -->
+        <header class="header">
+            <img src="../public/assets/img/Monopoly-Emblem.webp" alt="Monopoly Logo" class="monopoly-logo">
+            <h1 class="main-title">Cómo Jugar</h1>
+            <button class="btn-back" onclick="window.location.href='index.html'">
+                ← Volver al Inicio
+            </button>
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Objetivo del juego -->
+            <section class="game-section">
+                <div class="section-header">
+                    <h2>🎯 Objetivo del Juego</h2>
+                </div>
+                <div class="section-content">
+                    <p>El objetivo es convertirse en el monopolista más rico comprando, desarrollando y alquilando propiedades para hacer que los otros jugadores quiebren.</p>
+                </div>
+            </section>
+
+            <!-- Preparación -->
+            <section class="game-section">
+                <div class="section-header">
+                    <h2>🎲 Preparación</h2>
+                </div>
+                <div class="section-content">
+                    <div class="rules-grid">
+                        <div class="rule-card">
+                            <div class="rule-icon">👥</div>
+                            <h3>Jugadores</h3>
+                            <p>De 2 a 4 jugadores pueden participar</p>
+                        </div>
+                        <div class="rule-card">
+                            <div class="rule-icon">💰</div>
+                            <h3>Dinero Inicial</h3>
+                            <p>Cada jugador comienza con $1,500</p>
+                        </div>
+                        <div class="rule-card">
+                            <div class="rule-icon">🎮</div>
+                            <h3>Fichas</h3>
+                            <p>Cada jugador elige una ficha única</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Desarrollo del juego -->
+            <section class="game-section">
+                <div class="section-header">
+                    <h2>🎯 Desarrollo del Juego</h2>
+                </div>
+                <div class="section-content">
+                    <div class="game-flow">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>Lanza los dados</h3>
+                                <p>Tira los dos dados y mueve tu ficha el número de casillas indicado</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>Acción en la casilla</h3>
+                                <p>Realiza la acción correspondiente según el tipo de casilla donde caigas</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3>Pasa el turno</h3>
+                                <p>Una vez completadas las acciones, pasa el turno al siguiente jugador</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tipos de casillas -->
+            <section class="game-section">
+                <div class="section-header">
+                    <h2>🏘️ Tipos de Casillas</h2>
+                </div>
+                <div class="section-content">
+                    <div class="squares-grid">
+                        <div class="square-type">
+                            <div class="square-icon">🏠</div>
+                            <h4>Propiedades</h4>
+                            <p>Puedes comprarlas si están libres o pagar renta si pertenecen a otro jugador</p>
+                        </div>
+                        <div class="square-type">
+                            <div class="square-icon">🚂</div>
+                            <h4>Estaciones de Tren</h4>
+                            <p>Propiedades especiales que generan más ingresos si posees varias</p>
+                        </div>
+                        <div class="square-type">
+                            <div class="square-icon">⚡</div>
+                            <h4>Servicios Públicos</h4>
+                            <p>Compañías de luz y agua con rentas basadas en los dados</p>
+                        </div>
+                        <div class="square-type">
+                            <div class="square-icon">❓</div>
+                            <h4>Suerte/Cofre</h4>
+                            <p>Toma una carta y sigue las instrucciones</p>
+                        </div>
+                        <div class="square-type">
+                            <div class="square-icon">💸</div>
+                            <h4>Impuestos</h4>
+                            <p>Paga la cantidad especificada al banco</p>
+                        </div>
+                        <div class="square-type">
+                            <div class="square-icon">🚔</div>
+                            <h4>Ir a la Cárcel</h4>
+                            <p>Ve directamente a la cárcel sin pasar por la salida</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Estrategias -->
+            <section class="game-section">
+                <div class="section-header">
+                    <h2>🧠 Estrategias Ganadoras</h2>
+                </div>
+                <div class="section-content">
+                    <div class="strategies">
+                        <div class="strategy-tip">
+                            <div class="tip-icon">🎯</div>
+                            <h4>Monopoliza colores</h4>
+                            <p>Poseer todas las propiedades de un color te permite construir casas y hoteles</p>
+                        </div>
+                        <div class="strategy-tip">
+                            <div class="tip-icon">🏗️</div>
+                            <h4>Construye sabiamente</h4>
+                            <p>Las casas y hoteles aumentan significativamente las rentas</p>
+                        </div>
+                        <div class="strategy-tip">
+                            <div class="tip-icon">💼</div>
+                            <h4>Negocia inteligentemente</h4>
+                            <p>Los intercambios y negociaciones son clave para el éxito</p>
+                        </div>
+                        <div class="strategy-tip">
+                            <div class="tip-icon">💰</div>
+                            <h4>Gestiona tu dinero</h4>
+                            <p>Mantén suficiente efectivo para emergencias y oportunidades</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ganar/Perder -->
+            <section class="game-section">
+                <div class="section-header">
+                    <h2>🏆 Condiciones de Victoria</h2>
+                </div>
+                <div class="section-content">
+                    <div class="victory-conditions">
+                        <div class="condition win">
+                            <div class="condition-icon">👑</div>
+                            <h3>Ganar</h3>
+                            <p>Sé el último jugador que no haya quebrado y ten el mayor patrimonio</p>
+                        </div>
+                        <div class="condition lose">
+                            <div class="condition-icon">💔</div>
+                            <h3>Perder</h3>
+                            <p>Quedas eliminado cuando no puedes pagar tus deudas y no tienes propiedades para hipotecar</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-buttons">
+                <button class="btn-start" onclick="window.location.href='index.html'">
+                    🎮 Comenzar a Jugar
+                </button>
+                <button class="btn-ranking" onclick="window.location.href='./src/pages/ranking.html'">
+                    🏆 Ver Ranking
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Animación de aparición progresiva
+        window.addEventListener('load', () => {
+            const sections = document.querySelectorAll('.game-section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('animate-in');
+                }, index * 200);
+            });
+        });
+
+        // Efecto parallax suave en el scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const video = document.querySelector('.background-video');
+            if (video) {
+                video.style.transform = `translate(-50%, calc(-50% + ${scrolled * 0.3}px))`;
+            }
+        });
+    </script>
+    <script src="./js/como-jugar.js"></script>
 </body>
 </html>
