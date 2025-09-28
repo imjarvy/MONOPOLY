@@ -1,3 +1,4 @@
+/* ===== ESTILOS BASE ===== */
 .tablero {
   display: grid;
   grid-template-columns: repeat(11, minmax(60px, 1fr));
@@ -10,6 +11,31 @@
   background: #aad5a2;
   margin: auto;
   gap: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Contenedor principal responsive */
+.container {
+  padding: 0.5rem;
+  overflow: visible;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.row {
+  margin: 0;
+  overflow: visible;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+[class*="col-"] {
+  padding: 0.25rem;
+  overflow: visible;
+  position: relative;
 }
 
 .casilla {
@@ -30,6 +56,7 @@
   word-break: break-word;
   background: #aad5a2; /* Fondo verde por defecto para todas las casillas */
   overflow: hidden; /* <-- evita que el contenido se salga */
+  z-index: 2;
 }
 
 .casilla .nombre,
@@ -119,9 +146,10 @@
   font-weight: bold;
   color: #ff0000;
   background: #aad5a2;
-  z-index: 1;
+  z-index: 5;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  position: relative;
 }
 
 /* Logo de Monopoly en el centro */
@@ -130,6 +158,61 @@
   height: auto;
   object-fit: contain;
   transition: all 0.3s ease;
+}
+
+/* ===== PANEL DE JUGADORES Y UI ELEMENTS ===== */
+#panel-jugadores {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+}
+
+.jugador {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  position: relative;
+  z-index: 11;
+}
+
+.jugador:hover {
+  transform: translateY(-2px);
+}
+
+#area-dados {
+  text-align: center;
+  margin: 1rem 0;
+  position: relative;
+  z-index: 10;
+}
+
+#area-finalizacion {
+  margin-top: 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+.btn-danger {
+  font-weight: bold;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 12;
+}
+
+.btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
 }
 
 /* Text content */
@@ -257,4 +340,431 @@ body.container {
 html, body {
     overflow-x: visible !important;
     overflow-y: visible !important;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* PANTALLAS GRANDES - Computadores de escritorio (1200px y más) */
+@media screen and (min-width: 1200px) {
+  .tablero {
+    max-width: 900px;
+    grid-template-columns: repeat(11, minmax(70px, 1fr));
+    grid-template-rows: repeat(11, minmax(70px, 1fr));
+    border-width: 5px;
+  }
+  
+  .casilla {
+    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    padding: 0.4rem;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(150px, 25vw, 300px);
+  }
+}
+
+/* LAPTOPS Y COMPUTADORES MEDIANOS (992px - 1199px) */
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .tablero {
+    max-width: 800px;
+    grid-template-columns: repeat(11, minmax(65px, 1fr));
+    grid-template-rows: repeat(11, minmax(65px, 1fr));
+  }
+  
+  .casilla {
+    font-size: clamp(0.6rem, 1.3vw, 0.8rem);
+    padding: 0.3rem;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(130px, 22vw, 280px);
+  }
+}
+
+/* TABLETS - Pantalla mediana (768px - 991px) */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .container {
+    padding: 0.5rem;
+  }
+  
+  .row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .col-lg-9, .col-md-8 {
+    flex: 0 0 65%;
+    max-width: 65%;
+    padding-right: 0.5rem;
+  }
+  
+  .col-lg-3, .col-md-4 {
+    flex: 0 0 35%;
+    max-width: 35%;
+    padding-left: 0.5rem;
+  }
+  
+  .tablero {
+    max-width: 100%;
+    width: 100%;
+    grid-template-columns: repeat(11, minmax(45px, 1fr));
+    grid-template-rows: repeat(11, minmax(45px, 1fr));
+    border-width: 3px;
+    gap: 0.5px;
+    margin: 0;
+  }
+  
+  .casilla {
+    font-size: clamp(0.4rem, 1.2vw, 0.6rem);
+    padding: 0.15rem;
+    border-width: 0.5px;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(90px, 18vw, 180px);
+  }
+  
+  /* Panel de jugadores para tablets */
+  #panel-jugadores {
+    padding: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .jugador {
+    padding: 0.4rem;
+    margin: 0.25rem 0;
+    font-size: 0.8rem;
+  }
+  
+  .btn-danger {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+}
+
+/* MÓVILES GRANDES Y TABLETS PEQUEÑAS (481px - 767px) */
+@media screen and (min-width: 481px) and (max-width: 767px) {
+  .container {
+    padding: 0.25rem;
+  }
+  
+  .row {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .col-lg-9, .col-md-8, .col-sm-12 {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.25rem;
+  }
+  
+  .col-lg-3, .col-md-4 {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.25rem;
+  }
+  
+  .tablero {
+    max-width: 90vw;
+    width: 90vw;
+    grid-template-columns: repeat(11, minmax(32px, 1fr));
+    grid-template-rows: repeat(11, minmax(32px, 1fr));
+    border-width: 2px;
+    gap: 0.5px;
+    margin: 0 auto 1rem auto;
+  }
+  
+  .casilla {
+    font-size: clamp(0.3rem, 1.2vw, 0.5rem);
+    padding: 0.08rem;
+    border-width: 0.5px;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(60px, 12vw, 120px);
+  }
+  
+  /* Panel de jugadores más compacto */
+  #panel-jugadores {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+  
+  .jugador {
+    padding: 0.4rem;
+    margin: 0.25rem 0;
+    font-size: 0.75rem;
+  }
+  
+  .btn-danger {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    width: 100%;
+  }
+}
+
+/* MÓVILES PEQUEÑOS (320px - 480px) */
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0.15rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .row {
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .col-lg-9, .col-md-8, .col-sm-12,
+  .col-lg-3, .col-md-4 {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.15rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .tablero {
+    max-width: 95vw;
+    width: 95vw;
+    grid-template-columns: repeat(11, minmax(24px, 1fr));
+    grid-template-rows: repeat(11, minmax(24px, 1fr));
+    border-width: 1px;
+    gap: 0.5px;
+    margin: 0 auto 1rem auto;
+    aspect-ratio: 1;
+  }
+  
+  .casilla {
+    font-size: clamp(0.25rem, 1.5vw, 0.4rem);
+    padding: 0.03rem;
+    border-width: 0.5px;
+    line-height: 1;
+  }
+  
+  .casilla .nombre {
+    font-size: clamp(0.25rem, 1.2vw, 0.35rem);
+    line-height: 1;
+    margin-bottom: 0.05rem;
+  }
+  
+  .casilla .precio,
+  .casilla .renta {
+    font-size: clamp(0.2rem, 1vw, 0.3rem);
+    line-height: 1;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(40px, 10vw, 80px);
+  }
+  
+  /* Panel de jugadores optimizado para móviles */
+  #panel-jugadores {
+    padding: 0.4rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .jugador {
+    padding: 0.3rem;
+    margin: 0.2rem 0;
+    font-size: 0.7rem;
+    border-radius: 4px;
+  }
+  
+  #area-dados {
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+  
+  #area-finalizacion {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  /* Botones más grandes para touch */
+  .btn-danger {
+    padding: 0.7rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* MÓVILES MUY PEQUEÑOS (menos de 320px) */
+@media screen and (max-width: 319px) {
+  .tablero {
+    grid-template-columns: repeat(11, minmax(25px, 1fr));
+    grid-template-rows: repeat(11, minmax(25px, 1fr));
+  }
+  
+  .casilla {
+    font-size: 0.25rem;
+    padding: 0.02rem;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(50px, 12vw, 100px);
+  }
+}
+
+/* ORIENTACIÓN LANDSCAPE PARA MÓVILES */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .container {
+    padding: 0.2rem;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: calc(100vh - 0.4rem);
+    margin: 0;
+  }
+  
+  .col-lg-9, .col-md-8, .col-sm-12 {
+    flex: 0 0 65%;
+    max-width: 65%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.1rem;
+  }
+  
+  .col-lg-3, .col-md-4 {
+    flex: 0 0 35%;
+    max-width: 35%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 0.1rem;
+  }
+  
+  .tablero {
+    max-width: 60vh;
+    max-height: 60vh;
+    width: 60vh;
+    height: 60vh;
+    grid-template-columns: repeat(11, minmax(20px, 1fr));
+    grid-template-rows: repeat(11, minmax(20px, 1fr));
+    margin: 0;
+  }
+  
+  .casilla {
+    font-size: clamp(0.2rem, 1vw, 0.4rem);
+    padding: 0.02rem;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(30px, 8vh, 60px);
+  }
+  
+  #panel-jugadores {
+    margin-bottom: 0.3rem;
+    max-height: 35vh;
+    overflow-y: auto;
+    padding: 0.3rem;
+  }
+  
+  .jugador {
+    font-size: 0.6rem;
+    padding: 0.2rem;
+    margin: 0.1rem 0;
+  }
+  
+  #area-dados,
+  #area-finalizacion {
+    margin: 0.2rem 0;
+  }
+  
+  .btn-danger {
+    font-size: 0.7rem;
+    padding: 0.4rem;
+    min-height: 35px;
+  }
+}
+
+/* OPTIMIZACIONES ADICIONALES */
+@media screen and (max-width: 576px) {
+  /* Asegurar que el contenido no se desborde horizontalmente */
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.1rem;
+  }
+  
+  /* Mejorar la legibilidad en pantallas muy pequeñas */
+  .casilla {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 20px;
+  }
+  
+  /* Optimizar espaciado para pantallas pequeñas */
+  #area-dados, #area-finalizacion {
+    margin: 0.3rem 0;
+    width: 100%;
+  }
+  
+  /* Asegurar que no haya overlap */
+  .row > [class*="col-"] {
+    position: relative;
+    float: none;
+    clear: both;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* PANTALLAS ULTRA PEQUEÑAS (menos de 320px) */
+@media screen and (max-width: 319px) {
+  .tablero {
+    grid-template-columns: repeat(11, minmax(18px, 1fr));
+    grid-template-rows: repeat(11, minmax(18px, 1fr));
+    max-width: 98vw;
+    width: 98vw;
+  }
+  
+  .casilla {
+    font-size: 0.2rem;
+    padding: 0.01rem;
+    min-height: 18px;
+  }
+  
+  .monopoly-center-logo {
+    width: clamp(30px, 8vw, 50px);
+  }
+  
+  .jugador {
+    font-size: 0.6rem;
+    padding: 0.2rem;
+  }
+  
+  .btn-danger {
+    font-size: 0.7rem;
+    padding: 0.5rem;
+    min-height: 40px;
+  }
 }
