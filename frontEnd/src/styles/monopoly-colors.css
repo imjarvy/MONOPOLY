@@ -1,0 +1,170 @@
+/* Paleta de colores del Monopoly */
+:root {
+    /* Colores principales del Monopoly */
+    --monopoly-red: #DC143C;
+    --monopoly-dark-red: #8B0000;
+    --monopoly-crimson: #B22222;
+    --monopoly-orange: #FF8C00;
+    --monopoly-orange-red: #FF6347;
+    --monopoly-gold: #FFD700;
+    --monopoly-orange-light: #FFA500;
+    --monopoly-green: #228B22;
+    --monopoly-green-light: #32CD32;
+    --monopoly-white: #FFFFFF;
+    --monopoly-cream: #FFFDD0;
+    --monopoly-brown: #2c1810;
+    
+    /* Colores de propiedad del Monopoly */
+    --property-brown: #8B4513;
+    --property-light-blue: #87CEEB;
+    --property-purple: #DA70D6;
+    --property-orange: #FFA500;
+    --property-red: #DC143C;
+    --property-yellow: #FFFF00;
+    --property-green: #32CD32;
+    --property-dark-blue: #000080;
+    
+    /* Colores de utilidades */
+    --railroad-black: #000000;
+    --utility-white: #FFFFFF;
+    
+    /* Gradientes del Monopoly */
+    --gradient-red: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    --gradient-orange: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+    --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    --gradient-green: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    --gradient-money: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
+    
+    /* Sombras con colores del Monopoly */
+    --shadow-red: 0 4px 15px rgba(220, 20, 60, 0.3);
+    --shadow-orange: 0 4px 15px rgba(255, 140, 0, 0.3);
+    --shadow-gold: 0 4px 15px rgba(255, 215, 0, 0.3);
+    --shadow-green: 0 4px 15px rgba(34, 139, 34, 0.3);
+    
+    /* Bordes dorados */
+    --border-gold: 2px solid rgba(255, 215, 0, 0.4);
+    --border-gold-hover: 2px solid rgba(255, 215, 0, 0.7);
+}
+
+/* Clases utilitarias con colores del Monopoly */
+.monopoly-bg-red {
+    background: var(--gradient-red);
+}
+
+.monopoly-bg-orange {
+    background: var(--gradient-orange);
+}
+
+.monopoly-bg-gold {
+    background: var(--gradient-gold);
+}
+
+.monopoly-bg-green {
+    background: var(--gradient-green);
+}
+
+.monopoly-text-red {
+    color: var(--monopoly-red);
+}
+
+.monopoly-text-orange {
+    color: var(--monopoly-orange);
+}
+
+.monopoly-text-gold {
+    color: var(--monopoly-gold);
+}
+
+.monopoly-text-brown {
+    color: var(--monopoly-brown);
+}
+
+.monopoly-border-gold {
+    border: var(--border-gold);
+}
+
+.monopoly-shadow-red {
+    box-shadow: var(--shadow-red);
+}
+
+.monopoly-shadow-orange {
+    box-shadow: var(--shadow-orange);
+}
+
+.monopoly-shadow-gold {
+    box-shadow: var(--shadow-gold);
+}
+
+.monopoly-shadow-green {
+    box-shadow: var(--shadow-green);
+}
+
+/* Animaciones con temática del Monopoly */
+@keyframes monopoly-glow {
+    0% {
+        box-shadow: 0 0 10px var(--monopoly-gold);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--monopoly-gold), 0 0 30px var(--monopoly-orange);
+    }
+    100% {
+        box-shadow: 0 0 10px var(--monopoly-gold);
+    }
+}
+
+@keyframes monopoly-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: var(--shadow-red);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: var(--shadow-gold);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: var(--shadow-red);
+    }
+}
+
+@keyframes monopoly-shine {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: 200px 0;
+    }
+}
+
+/* Efectos especiales para botones del Monopoly */
+.monopoly-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.monopoly-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 215, 0, 0.4), 
+        transparent);
+    transition: left 0.6s ease;
+}
+
+.monopoly-button:hover::before {
+    left: 100%;
+}
+
+.monopoly-button-glow {
+    animation: monopoly-glow 2s ease-in-out infinite;
+}
+
+.monopoly-button-pulse {
+    animation: monopoly-pulse 2s ease-in-out infinite;
+}

@@ -32,7 +32,7 @@ body {
     min-height: 100%;
     transform: translate(-50%, -50%);
     object-fit: cover;
-    opacity: 0.15;
+    opacity: 0.85;
     filter: blur(1px);
 }
 
@@ -91,7 +91,7 @@ body {
 }
 
 .btn-back {
-    background: linear-gradient(135deg, #3498db, #2980b9);
+    background: linear-gradient(135deg, #FF8C00, #FF6347);
     color: white;
     border: none;
     padding: 12px 25px;
@@ -99,15 +99,16 @@ body {
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
     transition: all 0.3s ease;
     margin-top: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-back:hover {
-    background: linear-gradient(135deg, #2980b9, #21618c);
+    background: linear-gradient(135deg, #FF6347, #DC143C);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+    box-shadow: 0 6px 20px rgba(255, 99, 71, 0.5);
 }
 
 /* Contenido principal */
@@ -123,9 +124,9 @@ body {
     border-radius: 20px;
     padding: 30px;
     box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+        0 10px 30px rgba(139, 0, 0, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.2);
+    border: 3px solid rgba(255, 140, 0, 0.4);
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.6s ease;
@@ -142,7 +143,8 @@ body {
     height: 100%;
     background: linear-gradient(90deg, 
         transparent, 
-        rgba(255, 255, 255, 0.4), 
+        rgba(255, 215, 0, 0.3), 
+        rgba(255, 140, 0, 0.2),
         transparent);
     transition: left 0.8s ease;
 }
@@ -163,9 +165,10 @@ body {
 
 .section-header h2 {
     font-size: 2.2rem;
-    color: #2c3e50;
+    color: #8B0000;
     margin-bottom: 10px;
     font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(255, 140, 0, 0.3);
 }
 
 .section-content {
@@ -182,19 +185,21 @@ body {
 }
 
 .rule-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
     color: white;
     padding: 25px;
     border-radius: 15px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(139, 0, 0, 0.3);
     transform: translateY(0);
     transition: all 0.3s ease;
+    border: 2px solid rgba(255, 215, 0, 0.3);
 }
 
 .rule-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 35px rgba(220, 20, 60, 0.4);
+    border-color: rgba(255, 215, 0, 0.6);
 }
 
 .rule-icon {
@@ -220,17 +225,18 @@ body {
 .step {
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
     color: white;
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.3);
     transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .step:hover {
     transform: translateX(10px);
-    box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+    box-shadow: 0 8px 25px rgba(255, 99, 71, 0.4);
 }
 
 .step-number {
@@ -262,18 +268,19 @@ body {
 }
 
 .square-type {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
     color: white;
     padding: 20px;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.3);
+    box-shadow: 0 6px 20px rgba(34, 139, 34, 0.3);
     transition: all 0.3s ease;
+    border: 2px solid rgba(255, 215, 0, 0.4);
 }
 
 .square-type:hover {
     transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+    box-shadow: 0 8px 25px rgba(50, 205, 50, 0.4);
 }
 
 .square-icon {
@@ -297,18 +304,20 @@ body {
 }
 
 .strategy-tip {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    color: #333;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #2c1810;
     padding: 25px;
     border-radius: 15px;
     text-align: center;
-    box-shadow: 0 6px 20px rgba(250, 112, 154, 0.3);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
     transition: all 0.3s ease;
+    border: 2px solid rgba(139, 0, 0, 0.3);
 }
 
 .strategy-tip:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(250, 112, 154, 0.4);
+    box-shadow: 0 10px 30px rgba(255, 165, 0, 0.4);
+    border-color: rgba(139, 0, 0, 0.6);
 }
 
 .tip-icon {
@@ -321,7 +330,7 @@ body {
     font-size: 1.3rem;
     margin-bottom: 10px;
     font-weight: 600;
-    color: #2c3e50;
+    color: #8B0000;
 }
 
 /* Condiciones de victoria */
@@ -339,18 +348,20 @@ body {
     color: white;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    border: 3px solid rgba(255, 215, 0, 0.4);
 }
 
 .condition.win {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
 }
 
 .condition.lose {
-    background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
 }
 
 .condition:hover {
     transform: scale(1.05);
+    border-color: rgba(255, 215, 0, 0.7);
 }
 
 .condition-icon {
@@ -380,7 +391,7 @@ body {
 }
 
 .btn-start {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    background: linear-gradient(135deg, #DC143C, #8B0000);
     color: white;
     border: none;
     padding: 18px 35px;
@@ -388,35 +399,37 @@ body {
     cursor: pointer;
     font-size: 1.2rem;
     font-weight: 600;
-    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    box-shadow: 0 6px 20px rgba(220, 20, 60, 0.4);
     transition: all 0.3s ease;
     min-width: 200px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
 }
 
 .btn-start:hover {
-    background: linear-gradient(135deg, #c0392b, #a93226);
+    background: linear-gradient(135deg, #8B0000, #B22222);
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.5);
+    box-shadow: 0 8px 25px rgba(139, 0, 0, 0.5);
 }
 
 .btn-ranking {
-    background: linear-gradient(135deg, #ff9800, #f57c00);
-    color: white;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #2c1810;
     border: none;
     padding: 18px 35px;
     border-radius: 25px;
     cursor: pointer;
     font-size: 1.2rem;
     font-weight: 600;
-    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
     transition: all 0.3s ease;
     min-width: 200px;
+    border: 2px solid rgba(139, 0, 0, 0.3);
 }
 
 .btn-ranking:hover {
-    background: linear-gradient(135deg, #f57c00, #e65100);
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 152, 0, 0.5);
+    box-shadow: 0 8px 25px rgba(255, 165, 0, 0.5);
 }
 
 /* Responsive Design */
@@ -528,14 +541,134 @@ html {
     text-align: center;
     font-size: 1.1rem;
     line-height: 1.7;
-    color: #555;
+    color: #2c1810;
     margin-bottom: 15px;
+    font-weight: 500;
 }
 
 /* Efectos hover mejorados */
 .game-section:hover {
     transform: translateY(-2px);
     box-shadow: 
-        0 15px 40px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(255, 255, 255, 0.1);
+        0 15px 40px rgba(139, 0, 0, 0.3),
+        0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+/* Variaciones de color para diferentes secciones */
+.game-section:nth-child(1) {
+    border-color: rgba(220, 20, 60, 0.4);
+}
+
+.game-section:nth-child(1):hover {
+    box-shadow: 
+        0 15px 40px rgba(220, 20, 60, 0.3),
+        0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.game-section:nth-child(2) {
+    border-color: rgba(255, 140, 0, 0.4);
+}
+
+.game-section:nth-child(2):hover {
+    box-shadow: 
+        0 15px 40px rgba(255, 140, 0, 0.3),
+        0 0 30px rgba(220, 20, 60, 0.2);
+}
+
+.game-section:nth-child(3) {
+    border-color: rgba(34, 139, 34, 0.4);
+}
+
+.game-section:nth-child(3):hover {
+    box-shadow: 
+        0 15px 40px rgba(34, 139, 34, 0.3),
+        0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.game-section:nth-child(4) {
+    border-color: rgba(255, 215, 0, 0.4);
+}
+
+.game-section:nth-child(4):hover {
+    box-shadow: 
+        0 15px 40px rgba(255, 215, 0, 0.3),
+        0 0 30px rgba(139, 0, 0, 0.2);
+}
+
+.game-section:nth-child(5) {
+    border-color: rgba(178, 34, 34, 0.4);
+}
+
+.game-section:nth-child(5):hover {
+    box-shadow: 
+        0 15px 40px rgba(178, 34, 34, 0.3),
+        0 0 30px rgba(255, 140, 0, 0.2);
+}
+
+.game-section:nth-child(6) {
+    border-color: rgba(255, 99, 71, 0.4);
+}
+
+.game-section:nth-child(6):hover {
+    box-shadow: 
+        0 15px 40px rgba(255, 99, 71, 0.3),
+        0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+/* Variaciones para las casillas */
+.square-type:nth-child(1) {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    border-color: rgba(255, 215, 0, 0.5);
+}
+
+.square-type:nth-child(2) {
+    background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.square-type:nth-child(3) {
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    border-color: rgba(255, 215, 0, 0.4);
+}
+
+.square-type:nth-child(4) {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #2c1810;
+    border-color: rgba(139, 0, 0, 0.4);
+}
+
+.square-type:nth-child(5) {
+    background: linear-gradient(135deg, #B22222 0%, #DC143C 100%);
+    border-color: rgba(255, 215, 0, 0.5);
+}
+
+.square-type:nth-child(6) {
+    background: linear-gradient(135deg, #8B0000 0%, #B22222 100%);
+    border-color: rgba(255, 140, 0, 0.4);
+}
+
+/* Variaciones para estrategias */
+.strategy-tip:nth-child(1) {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-color: rgba(220, 20, 60, 0.3);
+}
+
+.strategy-tip:nth-child(2) {
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    border-color: rgba(139, 0, 0, 0.3);
+}
+
+.strategy-tip:nth-child(3) {
+    background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
+    color: white;
+    border-color: rgba(255, 215, 0, 0.4);
+}
+
+.strategy-tip:nth-child(3) h4 {
+    color: white;
+}
+
+.strategy-tip:nth-child(4) {
+    background: linear-gradient(135deg, #FFD700 0%, #FFFF00 100%);
+    border-color: rgba(178, 34, 34, 0.3);
 }

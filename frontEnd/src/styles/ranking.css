@@ -18,7 +18,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
     color: white;
     border: none;
     padding: 12px 20px;
@@ -27,28 +27,32 @@
     font-size: 14px;
     font-weight: 500;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+    border: 2px solid rgba(255, 215, 0, 0.3);
 }
 
 .btn-back:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
+    border-color: rgba(255, 215, 0, 0.6);
 }
 
 .ranking-title {
     font-size: 2.5em;
     margin: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(255, 215, 0, 0.3);
 }
 
 .ranking-subtitle {
-    color: #6b7280;
+    color: #8B0000;
     font-size: 1.1em;
     margin: 0;
+    font-weight: 600;
 }
 
 /* Loading y Error */
@@ -59,27 +63,28 @@
 
 .loading-spinner i {
     font-size: 3em;
-    color: #667eea;
+    color: #DC143C;
     margin-bottom: 20px;
 }
 
 .error-message {
-    background: #fee2e2;
-    border: 1px solid #fecaca;
+    background: rgba(255, 240, 240, 0.95);
+    border: 2px solid rgba(220, 20, 60, 0.4);
     border-radius: 12px;
     padding: 30px;
     max-width: 400px;
     margin: 0 auto;
+    box-shadow: 0 8px 25px rgba(139, 0, 0, 0.2);
 }
 
 .error-message i {
     font-size: 2.5em;
-    color: #dc2626;
+    color: #DC143C;
     margin-bottom: 15px;
 }
 
 .btn-retry {
-    background: #dc2626;
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -87,11 +92,13 @@
     cursor: pointer;
     margin-top: 15px;
     transition: all 0.3s ease;
+    border: 2px solid rgba(255, 215, 0, 0.3);
 }
 
 .btn-retry:hover {
-    background: #b91c1c;
+    background: linear-gradient(135deg, #8B0000 0%, #B22222 100%);
     transform: translateY(-1px);
+    border-color: rgba(255, 215, 0, 0.6);
 }
 
 /* Estadísticas resumen */
@@ -103,23 +110,24 @@
 }
 
 .stat-item {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 235, 0.9) 100%);
     padding: 25px;
     border-radius: 15px;
     text-align: center;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 2px solid rgba(255, 140, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(220, 20, 60, 0.15);
     transition: all 0.3s ease;
 }
 
 .stat-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 25px rgba(255, 140, 0, 0.25);
+    border-color: rgba(255, 215, 0, 0.6);
 }
 
 .stat-item i {
     font-size: 2em;
-    color: #667eea;
+    color: #DC143C;
     margin-bottom: 10px;
 }
 
@@ -127,12 +135,12 @@
     display: block;
     font-size: 2.2em;
     font-weight: bold;
-    color: #1f2937;
+    color: #8B0000;
     margin-bottom: 5px;
 }
 
 .stat-label {
-    color: #6b7280;
+    color: #FF6347;
     font-weight: 500;
     text-transform: uppercase;
     font-size: 0.9em;
@@ -141,11 +149,11 @@
 
 /* Tabla de ranking */
 .table-container {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(139, 0, 0, 0.2);
+    border: 3px solid rgba(255, 215, 0, 0.4);
 }
 
 .ranking-table {
@@ -155,7 +163,7 @@
 }
 
 .ranking-table thead {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
     color: white;
 }
 
@@ -173,21 +181,22 @@
 }
 
 .ranking-table tbody tr {
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid rgba(255, 140, 0, 0.2);
     transition: all 0.3s ease;
 }
 
 .ranking-table tbody tr:hover {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, rgba(255, 245, 235, 0.8) 0%, rgba(255, 235, 205, 0.6) 100%);
     transform: scale(1.01);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.2);
 }
 
 .ranking-table tbody tr:nth-child(even) {
-    background: #f9fafb;
+    background: rgba(255, 250, 240, 0.5);
 }
 
 .ranking-table tbody tr:nth-child(even):hover {
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, rgba(255, 240, 220, 0.8) 0%, rgba(255, 225, 185, 0.6) 100%);
 }
 
 .ranking-table td {
@@ -254,8 +263,15 @@
     height: 24px;
     border-radius: 4px;
     object-fit: cover;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    box-shadow: 0 2px 8px rgba(220, 20, 60, 0.2);
+    transition: all 0.3s ease;
+}
+
+.country-flag:hover {
+    transform: scale(1.1);
+    border-color: rgba(255, 140, 0, 0.8);
+    box-shadow: 0 4px 12px rgba(255, 99, 71, 0.3);
 }
 
 /* Información del jugador */
@@ -269,74 +285,77 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FF8C00 0%, #FF6347 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-weight: bold;
     font-size: 1.2em;
+    border: 2px solid rgba(255, 215, 0, 0.5);
 }
 
 .player-details h4 {
     margin: 0;
     font-size: 1em;
-    color: #1f2937;
+    color: #8B0000;
     font-weight: 600;
 }
 
 .player-details p {
     margin: 0;
     font-size: 0.85em;
-    color: #6b7280;
+    color: #DC143C;
 }
 
 /* Métricas */
 .score-badge {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
     color: white;
     padding: 6px 12px;
     border-radius: 20px;
     font-weight: 600;
     font-size: 0.9em;
+    border: 2px solid rgba(255, 215, 0, 0.4);
 }
 
 .games-count {
-    background: #e0e7ff;
-    color: #3730a3;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #8B0000;
     padding: 4px 8px;
     border-radius: 12px;
     font-weight: 500;
     font-size: 0.85em;
+    border: 1px solid rgba(139, 0, 0, 0.3);
 }
 
 .avg-score {
     font-weight: 600;
-    color: #1f2937;
+    color: #DC143C;
 }
 
 /* Sin datos */
 .no-data {
     text-align: center;
     padding: 60px 20px;
-    color: #6b7280;
+    color: #8B0000;
 }
 
 .no-data i {
     font-size: 4em;
     margin-bottom: 20px;
-    color: #d1d5db;
+    color: #FF8C00;
 }
 
 .no-data h3 {
     margin: 0 0 10px 0;
-    color: #374151;
+    color: #DC143C;
 }
 
 /* Estilo del botón ranking en index */
 .ranking-btn {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    color: white;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #8B0000;
     border: none;
     padding: 12px 24px;
     border-radius: 25px;
@@ -345,12 +364,14 @@
     cursor: pointer;
     margin-left: 10px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    border: 2px solid rgba(139, 0, 0, 0.3);
 }
 
 .ranking-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+    border-color: rgba(139, 0, 0, 0.6);
 }
 
 /* Responsive */
@@ -680,4 +701,124 @@
         width: 20px;
         height: 15px;
     }
+}
+
+/* Efectos especiales temáticos del Monopoly para ranking */
+.container {
+    background: linear-gradient(135deg, 
+        rgba(139, 0, 0, 0.05) 0%, 
+        rgba(255, 140, 0, 0.03) 25%,
+        rgba(255, 215, 0, 0.02) 50%,
+        rgba(255, 99, 71, 0.03) 75%,
+        rgba(220, 20, 60, 0.05) 100%);
+    min-height: 100vh;
+}
+
+/* Animaciones adicionales para el ranking */
+@keyframes monopoly-ranking-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(220, 20, 60, 0.15);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.25);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(220, 20, 60, 0.15);
+    }
+}
+
+@keyframes monopoly-glow-gold {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 140, 0, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+}
+
+/* Efectos especiales para posiciones top */
+.rank-1 {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #8B0000;
+    animation: monopoly-glow-gold 3s ease-in-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.rank-2 {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%);
+    color: #2c1810;
+    border: 2px solid rgba(255, 215, 0, 0.6);
+}
+
+.rank-3 {
+    background: linear-gradient(135deg, #CD7F32 0%, #B8860B 100%);
+    color: white;
+    border: 2px solid rgba(255, 140, 0, 0.6);
+}
+
+.rank-other {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    color: white;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Efectos hover mejorados para estadísticas */
+.stat-item:nth-child(1) {
+    border-color: rgba(220, 20, 60, 0.4);
+}
+
+.stat-item:nth-child(1):hover {
+    animation: monopoly-ranking-pulse 1.5s ease-in-out infinite;
+}
+
+.stat-item:nth-child(2) {
+    border-color: rgba(255, 140, 0, 0.4);
+}
+
+.stat-item:nth-child(2) i {
+    color: #FF8C00;
+}
+
+.stat-item:nth-child(3) {
+    border-color: rgba(255, 215, 0, 0.4);
+}
+
+.stat-item:nth-child(3) i {
+    color: #FFD700;
+}
+
+.stat-item:nth-child(3) .stat-number {
+    color: #FF8C00;
+}
+
+/* Efecto brillante en la tabla */
+.table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 215, 0, 0.1), 
+        rgba(255, 140, 0, 0.05),
+        transparent);
+    transition: left 1s ease;
+    pointer-events: none;
+}
+
+.table-container:hover::before {
+    left: 100%;
+}
+
+.table-container {
+    position: relative;
+    overflow: hidden;
 }
