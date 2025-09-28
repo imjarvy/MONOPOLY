@@ -1,35 +1,32 @@
 import { renderizarPanelJugadores } from '../components/panelJugador.js';
+import { PropiedadesManager } from '../managers/propiedadesManager.js';
+import { FinJuegoManager } from '../managers/finJuegoManager.js';
+// ✅ AGREGAR IMPORT:
+import { AccionModal } from '../components/modals/accionModal.js';
 
-/**
- * GAME CONTROLLER - Lógica específica del juego Monopoly
- * 
- * Responsabilidades:
- * - Gestión de turnos de jugadores
- * - Movimiento de fichas en el tablero
- * - Estados del juego (dados, acciones, etc.)
- * - Integración con sistema de notificaciones
- */
+// ============== INSTANCIAS DE MANAGERS ==============
+const propiedadesManager = new PropiedadesManager();
+const finJuegoManager = new FinJuegoManager();
+// ✅ AGREGAR INSTANCIA:
+const accionModal = new AccionModal();
 
 // ============== ESTADO DEL JUEGO ==============
 let jugadores = [];
 let turnoActual = 0;
-let estadoJuego = 'esperando_dados'; // otros estados: 'accion_casilla', 'compra', 'fin'
+let estadoJuego = 'esperando_dados';
 
 // ============== FUNCIÓN DE INICIALIZACIÓN ==============
-
-/**
- * Inicializa el juego con los jugadores configurados desde app.js
- * @param {Array} jugadoresConfigurados - Array de jugadores desde MonopolyApp
- */
 export function inicializarJuegoMonopoly(jugadoresConfigurados) {
   console.log('🎮 Inicializando lógica del juego...', jugadoresConfigurados);
-  
+
   if (!jugadoresConfigurados || jugadoresConfigurados.length < 2) {
-    console.error('❌ Error: Se necesitan al menos 2 jugadores para inicializar');
+    console.error('❌ Se necesitan al menos 2 jugadores');
+    if (window.Toast) {
+      window.Toast.error('Se necesitan al menos 2 jugadores', 'Error');
+    }
     return false;
   }
-  
-  // Inicializar jugadores con propiedades del juego
+
   jugadores = jugadoresConfigurados.map(j => ({
     ...j,
     dinero: j.dinero || 1500,
@@ -37,124 +34,238 @@ export function inicializarJuegoMonopoly(jugadoresConfigurados) {
     hipotecas: j.hipotecas || [],
     posicion: j.posicion || 0
   }));
-  
+
   turnoActual = 0;
   estadoJuego = 'esperando_dados';
+
+  console.log('✅ Juego inicializado:', { jugadores, turnoActual });
   
-  console.log('✅ Juego inicializado con jugadores:', jugadores);
-  
-  // Renderizar estado inicial
-  renderizarPanelJugadores(jugadores, turnoActual);
-  actualizarFichas(jugadores);
-  
-  // Notificación de inicio
-  if (window.Toast) {
-    window.Toast.success(
-      `¡Juego iniciado! Es el turno de ${jugadores[turnoActual].nickname}`,
-      "¡A Jugar!"
-    );
-  }
+  // ✅ EXPONER EN WINDOW PARA FUNCIONES GLOBALES:
+  window.gameController = {
+    jugadores,
+    turnoActual,
+    estadoJuego,
+    comprarPropiedad,
+    siguienteTurno,
+    propiedadesManager,
+    finJuegoManager
+  };
   
   return true;
 }
 
 // ============== FUNCIONES DE JUEGO ==============
-
-/**
- * Cambia el turno al siguiente jugador y actualiza el panel.
- * Se llama después de cada movimiento de ficha.
- */
 function siguienteTurno() {
-  const jugadorAnterior = jugadores[turnoActual].nickname;
   turnoActual = (turnoActual + 1) % jugadores.length;
   estadoJuego = 'esperando_dados';
   
-  // Notificación de cambio de turno
+  console.log(`🔄 Turno cambiado a: ${jugadores[turnoActual].nickname}`);
+  
   if (window.Toast) {
     window.Toast.info(
-      `Es el turno de ${jugadores[turnoActual].nickname}`,
-      "Cambio de Turno"
+      `Turno de ${jugadores[turnoActual].nickname}`, 
+      'Cambio de Turno'
     );
+  }
+  
+  // Actualizar panel de jugadores
+  renderizarPanelJugadores(jugadores, turnoActual);
+  
+  // ✅ ACTUALIZAR WINDOW:
+  window.gameController.turnoActual = turnoActual;
+  window.gameController.estadoJuego = estadoJuego;
+}
+
+export function moverFichaActual(casillas) {
+  const jugadorActual = jugadores[turnoActual];
+  if (!jugadorActual) {
+    console.error('❌ No hay jugador actual válido');
+    return;
+  }
+
+  console.log('🎲 Moviendo ficha del jugador:', jugadorActual.nickname);
+
+  // ✅ EJECUTAR ACCIÓN DE LA CASILLA:
+  const casillaDestino = obtenerCasilla(jugadorActual.posicion);
+  ejecutarAccionCasilla(jugadorActual, casillaDestino);
+
+  // ✅ VERIFICAR FIN DEL JUEGO:
+  const ganador = finJuegoManager.determinarGanador(jugadores);
+  if (ganador) {
+    console.log('🏆 ¡Juego terminado! Ganador:', ganador.nickname);
+    return;
+  }
+
+  actualizarFichas(jugadores);
+  // NO llamar siguienteTurno() aquí - lo hará el modal o la acción
+}
+
+// ✅ FUNCIÓN PARA EJECUTAR ACCIONES DE CASILLA:
+function ejecutarAccionCasilla(jugador, casilla) {
+  console.log('🎯 Ejecutando acción:', casilla.tipo, casilla);
+  
+  switch(casilla.tipo) {
+    case 'propiedad':
+      if (!casilla.propietario) {
+        // Mostrar modal de compra
+        accionModal.mostrarOpcionesPropiedad(casilla, jugador);
+      } else if (casilla.propietario !== jugador.id) {
+        // Cobrar renta
+        cobrarRenta(jugador, casilla);
+        // Pasar turno automáticamente después de pagar renta
+        setTimeout(() => siguienteTurno(), 1500);
+      } else {
+        // Es tu propiedad, pasar turno
+        if (window.Toast) {
+          window.Toast.info(`Es tu propiedad: ${casilla.nombre}`, 'Propiedad Propia');
+        }
+        setTimeout(() => siguienteTurno(), 1000);
+      }
+      break;
+      
+    case 'impuesto':
+      jugador.dinero -= casilla.impuesto || 100;
+      if (window.Toast) {
+        window.Toast.warning(
+          `${jugador.nickname} pagó $${casilla.impuesto || 100} de impuestos`, 
+          'Impuestos'
+        );
+      }
+      renderizarPanelJugadores(jugadores, turnoActual);
+      setTimeout(() => siguienteTurno(), 1500);
+      break;
+      
+    case 'salida':
+      jugador.dinero += 200;
+      if (window.Toast) {
+        window.Toast.success(
+          `${jugador.nickname} recibió $200 por pasar por la Salida`, 
+          '¡Salida!'
+        );
+      }
+      renderizarPanelJugadores(jugadores, turnoActual);
+      setTimeout(() => siguienteTurno(), 1500);
+      break;
+      
+    case 'carta':
+      // Implementar más adelante
+      if (window.Toast) {
+        window.Toast.info('Sistema de cartas próximamente', 'Carta');
+      }
+      setTimeout(() => siguienteTurno(), 1000);
+      break;
+      
+    default:
+      // Casilla neutral
+      if (window.Toast) {
+        window.Toast.info(`${jugador.nickname} en casilla neutral`, 'Casilla');
+      }
+      setTimeout(() => siguienteTurno(), 1000);
+  }
+  
+  // ✅ ACTUALIZAR WINDOW:
+  window.gameController.jugadores = jugadores;
+}
+
+// ✅ FUNCIÓN PARA OBTENER CASILLA:
+function obtenerCasilla(posicion) {
+  // Esta función debe obtener la información de la casilla del tablero
+  if (window.tableroData && window.tableroData.casillas) {
+    return window.tableroData.casillas.find(c => c.position === posicion) || {
+      id: `casilla-${posicion}`,
+      tipo: 'neutral',
+      nombre: `Casilla ${posicion}`,
+      precio: 0,
+      position: posicion
+    };
+  }
+  
+  // ✅ DATOS DE PRUEBA PARA TESTING:
+  const casillasPrueba = {
+    1: { id: 'prop-1', tipo: 'propiedad', nombre: 'Mediterráneo', precio: 60, color: 'marron', position: 1 },
+    5: { id: 'imp-1', tipo: 'impuesto', nombre: 'Impuesto de Lujo', impuesto: 75, position: 5 },
+    10: { id: 'carcel', tipo: 'carcel', nombre: 'Cárcel', position: 10 },
+    15: { id: 'prop-15', tipo: 'propiedad', nombre: 'Estados Unidos', precio: 140, color: 'rosa', position: 15 }
+  };
+  
+  return casillasPrueba[posicion] || {
+    id: `casilla-${posicion}`,
+    tipo: 'neutral',
+    nombre: `Casilla ${posicion}`,
+    precio: 0,
+    position: posicion
+  };
+}
+
+// ✅ FUNCIÓN PARA COBRAR RENTA:
+function cobrarRenta(jugadorPagador, casilla) {
+  const propietario = jugadores.find(j => j.id === casilla.propietario);
+  if (!propietario) return;
+  
+  const renta = propiedadesManager.calcularRenta(casilla, 0);
+  
+  if (jugadorPagador.dinero >= renta) {
+    jugadorPagador.dinero -= renta;
+    propietario.dinero += renta;
+    
+    if (window.Toast) {
+      window.Toast.warning(
+        `${jugadorPagador.nickname} pagó $${renta} a ${propietario.nickname}`,
+        'Renta Pagada'
+      );
+    }
+  } else {
+    // Lógica de bancarrota
+    if (window.Toast) {
+      window.Toast.error(
+        `${jugadorPagador.nickname} no puede pagar $${renta}. ¡Bancarrota!`,
+        'Sin Dinero'
+      );
+    }
+    jugadorPagador.bancarrota = true;
   }
   
   renderizarPanelJugadores(jugadores, turnoActual);
 }
 
-/**
- * Mueve la ficha del jugador actual en el tablero y actualiza el DOM.
- * @param {number} casillas - Número de casillas a mover
- * Se llama desde dados.js al lanzar los dados.
- */
-export function moverFichaActual(casillas) {
-  if (!jugadores.length) {
-    console.error('❌ Error: No hay jugadores inicializados');
-    return;
-  }
-  
+// ✅ FUNCIÓN PARA COMPRAR PROPIEDAD (llamada desde modal):
+function comprarPropiedad(propiedadId) {
   const jugadorActual = jugadores[turnoActual];
-  const posicionAnterior = jugadorActual.posicion;
+  const casilla = obtenerCasilla(jugadorActual.posicion);
   
-  jugadorActual.posicion = (jugadorActual.posicion + casillas) % 40;
+  console.log('💰 Intentando comprar:', propiedadId, casilla);
   
-  // Notificación de movimiento
-  if (window.Toast) {
-    window.Toast.success(
-      `${jugadorActual.nickname} se movió ${casillas} espacios (casilla ${posicionAnterior} → ${jugadorActual.posicion})`,
-      "Movimiento Realizado"
-    );
+  if (casilla.id === propiedadId || casilla.position.toString() === propiedadId) {
+    const exito = propiedadesManager.comprarPropiedad(jugadorActual, casilla);
     
-    // Verificar si pasó por la salida (posición 0)
-    if (posicionAnterior + casillas >= 40) {
-      window.Toast.success(
-        `${jugadorActual.nickname} pasó por la SALIDA. +$200`,
-        "¡Cobrar Salario!"
-      );
-      jugadorActual.dinero += 200;
+    if (exito) {
+      // Actualizar panel y pasar turno
+      renderizarPanelJugadores(jugadores, turnoActual);
+      
+      // ✅ ACTUALIZAR WINDOW:
+      window.gameController.jugadores = jugadores;
+      
+      setTimeout(() => siguienteTurno(), 1000);
     }
+  } else {
+    console.error('❌ ID de propiedad no coincide');
   }
-  
-  actualizarFichas(jugadores);
-  siguienteTurno();
 }
 
-/**
- * Actualiza visualmente las fichas de los jugadores en el tablero.
- * Elimina fichas anteriores y coloca la ficha de cada jugador en su casilla actual.
- * @param {Array} jugadores - Lista de jugadores con su posición
- */
 function actualizarFichas(jugadores) {
-  // Remover fichas existentes
-  document.querySelectorAll('.ficha-jugador').forEach(el => el.remove());
-
-  jugadores.forEach((jugador, idx) => {
-    const casilla = document.querySelector(`[data-position="${jugador.posicion}"]`);
-    if (casilla) {
-      const ficha = document.createElement('div');
-      ficha.className = 'ficha-jugador' + (idx === turnoActual ? ' activo' : '');
-      ficha.textContent = jugador.nickname[0].toUpperCase();
-      ficha.style.cssText = `
-        background: ${idx === 0 ? '#FF6B6B' : idx === 1 ? '#4ECDC4' : '#45B7D1'};
-        color: white;
-        font-weight: bold;
-        border-radius: 50%;
-        width: 25px;
-        height: 25px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        margin: 2px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        ${idx === turnoActual ? 'animation: pulse 1s infinite; transform: scale(1.1);' : ''}
-      `;
-      casilla.appendChild(ficha);
-    }
-  });
+  // Esta función debe actualizar las fichas en el DOM
+  console.log('🔄 Actualizando fichas de jugadores');
+  // Implementar lógica para mover fichas visualmente
 }
 
 // ============== EXPORTACIONES ADICIONALES ==============
+export {
+  jugadores,
+  turnoActual,
+  estadoJuego,
+  siguienteTurno,
+  actualizarFichas,
+  comprarPropiedad
+};
 
-// Exportar funciones para uso desde otros módulos si es necesario
-export { jugadores, turnoActual, estadoJuego, siguienteTurno, actualizarFichas };
-
-console.log('🎮 GameController cargado');
+console.log('🎮 GameController cargado con AccionModal');

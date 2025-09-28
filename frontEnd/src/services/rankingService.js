@@ -27,6 +27,21 @@ async function getHistoricalRanking() {
         throw error;
     }
 }
+/**
+ * Versión simplificada para obtener el ranking sin mapear datos
+ * Ideal para componentes que usan el JSON tal como viene del backend
+ */
+async function obtenerRanking() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/ranking`);
+        if (!response.ok) throw new Error('Error obteniendo ranking');
+        return await response.json();
+    } catch (error) {
+        console.error('Error en rankingService:', error);
+        return [];
+    }
+}
+
 
 async function getCountryFlag(countryCode) {
     try {
@@ -109,5 +124,6 @@ function getCountryName(countryCode) {
 window.rankingService = {
     getHistoricalRanking,
     getCountryFlag,
-    getCountryName
+    getCountryName,
+    obtenerRanking
 };

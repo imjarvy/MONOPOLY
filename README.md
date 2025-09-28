@@ -336,6 +336,73 @@ const jugadores = [
 
 ---
 
+## 2. División en Etapas para 3 Personas
+
+### **Etapa 1: Configuración Inicial y Responsive**
+**Responsable:** Persona 1  
+**Tareas:**
+- Crear `/src/pages/configuracion.js` y su CSS.
+- Formulario para seleccionar número de jugadores, ingresar nickname y país (usando `/src/services/countriesService.js` que hace fetch al endpoint de países).
+- Validaciones (cantidad de jugadores, datos requeridos).
+- Preparar estructura base de `/public/assets` (img, icons).
+- Garantizar diseño adaptable (responsive) usando Bootstrap y CSS propio.
+- Documentar el código y los cambios realizados.
+
+---
+
+### **Etapa 2: Tablero y Manipulación Avanzada del DOM**
+**Responsable:** Persona 2  
+**Tareas:**
+- Crear `/src/components/tablero.js` y su CSS.
+- Usar `/src/services/boardService.js` para obtener el tablero del backend.
+- Renderizar dinámicamente las casillas, mostrando nombre, color, estado, casas/hotel.
+- Crear componente para dados (`/src/components/dados.js`) y lógica de movimiento de fichas en el DOM.
+- Panel visual para cada jugador, mostrando dinero, propiedades, hipotecas/préstamos.
+- Controlar el cambio de turnos y el estado del juego.
+- Documentar funciones principales y su relación.
+
+---
+
+### **Etapa 3: Lógica de Juego, Acciones y Ranking**
+**Responsable:** Persona 3  
+**Tareas:**
+- Implementar en `/src/utils/` la lógica de compra/venta, construcción de casas/hoteles, hipotecas/préstamos, cartas especiales, cárcel, impuestos.
+- Integrar acciones en el tablero y paneles mediante modales/componentes (`/src/components/modalAccion.js`).
+- Finalización de partida:
+  - Botón "Finalizar Juego"
+  - Cálculo de patrimonio y ganador.
+  - Envío de resultados con `/src/services/scoreService.js` (POST).
+  - Ranking global con `/src/services/rankingService.js` (GET) y banderas usando FlagsAPI.
+- Documentar todos los cambios y explicar ejemplos de uso.
+
+---
+
+## 3. Conceptos Clave Explicados
+
+### **Manipulación del DOM**
+Modificar la estructura y contenido de la página en tiempo real usando JavaScript:
+```js
+document.getElementById("casilla-propiedad").textContent = propiedad.nombre;
+```
+
+### **Asincronía y fetch**
+Obtener datos del backend usando `fetch` para actualizar la interfaz sin recargar la página:
+```js
+fetch("http://127.0.0.1:5000/board")
+  .then(res => res.json())
+  .then(data => renderizarTablero(data));
+```
+
+### **Objetos, Arrays y Estado**
+Modelar jugadores, propiedades, tablero, turnos, etc. usando objetos y arrays:
+```js
+const jugadores = [
+  { nickname: "Juan", pais: "co", dinero: 1500, propiedades: [] }
+];
+```
+
+---
+
 ## 4. Buenas Prácticas y Recomendaciones
 
 - Mantén **archivos JS y CSS separados** por funcionalidad.
@@ -371,15 +438,3 @@ const jugadores = [
 - `/src/services/rankingService.js`
 - `/src/styles/modalAccion.css`, `/src/styles/ranking.css`
 - Documentación de lógica y ejemplos de uso.
-
-
-### DEsARROLLO PERsONA 2
-### Flujo de conexión entre componentes
-
-### Flujo de conexión entre componentes
-
-- El **tablero** se renderiza dinámicamente usando los datos obtenidos por `boardService.js`.
-- El **panel de jugadores** muestra el estado actual de cada jugador y se actualiza en cada turno.
-- El **componente de dados** permite lanzar los dados; al hacerlo, llama a `moverFichaActual(casillas)` en `app.js`.
-- La función `moverFichaActual` actualiza la posición del jugador, mueve la ficha en el tablero y llama a `siguienteTurno` para cambiar el turno y actualizar el panel.
-- Todos los componentes están conectados mediante funciones importadas/exportadas y el estado global de los jugadores.

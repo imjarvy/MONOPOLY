@@ -1,0 +1,201 @@
+/* Estilos específicos para modales de acciones del juego */
+
+/* Información del jugador */
+.jugador-info {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #bae6fd;
+}
+
+.jugador-nombre {
+    font-weight: bold;
+    color: #0c4a6e;
+    margin-bottom: 5px;
+}
+
+.jugador-dinero {
+    color: #059669;
+    font-weight: 600;
+}
+
+/* Información de la propiedad */
+.propiedad-info {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e5e7eb;
+}
+
+.propiedad-nombre {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.color-indicator {
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Detalles en grid */
+.propiedad-detalles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.detalle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detalle-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.detalle-valor {
+    font-weight: 500;
+    color: #059669;
+}
+
+.detalle-valor.suficiente {
+    color: #059669;
+}
+
+.detalle-valor.insuficiente {
+    color: #dc2626;
+}
+
+/* Estados de propiedades */
+.estado-propiedad {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.estado-disponible {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.estado-ocupada {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.estado-propia {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+/* Botones de acción */
+.acciones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-accion {
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-comprar {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.btn-pasar {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: white;
+}
+
+.btn-accion:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-accion:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Listas de propiedades */
+.hipoteca-lista, .construccion-lista {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 15px 0;
+}
+
+.propiedad-hipoteca {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    margin: 8px 0;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.propiedad-hipoteca:hover {
+    background: #f0f4ff;
+    border-color: #667eea;
+}
+
+.propiedad-hipoteca-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Responsive básico */
+@media (max-width: 768px) {
+    .propiedad-detalles {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .acciones-container {
+        gap: 10px;
+    }
+    
+    .btn-accion {
+        padding: 14px 16px;
+        font-size: 13px;
+    }
+}
