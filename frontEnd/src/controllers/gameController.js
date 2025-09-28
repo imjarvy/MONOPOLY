@@ -84,7 +84,19 @@ export function moverFichaActual(casillas) {
   }
 
   console.log('🎲 Moviendo ficha del jugador:', jugadorActual.nickname);
-
+  console.log('🎯 Posición antes:', jugadorActual.posicion);
+  
+  // ✅ ASEGURAR QUE LA POSICIÓN SE ACTUALIZA CORRECTAMENTE
+  // Si casillas es un número (resultado de dados)
+  if (typeof casillas === 'number') {
+    jugadorActual.posicion = (jugadorActual.posicion + casillas) % 40;
+  }
+  
+  console.log('🎯 Posición después:', jugadorActual.posicion);
+  
+  // ✅ ACTUALIZAR FICHAS PRIMERO (antes de ejecutar acciones)
+  actualizarFichas(jugadores);
+  
   // ✅ EJECUTAR ACCIÓN DE LA CASILLA:
   const casillaDestino = obtenerCasilla(jugadorActual.posicion);
   ejecutarAccionCasilla(jugadorActual, casillaDestino);
@@ -95,9 +107,6 @@ export function moverFichaActual(casillas) {
     console.log('🏆 ¡Juego terminado! Ganador:', ganador.nickname);
     return;
   }
-
-  actualizarFichas(jugadores);
-  // NO llamar siguienteTurno() aquí - lo hará el modal o la acción
 }
 
 // ✅ FUNCIÓN PARA EJECUTAR ACCIONES DE CASILLA:
@@ -253,9 +262,24 @@ function comprarPropiedad(propiedadId) {
 }
 
 function actualizarFichas(jugadores) {
-  // Esta función debe actualizar las fichas en el DOM
   console.log('🔄 Actualizando fichas de jugadores');
-  // Implementar lógica para mover fichas visualmente
+  console.log('📍 Posiciones actuales:', jugadores.map(j => ({ 
+    nickname: j.nickname, 
+    posicion: j.posicion 
+  })));
+  
+  if (window.tableroController) {
+    // ✅ SINCRONIZAR JUGADORES CON TABLERO CONTROLLER
+    window.tableroController.jugadores = [...jugadores]; // Clonar array
+    window.tableroController.turnoActual = turnoActual;
+    
+    // ✅ ACTUALIZAR FICHAS
+    window.tableroController.actualizarFichasPublico(jugadores, turnoActual);
+    
+    console.log('✅ Fichas enviadas a tableroController');
+  } else {
+    console.error('❌ window.tableroController no disponible');
+  }
 }
 
 // ============== EXPORTACIONES ADICIONALES ==============

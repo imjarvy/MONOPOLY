@@ -236,4 +236,6 @@ export class TableroController {
         // Exponer métodos necesarios globalmente
         window.tableroController = this;
     }
+
+    
 }

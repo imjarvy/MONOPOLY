@@ -148,5 +148,52 @@
         
         console.log('💡 Usa debugEstado() para ver el estado completo');
     </script>
+    <script>
+// ✅ FUNCIÓN DE DEBUG PARA FICHAS
+window.debugFichas = function() {
+    console.log('=== DEBUG FICHAS ===');
+    
+    // 1. Verificar controllers
+    console.log('tableroController:', !!window.tableroController);
+    console.log('gameController:', !!window.gameController);
+    
+    // 2. Verificar jugadores en ambos controllers
+    if (window.tableroController) {
+        console.log('tableroController.jugadores:', window.tableroController.jugadores);
+    }
+    
+    if (window.gameController) {
+        console.log('gameController.jugadores:', window.gameController.jugadores);
+    }
+    
+    // 3. Verificar fichas en el DOM
+    const fichas = document.querySelectorAll('.ficha-jugador');
+    console.log('Fichas en DOM:', fichas.length);
+    fichas.forEach((ficha, i) => {
+        console.log(`Ficha ${i}:`, ficha.textContent, ficha.parentElement);
+    });
+    
+    // 4. Verificar casillas con data-position
+    const casillas = document.querySelectorAll('[data-position]');
+    console.log('Casillas con data-position:', casillas.length);
+    
+    // 5. Test manual de fichas
+    if (window.tableroController && window.gameController) {
+        console.log('🧪 Probando actualización manual de fichas...');
+        window.tableroController.actualizarFichasPublico(
+            window.gameController.jugadores, 
+            window.gameController.turnoActual
+        );
+    }
+};
+
+// Ejecutar debug automáticamente después de 3 segundos
+setTimeout(() => {
+    if (window.location.pathname.includes('tablero')) { // ← Solo funciona en tablero.html
+        console.log('🔍 Ejecutando debug automático de fichas...');
+        window.debugFichas();
+    }
+}, 3000);
+</script>
   </body>
 </html>
