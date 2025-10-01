@@ -4,7 +4,7 @@
  * Funciona con el backend que devuelve countries.json en formato:
  * [{ "ad": "Andorra" }, { "ae": "Emiratos Árabes Unidos" }, ...]
  * 
- * Arquitectura: /src/services/countriesService.js
+ * Arquitectura../../services/countriesService.js
  * Consumo: Backend /countries endpoint
  * Uso: window.countriesService.obtenerPaises()
  */

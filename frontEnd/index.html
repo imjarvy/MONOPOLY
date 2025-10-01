@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="src/styles/index.css" />
+    <link rel="stylesheet" href="styles/index.css" />
     <!-- Modal Component -->
-    <link rel="stylesheet" href="src/components/modals/modal.css" />
-    <script src="src/components/modals/modal.js"></script>
+    <link rel="stylesheet" href="views/modals/modal.css" />
+    <script src="views/modals/modal.js"></script>
     <!-- Toast Component -->
-    <link rel="stylesheet" href="src/components/toast/toast.css" />
-    <script src="src/components/toast/toast.js"></script>
+    <link rel="stylesheet" href="views/toast/toast.css" />
+    <script src="views/toast/toast.js"></script>
     <!-- Countries Service - DEBE cargarse antes que index.js -->
-    <script src="src/services/countriesService.js"></script>
-    <script src="src/pages/index.js" defer></script>
+    <script src="services/countriesService.js"></script>
+    <script src="controllers/index.js" defer></script>
     <!-- Modal registro de usuarios -->
-    <link rel="stylesheet" href="src/components/modals/registroUsuarios.css">
-    <script src="src/components/modals/registroUsuarios.js"></script>
+    <link rel="stylesheet" href="views/modals/registroUsuarios.css">
+    <script src="views/modals/registroUsuarios.js"></script>
     <!-- Estilos para botón de prueba -->
     <style>
       .btn-test {
@@ -45,7 +45,7 @@
     <!-- Video de fondo -->
     <div class="video-background">
       <video autoplay muted loop class="background-video">
-        <source src="../public/assets/img/video.mp4" type="video/mp4">
+        <source src="../assets/img/video.mp4" type="video/mp4">
         <!-- Fallback si no encuentra el video -->
         Tu navegador no soporta videos HTML5.
       </video>
@@ -54,7 +54,7 @@
 
     <div class="main-container">
       <div class="monopoly-logo-container">
-        <img src="../public/assets/img/Monopoly-Emblem.webp" alt="Monopoly" class="monopoly-logo-img">
+        <img src="../assets/img/Monopoly-Emblem.webp" alt="Monopoly" class="monopoly-logo-img">
       </div>
       <div id="jugadores"></div>
       
@@ -74,7 +74,7 @@
             <div class="btn-emoji">🎮</div>
           </div>
         </button>
-        <button class="btn-ranking" onclick="location.href='src/pages/ranking.html'">
+        <button class="btn-ranking" onclick="location.href='controllers/ranking.html'">
           🏆 Ranking
         </button>
       </div>

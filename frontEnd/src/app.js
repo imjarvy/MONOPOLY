@@ -75,7 +75,7 @@ function navegarAPagina(pagina) {
     
     switch (pagina) {
         case APP_CONFIG.pages.CONFIGURACION:
-            window.location.href = 'src/pages/index.html';
+            window.location.href = 'controllers/index.html';
             break;
             
         case APP_CONFIG.pages.TABLERO:
@@ -83,7 +83,7 @@ function navegarAPagina(pagina) {
             break;
             
         case APP_CONFIG.pages.RANKING:
-            window.location.href = 'src/pages/ranking.html';
+            window.location.href = 'controllers/ranking.html';
             break;
             
         case APP_CONFIG.pages.COMO_JUGAR:
@@ -115,7 +115,7 @@ function navegarATablero() {
     
     // Guardar estado antes de navegar
     MonopolyApp.jugadores = jugadores;
-    window.location.href = 'src/components/tablero/tablero.html';
+    window.location.href = 'views/tablero/tablero.html';
 }
 
 /**
@@ -136,11 +136,11 @@ function irAlInicio() {
     // Detectar desde qué ubicación se está llamando
     const currentPath = window.location.pathname;
     
-    if (currentPath.includes('/src/pages/')) {
+    if (currentPath.includes../../../controllers/')) {
         // Desde pages/ -> sube dos niveles
         window.location.href = '../../index.html';
-    } else if (currentPath.includes('/src/components/')) {
-        // Desde components/ -> sube tres niveles  
+    } else if (currentPath.includes../../../views/')) {
+        // Desde views/ -> sube tres niveles  
         window.location.href = '../../../index.html';
     } else {
         // Desde raíz de frontEnd

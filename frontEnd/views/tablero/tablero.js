@@ -2,8 +2,8 @@
  * PRONT: Crea un sistema de renderizado de tablero de Monopoly dinámico y responsivo que consuma datos desde 
  * boardService.js
  */
-import { getBoard } from '../../services/boardService.js';
-import { inicializarJuego } from '../../logica/turnos.js';
+import { getBoard } from '../../../../services/boardService.js';
+import { inicializarJuego } from '../../../../models/turnos.js';
 
 const tablero = document.querySelector('.tablero');
 
@@ -119,7 +119,7 @@ boardData.bottom.forEach((casilla, idx) => {
   
   // Agregar logo completo de Monopoly (igual que en el index)
   const logo = document.createElement('img');
-  logo.src = '../../../../public/assets/img/Monopoly-Emblem.webp';
+  logo.src = '../../../../assets/img/Monopoly-Emblem.webp';
   logo.alt = 'Monopoly';
   logo.className = 'monopoly-center-logo';
   

@@ -2124,7 +2124,7 @@ async function confirmarMovimiento() {
     
     try {
         // Importar y ejecutar el movimiento usando ES6 modules
-        const module = await import('../../logica/turnos.js');
+        const module = await import('../../../../models/turnos.js');
         if (module.moverFichaActual) {
             await module.moverFichaActual(espaciosAMover);
         } else {

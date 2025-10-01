@@ -11,8 +11,8 @@
   });para comprar, construir, hipotecar propiedades
  */
 
-import * as Propiedades from '../../logica/propiedades.js';
-import { obtenerJugadorActual, obtenerJugadoresActuales, completarAccionJugador } from '../../logica/turnos.js';
+import * as Propiedades from '../../../../models/propiedades.js';
+import { obtenerJugadorActual, obtenerJugadoresActuales, completarAccionJugador } from '../../../../models/turnos.js';
 
 /**
  * Muestra el modal de acción de propiedad cuando el jugador cae en una casilla

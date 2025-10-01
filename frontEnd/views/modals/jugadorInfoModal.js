@@ -1216,7 +1216,7 @@ async function obtenerDatosTablero() {
   
   // Fallback para obtener los datos usando boardService
   try {
-    const { getBoard } = await import('../../services/boardService.js');
+    const { getBoard } = await import('../../../../services/boardService.js');
     return await getBoard();
   } catch (error) {
     console.warn('No se pudo cargar datos del tablero:', error);

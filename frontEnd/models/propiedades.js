@@ -3,7 +3,7 @@
  * Maneja compra, venta, construcción, hipotecas de propiedades
  */
 
-import { obtenerJugadoresActuales, obtenerJugadorActual } from '../logica/turnos.js';
+import { obtenerJugadoresActuales, obtenerJugadorActual } from './turnos.js';
 
 // Constantes del juego
 const PRECIO_CASA = 100;
@@ -22,7 +22,7 @@ export async function obtenerInfoPropiedad(posicion) {
     
     if (!response.ok) {
       // Usar datos locales si el backend no está disponible
-      const { getBoard } = await import('../services/boardService.js');
+      const { getBoard } = await import('../../../../services/boardService.js');
       boardData = await getBoard();
     } else {
       boardData = await response.json();
@@ -40,7 +40,7 @@ export async function obtenerInfoPropiedad(posicion) {
   } catch (error) {
     console.error('Error al obtener información de propiedad:', error);
     // Último recurso: usar datos locales
-    const { getBoard } = await import('../services/boardService.js');
+    const { getBoard } = await import('../../../../services/boardService.js');
     const boardData = await getBoard();
     const todasLasCasillas = [
       ...boardData.bottom,
@@ -121,7 +121,7 @@ export function comprarPropiedad(jugador, propiedad) {
  */
 export async function tieneMonopolio(jugador, color) {
   try {
-    const { getBoard } = await import('../services/boardService.js');
+    const { getBoard } = await import('../../../../services/boardService.js');
     const boardData = await getBoard();
     
     const todasLasCasillas = [

@@ -1,5 +1,5 @@
-import { renderizarPanelJugadores } from '../components/panelJugador.js';
-import { mostrarModalPropiedad } from '../components/modals/propiedadModal.js';
+import { renderizarPanelJugadores } from '../../../views/panelJugador.js';
+import { mostrarModalPropiedad } from '../../../views/modals/propiedadModal.js';
 import { obtenerInfoPropiedad } from './propiedades.js';
 
 // Obtener jugadores desde localStorage
@@ -187,7 +187,7 @@ function procesarImpuesto(casilla, jugador) {
  */
 async function procesarCartaSorpresa(jugador) {
   try {
-    const { getBoard } = await import('../services/boardService.js');
+    const { getBoard } = await import('../../../../services/boardService.js');
     const boardData = await getBoard();
     
     const cartas = boardData.chance;
@@ -204,7 +204,7 @@ async function procesarCartaSorpresa(jugador) {
  */
 async function procesarCartaComunidad(jugador) {
   try {
-    const { getBoard } = await import('../services/boardService.js');
+    const { getBoard } = await import('../../../../services/boardService.js');
     const boardData = await getBoard();
     
     const cartas = boardData.community_chest;

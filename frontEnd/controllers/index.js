@@ -1,33 +1,18 @@
-/**
- * CONFIGURACIÓN DE JUGADORES - ETAPA 1
- * Responsable: Persona 1
- * 
- * Este archivo contiene toda la lógica para:
- * - Gestión de jugadores (agregar, eliminar, validar)
- * - Integración con countriesService.js
- * - Formulario de configuración
- * - Validaciones de datos
- * - Navegación al tablero
- */
-
-// ============== VARIABLES GLOBALES ==============
 const jugadoresDiv = document.getElementById("jugadores");
 const agregarBtn = document.getElementById("agregarBtn");
 let contador = 0;
 const maxJugadores = 4;
 let jugadores = []; // Array para mantener los jugadores
 
-// Fichas disponibles (emojis, pero pueden ser imágenes también)
-let fichasDisponibles = ["🚗", "🎩", "🐶", "🚢", "🏠", "🛩️"];
 
-// ============== INTEGRACIÓN CON MODAL ==============
+
 // Función global para recibir jugadores del modal
-window.agregarJugadoresDesdeModal = function(jugadoresConfig) {
+window.agregarJugadoresDesdeModal = async function(jugadoresConfig) {
     jugadores = jugadoresConfig;
     contador = jugadores.length;
     // Actualizar la referencia global
     window.jugadores = jugadores;
-    actualizarListaJugadores();
+    await actualizarListaJugadores();
     
     // Deshabilitar botón si se alcanza el máximo
     if (contador >= maxJugadores) {
@@ -38,24 +23,14 @@ window.agregarJugadoresDesdeModal = function(jugadoresConfig) {
 // Exponer la variable jugadores globalmente para que el modal pueda accederla
 window.jugadores = jugadores;
 
-// ============== FUNCIONES DE GESTIÓN DE JUGADORES ==============
-
-/**
- * Obtiene las fichas disponibles (no usadas por otros jugadores)
- * @returns {Array} Array de fichas disponibles
- */
+// Función para obtener fichas disponibles (no usadas)
 function obtenerFichasDisponibles() {
     const fichasUsadas = jugadores.map(j => j.ficha);
     return fichasDisponibles.filter(ficha => !fichasUsadas.includes(ficha));
 }
 
-/**
- * Agrega un nuevo jugador al array
- * @param {string} nombre - Nickname del jugador
- * @param {string} ficha - Ficha seleccionada
- * @returns {boolean} - True si se agregó correctamente
- */
-function agregarJugador(nombre, ficha) {
+// Función refactorizada para agregar jugador
+async function agregarJugador(nombre, ficha) {
     if (contador >= maxJugadores) {
         if (typeof window.Toast !== 'undefined' && window.Toast) {
             window.Toast.warning("Ya tienes el máximo de jugadores permitidos (4).", "Límite Alcanzado");
@@ -79,8 +54,7 @@ function agregarJugador(nombre, ficha) {
     const nuevoJugador = {
         id: Date.now(), // ID único
         nombre: nombre.trim(),
-        ficha: ficha,
-        dinero: 1500 // Dinero inicial según las reglas
+        ficha: ficha
     };
 
     // Agregar al array
@@ -88,7 +62,7 @@ function agregarJugador(nombre, ficha) {
     contador++;
 
     // Actualizar la UI
-    actualizarListaJugadores();
+    await actualizarListaJugadores();
 
     // Deshabilitar botón si se alcanza el máximo
     if (contador >= maxJugadores) {
@@ -98,14 +72,11 @@ function agregarJugador(nombre, ficha) {
     return true;
 }
 
-/**
- * Elimina un jugador del array
- * @param {string|number} id - ID del jugador a eliminar
- */
-function eliminarJugador(id) {
+// Función para eliminar jugador
+async function eliminarJugador(id) {
     jugadores = jugadores.filter(j => (j.id || Date.now()) !== id);
     contador = jugadores.length;
-    actualizarListaJugadores();
+    await actualizarListaJugadores();
     
     // Rehabilitar botón si hay espacio
     if (contador < maxJugadores) {
@@ -113,15 +84,24 @@ function eliminarJugador(id) {
     }
 }
 
-// ============== FUNCIONES DE UI ==============
-
-/**
- * Actualiza la lista visual de jugadores en el DOM
- */
-function actualizarListaJugadores() {
+// Función para actualizar la lista visual de jugadores
+async function actualizarListaJugadores() {
     jugadoresDiv.innerHTML = '';
     
-    jugadores.forEach(jugador => {
+    // Procesar jugadores de forma asíncrona para obtener nombres de países
+    for (const jugador of jugadores) {
+        let nombrePais = jugador.pais ? jugador.pais.toUpperCase() : 'PAÍS';
+        
+        // Intentar obtener el nombre completo del país si countriesService está disponible
+        if (typeof window.countriesService !== 'undefined') {
+            try {
+                nombrePais = await window.countriesService.obtenerNombrePais(jugador.pais);
+            } catch (error) {
+                console.warn('Error al obtener nombre del país:', error);
+                nombrePais = jugador.pais ? jugador.pais.toUpperCase() : 'PAÍS';
+            }
+        }
+        // coge la informacion del JS y lo une con lo que le mando desde el HTML
         const div = document.createElement("div");
         div.className = "jugador-card";
         div.innerHTML = `
@@ -182,7 +162,7 @@ function actualizarListaJugadores() {
                         gap: 12px;
                         flex-wrap: wrap;
                     ">
-                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${obtenerNombrePais(jugador.pais)}</span>
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${nombrePais}</span>
                         <span style="
                             background: #10b98120;
                             color: #059669;
@@ -224,57 +204,12 @@ function actualizarListaJugadores() {
             </div>
         `;
         jugadoresDiv.appendChild(div);
-    });
+    }
 }
 
-// ============== FUNCIONES DE UTILIDAD ==============
 
-/**
- * Obtiene el nombre del país desde el código
- * Integra con /src/services/countriesService.js - SIN DUPLICACIÓN
- * @param {string} codigoPais - Código de país (ej: 'co', 'mx')
- * @returns {string} - Nombre completo del país
- */
-function obtenerNombrePais(codigoPais) {
-    // Si ya es un nombre completo, devolverlo
-    if (!codigoPais || codigoPais.length > 2) {
-        return codigoPais || 'País desconocido';
-    }
-    
-    // 🎯 USAR COUNTRIESSERVICE - NO DUPLICAR DATOS
-    if (typeof window.countriesService !== 'undefined' && window.countriesService.obtenerNombrePais) {
-        // Usar el servicio asíncrono (pero devolver resultado síncrono para compatibilidad)
-        return obtenerNombrePaisSync(codigoPais);
-    }
-    
-    // ⚠️ Fallback SOLO si el service no está disponible
-    console.warn('⚠️ countriesService no disponible, usando fallback básico');
-    const fallbackPaises = {
-        'co': 'Colombia', 'mx': 'México', 'ar': 'Argentina', 'es': 'España',
-        'cl': 'Chile', 'pe': 'Perú', 'br': 'Brasil', 'us': 'Estados Unidos'
-    };
-    
-    return fallbackPaises[codigoPais.toLowerCase()] || codigoPais.toUpperCase();
-}
 
-/**
- * Versión síncrona para obtener nombre de país (usa caché local)
- */
-function obtenerNombrePaisSync(codigoPais) {
-    // Si hay caché disponible, usarlo
-    if (window.countriesCache && window.countriesCache[codigoPais.toLowerCase()]) {
-        return window.countriesCache[codigoPais.toLowerCase()];
-    }
-    
-    // Si no hay caché, devolver fallback básico
-    return obtenerNombrePais(codigoPais);
-}
-
-/**
- * Actualiza el nombre de un jugador
- * @param {string|number} id - ID del jugador
- * @param {string} nuevoNombre - Nuevo nickname
- */
+// Función para actualizar nombre de jugador
 function actualizarNombreJugador(id, nuevoNombre) {
     const jugador = jugadores.find(j => j.id === id);
     if (jugador) {
@@ -282,12 +217,8 @@ function actualizarNombreJugador(id, nuevoNombre) {
     }
 }
 
-/**
- * Actualiza la ficha de un jugador
- * @param {string|number} id - ID del jugador
- * @param {string} nuevaFicha - Nueva ficha seleccionada
- */
-function actualizarFichaJugador(id, nuevaFicha) {
+// Función para actualizar ficha de jugador
+async function actualizarFichaJugador(id, nuevaFicha) {
     // Verificar que la ficha no esté en uso por otro jugador
     const fichaEnUso = jugadores.some(j => j.id !== id && j.ficha === nuevaFicha);
     if (fichaEnUso) {
@@ -296,24 +227,18 @@ function actualizarFichaJugador(id, nuevaFicha) {
         } else {
             alert("⚠️ Esta ficha ya está en uso por otro jugador.");
         }
-        actualizarListaJugadores(); // Revertir cambio
+        await actualizarListaJugadores(); // Revertir cambio
         return;
     }
     
     const jugador = jugadores.find(j => j.id === id);
     if (jugador) {
         jugador.ficha = nuevaFicha;
-        actualizarListaJugadores(); // Refrescar para actualizar opciones disponibles
+        await actualizarListaJugadores(); // Refrescar para actualizar opciones disponibles
     }
 }
 
-// ============== FUNCIONES DE CONFIRMACIÓN ==============
-
-/**
- * Confirma la eliminación de un jugador usando modal
- * @param {string|number} id - ID del jugador
- * @param {string} nombre - Nombre del jugador para mostrar
- */
+// Función para confirmar eliminación (usando el modal)
 function confirmarEliminarJugador(id, nombre) {
     if (typeof mostrarModalConfirmacion === 'function') {
         mostrarModalConfirmacion(
@@ -328,17 +253,12 @@ function confirmarEliminarJugador(id, nombre) {
     }
 }
 
-// ============== VALIDACIÓN Y NAVEGACIÓN ==============
+// Event listener removido - ahora se maneja con onclick en el HTML
 
-/**
- * Valida y guarda la configuración de jugadores
- * Navega al tablero si todo está correcto
- */
 function guardarJugadores() {
     console.log("Función guardarJugadores ejecutada");
     console.log("Jugadores actuales:", jugadores);
     
-    // VALIDACIÓN 1: Mínimo 2 jugadores
     if (jugadores.length < 2) {
         if (typeof mostrarModalInfo === 'function') {
             mostrarModalInfo('Jugadores Insuficientes', 'Se necesitan al menos 2 jugadores para comenzar el juego.');
@@ -350,7 +270,7 @@ function guardarJugadores() {
         return;
     }
 
-    // VALIDACIÓN 2: Nombres completos
+    // Verificar nombres vacíos
     const nombresVacios = jugadores.filter(j => !j.nickname || j.nickname.trim() === '');
     if (nombresVacios.length > 0) {
         if (typeof mostrarModalInfo === 'function') {
@@ -363,79 +283,54 @@ function guardarJugadores() {
         return;
     }
 
-    // VALIDACIÓN 3: Países asignados (usando countriesService.js)
-    // TODO: Integrar validación con countriesService.js
-
-    // Guardar en localStorage para el tablero
+    // Guardamos en localStorage para usar en el tablero
     localStorage.setItem("jugadores", JSON.stringify(jugadores));
     console.log("Jugadores guardados en localStorage:", localStorage.getItem("jugadores"));
-    
-    // Navegación al tablero (manejada por app.js)
-    if (typeof navegarATablero === 'function') {
-        navegarATablero();
-    } else {
-        // Fallback directo - ruta desde la raíz de frontEnd
-        location.href = "../../src/components/tablero/tablero.html";
-    }
+    location.href = "views/tablero/tablero.html";
 }
 
-// ============== INTEGRACIÓN CON COUNTRIES SERVICE ==============
-
-/**
- * Carga los países desde el servicio y los guarda en caché
- * Integra con /src/services/countriesService.js
- */
-async function cargarPaises() {
-    try {
-        console.log('🌍 Cargando países desde countriesService...');
+// Función para probar todos los tipos de toast
+function probarTodosLosToasts() {
+    console.log("Probando todos los toasts...");
+    
+    if (typeof window.Toast !== 'undefined' && window.Toast) {
+        // Toast de éxito
+        setTimeout(() => {
+            window.Toast.success("¡Operación completada exitosamente!", "Éxito");
+        }, 0);
         
-        if (typeof window.countriesService !== 'undefined') {
-            const paises = await window.countriesService.obtenerPaises();
-            const paisesObjeto = await window.countriesService.obtenerPaisesComoObjeto();
-            
-            // Guardar en caché global para uso síncrono
-            window.countriesCache = paisesObjeto;
-            
-            console.log('✅ Países cargados y en caché:', Object.keys(paisesObjeto).length, 'países');
-            return paises;
-        } else {
-            console.warn('⚠️ countriesService no disponible');
-            return [];
-        }
-    } catch (error) {
-        console.error('❌ Error al cargar países:', error);
-        return [];
+        // Toast de información
+        setTimeout(() => {
+            window.Toast.info("Esta es una notificación informativa", "Información");
+        }, 1000);
+        
+        // Toast de advertencia
+        setTimeout(() => {
+            window.Toast.warning("Ten cuidado con esta acción", "Advertencia");
+        }, 2000);
+        
+        // Toast de error
+        setTimeout(() => {
+            window.Toast.error("Ha ocurrido un error en el sistema", "Error");
+        }, 3000);
+        
+        // Toast simple (sin título)
+        setTimeout(() => {
+            window.Toast.info("Toast simple sin título");
+        }, 4000);
+        
+        // Toast personalizado si existe el método
+        setTimeout(() => {
+            if (typeof window.Toast.custom === 'function') {
+                window.Toast.custom("Toast personalizado", "Custom", "#8b5cf6");
+            } else {
+                window.Toast.info("Toast personalizado (método custom no disponible)", "Custom");
+            }
+        }, 5000);
+        
+        console.log("✅ Todos los toasts han sido programados");
+    } else {
+        console.error("❌ Toast no está disponible");
+        alert("El sistema de Toast no está disponible");
     }
 }
-
-// ============== INICIALIZACIÓN ==============
-
-/**
- * Inicializa la página de configuración
- */
-function inicializarConfiguracion() {
-    console.log('Página de configuración inicializada');
-    
-    // Cargar países si el servicio está disponible
-    if (typeof cargarPaises === 'function') {
-        cargarPaises();
-    }
-    
-    // Inicializar eventos del modal si está disponible
-    if (typeof mostrarModalRegistroUsuarios === 'function') {
-        console.log('Modal de registro disponible');
-    }
-}
-
-// Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', inicializarConfiguracion);
-
-// ============== EXPORTS PARA OTROS MÓDULOS ==============
-// Exponer funciones necesarias para otros archivos
-window.ConfiguracionJugadores = {
-    guardarJugadores,
-    obtenerJugadores: () => jugadores,
-    agregarJugador,
-    eliminarJugador,
-    validarConfiguracion: () => jugadores.length >= 2
-};
